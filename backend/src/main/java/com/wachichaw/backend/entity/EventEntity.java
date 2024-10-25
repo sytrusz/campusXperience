@@ -1,7 +1,6 @@
 package com.wachichaw.backend.entity;
 import java.time.LocalDateTime;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -36,7 +35,6 @@ public class EventEntity {
 
     @Column(name = "max_capacity", nullable = false)
     private int maxCapacity;
-
 
     public EventEntity(int eventId, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int maxCapacity){
         super();

@@ -5,14 +5,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
-import jakarta.persistence.CascadeType;
-import java.util.List;
 
 @Entity
 @Table(name = "User")
@@ -36,9 +32,6 @@ public class UserEntity {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private List<EventEntity> eventCreated;
 
     public UserEntity() {
         super();
@@ -92,13 +85,4 @@ public class UserEntity {
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
     }
-
-    public List<EventEntity> getEventCreated() {
-        return eventCreated;
-    }
-
-    public void setClassEnrolled(List<EventEntity> eventCreated) {
-        this.eventCreated = eventCreated;
-    }
-
 }
