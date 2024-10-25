@@ -1,9 +1,14 @@
 package com.wachichaw.backend.entity;
 import java.time.LocalDateTime;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
@@ -35,6 +40,10 @@ public class EventEntity {
 
     @Column(name = "max_capacity", nullable = false)
     private int maxCapacity;
+
+    @OneToMany(mappedBy = "event")
+    @JsonIgnore
+    private List<ReminderEntity> reminders;
 
     public EventEntity(int eventId, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int maxCapacity){
         super();
