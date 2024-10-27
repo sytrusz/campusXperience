@@ -60,30 +60,30 @@ public class ReminderEntity {
         return event;
     }
 
-    public void eventId(EventEntity eventId){
+    public void setEventId(EventEntity eventId){
         this.event = eventId;
     }
 
-    public UserEntity userId(){
+    public UserEntity getUserId(){
         return user;
     }
 
-    public void userId(UserEntity userId){
+    public void setUserId(UserEntity userId){
         this.user = userId;
     }
 
-    public LocalDateTime reminderTime(){
+    public LocalDateTime getReminderTime(){
         return reminderTime;
     }
 
-    public void reminderTime(LocalDateTime reminderTime){
+    public void setReminderTime(LocalDateTime reminderTime){
         this.reminderTime = reminderTime;
     }
 
-    public String reminderType(){
+    public String getReminderType(){
         return reminderType;
     }
-    public void reminderType(String reminderType){
+    public void setReminderType(String reminderType){
         this.reminderType = reminderType;
     }
 }
