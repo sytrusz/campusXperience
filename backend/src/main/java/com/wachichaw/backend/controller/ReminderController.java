@@ -27,7 +27,7 @@ public class ReminderController {
         return reminderService.saveReminder(reminder);
     }
 
-    // Get all
+    // Read
     @GetMapping("/getAll")
     public List<ReminderEntity> getAllReminder() {
         return reminderService.getAllReminder();
