@@ -10,6 +10,7 @@ import com.wachichaw.backend.service.UserService;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
 
     @Autowired
