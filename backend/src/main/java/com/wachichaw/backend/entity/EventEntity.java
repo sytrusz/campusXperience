@@ -56,6 +56,10 @@ public class EventEntity {
         this.maxCapacity = maxCapacity;
     }
 
+    public EventEntity() {
+        //TODO Auto-generated constructor stub
+    }
+
     public int getEventId(){
         return eventId;
     }
@@ -66,6 +70,14 @@ public class EventEntity {
 
     public String getTitle(){
         return title;
+    }
+
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public String getDescription(){
+        return description;
     }
 
     public void setDescription(String description){
