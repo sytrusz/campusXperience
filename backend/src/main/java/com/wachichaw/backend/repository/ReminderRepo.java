@@ -7,5 +7,5 @@ import com.wachichaw.backend.entity.ReminderEntity;
 @Repository
 
 public interface ReminderRepo extends JpaRepository<ReminderEntity, Integer>{
-
+    
 }

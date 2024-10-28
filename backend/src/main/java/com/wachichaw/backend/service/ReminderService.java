@@ -58,8 +58,7 @@ public class ReminderService {
         if (reminderRepo.findById(id)!=null){
             reminderRepo.deleteById(id);
             msg = "Reminder record successfully deleted!";
-        }else
-            msg = id + "NOT FOUND!";
+        }
         return msg;
     }
 

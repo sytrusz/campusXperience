@@ -59,8 +59,7 @@ public class UserService {
         if (userRepo.findById(id)!=null){
             userRepo.deleteById(id);
             msg = "User record successfully deleted!";
-        }else
-            msg = id + "NOT FOUND!";
+        }
         return msg;
     }
 }
