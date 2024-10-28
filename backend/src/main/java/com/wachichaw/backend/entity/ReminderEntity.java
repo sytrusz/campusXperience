@@ -2,6 +2,7 @@ package com.wachichaw.backend.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,11 +21,11 @@ public class ReminderEntity {
     @Column(name = "reminder_id")
     private int reminderId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
     private EventEntity event;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
@@ -56,20 +57,20 @@ public class ReminderEntity {
         this.reminderId = reminderId;
     }
 
-    public EventEntity getEventId(){
+    public EventEntity getEvent(){
         return event;
     }
 
-    public void setEventId(EventEntity eventId){
-        this.event = eventId;
+    public void setEvent(EventEntity event){
+        this.event = event;
     }
 
-    public UserEntity getUserId(){
+    public UserEntity getUser(){
         return user;
     }
 
-    public void setUserId(UserEntity userId){
-        this.user = userId;
+    public void setUser(UserEntity user){
+        this.user = user;
     }
 
     public LocalDateTime getReminderTime(){

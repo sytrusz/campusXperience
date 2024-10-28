@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import com.wachichaw.backend.entity.ReminderEntity;
 import com.wachichaw.backend.repository.ReminderRepo;
-import java.util.NoSuchElementException;
+
+import jakarta.persistence.EntityNotFoundException;
+
 
 @Service
 public class ReminderService {
+    
     @Autowired
     private ReminderRepo reminderRepo;
 
@@ -33,24 +36,18 @@ public class ReminderService {
     }
 
     // Update by ID
-    @SuppressWarnings("finally")
     public ReminderEntity updateReminder(int id, ReminderEntity updatedReminder) {
-        ReminderEntity reminderEntity = new ReminderEntity();
+    ReminderEntity reminderEntity = reminderRepo.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Reminder " + id + " not found"));
 
-        try{
-            reminderEntity = reminderRepo.findById(id).get();
-            
-            reminderEntity.setEventId(updatedReminder.getEventId());
-            reminderEntity.setUserId(updatedReminder.getUserId());
-            reminderEntity.setReminderTime(updatedReminder.getReminderTime());
-            reminderEntity.setReminderType(updatedReminder.getReminderType());
+    reminderEntity.setEvent(updatedReminder.getEvent());
+    reminderEntity.setUser(updatedReminder.getUser());
+    reminderEntity.setReminderTime(updatedReminder.getReminderTime());
+    reminderEntity.setReminderType(updatedReminder.getReminderType());
 
-        }catch(NoSuchElementException nex){
-            throw new Exception ("Reminder " + id + " not found");
-        }finally{
-            return reminderRepo.save(reminderEntity);
-        }
-    }
+    return reminderRepo.save(reminderEntity);
+}
+
 
     // Delete by ID
     public String deleteReminder(int id) {
