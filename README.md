@@ -4,3 +4,6 @@
 -> Template is located at: "backend\src\main\resources"
 
 -> Filename: "readme.txt"
+
+# toolpad error (frontend)
+-> npm install -S @toolpad/core
