@@ -42,7 +42,7 @@ public class RsvpController {
     }
 
     // Update by ID
-    @PutMapping("/update")
+    @PutMapping("/update/{rsvpId}")
     public RsvpEntity updateReservation(@RequestParam int rsvpId, @RequestBody RsvpEntity rsvp){
         return rsvpService.updateReservation(rsvpId, rsvp);
     }
