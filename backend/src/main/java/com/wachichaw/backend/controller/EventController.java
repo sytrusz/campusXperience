@@ -9,6 +9,7 @@ import com.wachichaw.backend.service.EventService;
 
 @RestController
 @RequestMapping("/event")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EventController {
 
     @Autowired
@@ -38,7 +39,7 @@ public class EventController {
         return eventService.updateEvent(eventId, event);
     }
 
-    // Delete by ID
+    // Delete by ID 
     @DeleteMapping("/delete/{eventID}")
     public String deleteEvent(@PathVariable int eventID) {
         return eventService.deleteEvent(eventID);
