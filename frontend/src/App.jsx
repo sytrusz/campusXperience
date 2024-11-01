@@ -11,6 +11,15 @@ function App() {
       <Signup/>
       <Login/> */}
       <ReminderApp/>
+      <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Homepage />} />
+                <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                <Route path="/user-dashboard" element={<UserDashboard />} />
+                <Route path="/signup" element={<SignupPage/>} />
+                <Route path='/login' element={<LoginPage/>} />
+            </Routes>
+        </BrowserRouter>
     </>
   )
 }
