@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wachichaw.backend.entity.RsvpEntity;
@@ -19,9 +18,8 @@ import com.wachichaw.backend.service.RsvpService;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/rsvp")
-
 public class RsvpController {
-    
+
     @Autowired
     RsvpService rsvpService;
 
@@ -45,11 +43,11 @@ public class RsvpController {
 
     // Update by ID
     @PutMapping("/update/{rsvpId}")
-    public RsvpEntity updateReservation(@RequestParam int rsvpId, @RequestBody RsvpEntity rsvp){
+    public RsvpEntity updateReservation(@PathVariable int rsvpId, @RequestBody RsvpEntity rsvp){
         return rsvpService.updateReservation(rsvpId, rsvp);
     }
 
-    // Delte by ID
+    // Delete by ID
     @DeleteMapping("/delete/{rsvpId}")
     public String deleteReservation(@PathVariable int rsvpId){
         return rsvpService.deleteReservation(rsvpId);

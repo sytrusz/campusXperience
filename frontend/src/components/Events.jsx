@@ -42,24 +42,24 @@ const Events = () => {
   const handleReservation = async () => {
     try {
       if (isReserved) {
-        const reservation = {
-          event: { eventId: 1 },
-          user: { userId: 3 },
-          status: "Cancel",
-          reservationTime: new Date().toISOString()
-        };
+        // const reservation = {
+        //   event: { eventId: 1 },
+        //   user: { userId: 3 },
+        //   status: "Cancel",
+        //   reservationTime: new Date().toISOString()
+        // };
         
-        await fetch("http://localhost:8080/rsvp/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(reservation)
-        /*await fetch("http://localhost:8080/rsvp/delete/{rsvpId}", {
+        // await fetch("http://localhost:8080/rsvp/update/36", {
+        //   method: "PUT",
+        //   headers: {
+        //     "Content-Type": "application/json"
+        //   },
+        //   body: JSON.stringify(reservation)
+        await fetch("http://localhost:8080/rsvp/delete/37", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json"
-          }*/
+          }
         });
       } else {
         const reservation = {
