@@ -1,16 +1,16 @@
 import './App.css'
-import AdminDashboard from './pages/AdminDashboard';
-import UserDashboard from './pages/UserDashboard';
-import Homepage from './pages/Homepage'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import SignupPage from './pages/SignupPage';
-import LoginPage from './pages/LoginPage';
-
-
+import Appbar from './components/Appbar'
+import Signup from './components/Signup'
+import Login from './components/Login'
+import ReminderApp from './components/Reminder'
 function App() {
 
   return (
     <>
+      {/* <Appbar/>
+      <Signup/>
+      <Login/> */}
+      <ReminderApp/>
       <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Homepage />} />
