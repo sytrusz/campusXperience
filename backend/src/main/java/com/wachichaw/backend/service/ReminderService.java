@@ -53,6 +53,7 @@ public class ReminderService {
     }
 
     // Delete by ID
+    @SuppressWarnings("unused")
     public String deleteReminder(int id) {
         String msg = " ";
         if (reminderRepo.findById(id)!=null){

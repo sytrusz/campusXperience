@@ -2,7 +2,9 @@ package com.wachichaw.backend.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.wachichaw.backend.entity.UserEntity;
@@ -10,12 +12,24 @@ import com.wachichaw.backend.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired
     private UserService userService;
+    
 
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserEntity user) {
+    System.out.println("Login request received"); // Debugging output
+    String token = userService.authenticateUser(user.getEmail(), user.getPassword());
+    System.out.println(token); // Debugging output
+    return ResponseEntity.ok(token);
+}
+   
+
+   
     // Check
     @GetMapping("/print")
     public String print() {

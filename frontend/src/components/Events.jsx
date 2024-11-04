@@ -19,10 +19,21 @@ export default function EventList() {
 
     const baseUrl = 'http://localhost:8080/event';
 
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
         const fetchEvents = async () => {
+            const token = localStorage.getItem('token'); // Get the token from local storage
+            console.log("Fetching events with token:", token); // Print the token here
             try {
-                const response = await fetch(`${baseUrl}/getAll`);
+                const response = await fetch(`http://localhost:8080/event/getAll`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    },
+                });
                 if (!response.ok) throw new Error('Failed to fetch events');
                 const data = await response.json();
                 setEvents(data);
@@ -32,15 +43,18 @@ export default function EventList() {
                 setLoading(false);
             }
         };
-
+    
         fetchEvents();
-    }, []);
+    }, []); // Add token as a dependency
 
     const handleSaveEvent = async () => {
         try {
             const response = await fetch(`${baseUrl}/save`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token for saving
+                },
                 body: JSON.stringify(newEvent),
             });
             if (!response.ok) throw new Error('Failed to save event');
@@ -57,7 +71,10 @@ export default function EventList() {
         try {
             const response = await fetch(`${baseUrl}/update?eventId=${eventId}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token for updating
+                },
                 body: JSON.stringify(newEvent),
             });
             if (!response.ok) throw new Error('Failed to update event');
@@ -72,7 +89,10 @@ export default function EventList() {
 
     const handleDeleteEvent = async (eventId) => {
         try {
-            const response = await fetch(`${baseUrl}/delete/${eventId}`, { method: 'DELETE' });
+            const response = await fetch(`${baseUrl}/delete/${eventId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` } // Include the token for deleting
+            });
             if (!response.ok) throw new Error('Failed to delete event');
             setEvents(events.filter(event => event.eventId !== eventId));
         } catch (err) {
@@ -86,7 +106,6 @@ export default function EventList() {
                 <Typography variant="h4" align="center" gutterBottom>
                     Events
                 </Typography>
-
                 {error && (
                     <Typography color="error" align="center">
                         {error}
@@ -266,21 +285,33 @@ export default function EventList() {
                                         <Button
                                             variant="outlined"
                                             color="secondary"
-                                            onClick={() => setEditEventId(event.eventId === editEventId ? null : event.eventId)}
-                                            sx={{ ml: 1 }}
-                                        >
-                                            {editEventId === event.eventId ? 'Cancel' : 'Update'}
-                                        </Button>
-                                        <Button
-                                            variant="outlined"
-                                            color="error"
                                             onClick={() => handleDeleteEvent(event.eventId)}
-                                            sx={{ ml: 1 }}
                                         >
                                             Delete
                                         </Button>
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => {
+                                                if (editEventId === event.eventId) {
+                                                    setEditEventId(null);
+                                                    setNewEvent({ title: '', description: '', startTime: '', endTime: '', location: '', maxCapacity: '' });
+                                                } else {
+                                                    setEditEventId(event.eventId);
+                                                    setNewEvent({
+                                                        title: event.title,
+                                                        description: event.description,
+                                                        startTime: event.startTime,
+                                                        endTime: event.endTime,
+                                                        location: event.location,
+                                                        maxCapacity: event.maxCapacity,
+                                                    });
+                                                }
+                                            }}
+                                        >
+                                            {editEventId === event.eventId ? 'Cancel' : 'Edit'}
+                                        </Button>
                                     </ListItem>
-                                    <Divider component="li" />
+                                    <Divider />
                                 </React.Fragment>
                             ))}
                         </List>
