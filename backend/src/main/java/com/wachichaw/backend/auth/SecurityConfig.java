@@ -46,11 +46,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Specify allowed origins
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed HTTP methods
-        configuration.setAllowedHeaders(List.of("*")); // Allow all headers
-        configuration.setAllowCredentials(true); // Allow credentials (cookies, authorization headers)
-        
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true); 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Apply configuration to all paths
+        source.registerCorsConfiguration("/**", configuration);
         return new CorsFilter(source);
     }
 }
