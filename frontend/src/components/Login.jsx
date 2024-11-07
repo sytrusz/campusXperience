@@ -1,47 +1,49 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Container, Paper, Button, Typography } from '@mui/material';
 
 export default function Login() {
-    const paperStyle = { padding: '10px 20px', width: 600, margin: '20px auto' }
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
-    const [name, setName] = useState('')
-    const [great, setGreat] = useState(false)
+    const paperStyle = { padding: '10px 20px', width: 600, margin: '20px auto' };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [name, setName] = useState('');
+    const [great, setGreat] = useState(false);
+    
+    const navigate = useNavigate(); // Initialize navigate
 
     const handleSignIn = (e) => {
-        e.preventDefault()
-        setError('')
-
-        // Fetch all users and check credentials
-        fetch("http://localhost:8080/user/getAll")
-            .then(response => response.json())
-            .then(users => {
-                const user = users.find(u => 
-                    u.email === email && u.password === password
-                );
-                
-                
-                
-                if (user) {
-                    console.log("Successfully signed in", user);
-                    // Store user info in localStorage or state management
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    // You can add redirect logic here
-                    setName(user.name)
-                    setGreat(true)
-                } else {
-                    setError('Invalid email or password');
-                }
-            })
-            .catch(err => {
-                console.error("Error signing in:", err);
-                setError('Something went wrong. Please try again.');
-            });
-    }
+        e.preventDefault();
+        setError('');
+    
+        // Use the login endpoint with email and password
+        fetch("http://localhost:8080/user/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Invalid email or password');
+            }
+            return response.text(); 
+        })
+        .then(token => {
+            // Store JWT in localStorage
+            localStorage.setItem('token', token);
+            console.log("JWT Token:", token);
+            setGreat(true);
+            setName(email); 
+            navigate('/events'); // Redirect to Events page after successful login
+        })
+        .catch(err => {
+            console.error("Error signing in:", err);
+            setError('Invalid email or password');
+        });
+    };
 
     return (
         <Container>

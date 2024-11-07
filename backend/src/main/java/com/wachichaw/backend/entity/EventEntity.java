@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -41,7 +42,7 @@ public class EventEntity {
     @Column(name = "max_capacity", nullable = false)
     private int maxCapacity;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<ReminderEntity> reminders;
 
@@ -57,7 +58,6 @@ public class EventEntity {
     }
 
     public EventEntity() {
-        //TODO Auto-generated constructor stub
     }
 
     public int getEventId(){
