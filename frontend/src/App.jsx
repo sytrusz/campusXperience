@@ -1,28 +1,29 @@
-import './App.css'
-import Appbar from './components/Appbar'
-import Signup from './components/Signup'
-import Login from './components/Login'
-import ReminderApp from './components/Reminder'
-import UserRecord from './components/UserRecord'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import React from 'react';
+import './App.css';
+import CustomAppBar from './components/Appbar';
+import './fonts.css';
+import Homepage from './pages/Homepage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ReminderList from './components/Reminder';
+import EventDashboard from './pages/EventDashboard';
 
 function App() {
   return (
-    <>
-      <Appbar/>
-
-      <ReminderApp/>
-      <UserRecord/>
-      <BrowserRouter>
-            <Routes>
-                {/* <Route path="/" element={<Homepage />} /> */}
-                {/* <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/user-dashboard" element={<UserDashboard />} /> */}
-                <Route path="/signup" element={<Signup/>} />
-                <Route path='/login' element={<Login/>} />
-            </Routes>
-        </BrowserRouter>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <CustomAppBar />
+            <Homepage />
+          </>
+        } />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        {/* Add other routes here as needed */}
+      </Routes>
+    </Router>
   );
 }
 
