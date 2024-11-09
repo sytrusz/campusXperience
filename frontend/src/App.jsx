@@ -10,26 +10,21 @@ import UserRecord from './components/UserRecord'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
-
   return (
-    <>
-      <Appbar/>
-
-      <ReminderApp/>
-      <UserRecord/>
-      <BrowserRouter>
-            <Routes>
-                {/* <Route path="/" element={<Homepage />} /> */}
-                {/* <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/user-dashboard" element={<UserDashboard />} /> 
-                  <Route path="/events" element={<EventList />} />*/}
-                <Route path="/signup" element={<Signup/>} />
-                <Route path='/login' element={<Login/>} />
-            </Routes>
-        </BrowserRouter>
-    </>
-  )
-
+    <Router>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <CustomAppBar />
+            <Homepage />
+          </>
+        } />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        {/* Add other routes here as needed */}
+      </Routes>
+    </Router>
+  );  
 }
 
 export default App;

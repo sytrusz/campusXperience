@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Product Sans';
+    src: url('/fonts/ProductSans-Regular.woff2') format('woff2'),
+         url('/fonts/ProductSans-Regular.woff') format('woff'),
+         url('/fonts/ProductSans-Regular.ttf') format('truetype'); /* Adjust the file names as needed */
+    font-weight: normal;
+    font-style: normal;
+  }

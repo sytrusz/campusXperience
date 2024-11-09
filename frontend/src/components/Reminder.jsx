@@ -154,14 +154,25 @@ export default function ReminderList() {
                         required
                     />
                     {isEditing ? (
-                        <Button variant="contained" color="primary" fullWidth type="submit" sx={{ mt: 2 }}>
-                            Update Reminder
-                        </Button>
-                    ) : (
-                        <Button variant="contained" color="primary" fullWidth type="submit" sx={{ mt: 2 }}>
-                            Create Reminder
-                        </Button>
-                    )}
+                                <Button 
+                                    variant="contained" 
+                                    fullWidth 
+                                    type="submit" 
+                                    sx={{ mt: 2, backgroundColor: "#C21807", color: "#fff", '&:hover': { backgroundColor: "#A61C06" } }}
+                                >
+                                    Update Reminder
+                                </Button>
+                            ) : (
+                                <Button 
+                                    variant="contained" 
+                                    fullWidth 
+                                    type="submit" 
+                                    sx={{ mt: 2, backgroundColor: "#C21807", color: "#fff", '&:hover': { backgroundColor: "#A61C06" } }}
+                                >
+                                    Create Reminder
+                                </Button>
+                            )}
+
                 </form>
 
                 {loading ? (
