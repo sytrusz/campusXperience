@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.*;
 
 import com.wachichaw.backend.entity.EventEntity;
 import com.wachichaw.backend.service.EventService;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 
 @RestController
 @RequestMapping("/event")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class EventController {
 
     @Autowired
@@ -38,7 +41,7 @@ public class EventController {
         return eventService.updateEvent(eventId, event);
     }
 
-    // Delete by ID
+    // Delete by ID 
     @DeleteMapping("/delete/{eventID}")
     public String deleteEvent(@PathVariable int eventID) {
         return eventService.deleteEvent(eventID);

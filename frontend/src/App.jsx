@@ -1,13 +1,13 @@
 import React from 'react';
-import './App.css';
-import CustomAppBar from './components/Appbar';
-import './fonts.css';
-import Homepage from './pages/Homepage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ReminderList from './components/Reminder';
-import EventDashboard from './pages/EventDashboard';
+import './App.css'
+import Appbar from './components/Appbar'
+import Signup from './components/Signup'
+import Login from './components/Login'
+import EventList from './components/Events' 
+import ReminderApp from './components/Reminder'
+import UserRecord from './components/UserRecord'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
         {/* Add other routes here as needed */}
       </Routes>
     </Router>
-  );
+  );  
 }
 
 export default App;

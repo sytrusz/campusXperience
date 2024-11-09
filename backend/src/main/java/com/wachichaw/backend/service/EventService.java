@@ -58,6 +58,7 @@ public class EventService {
     }
 
     // Delete by ID
+    @SuppressWarnings("unused")
     public String deleteEvent(int eventID) {
         String msg = " ";
         if (eventRepo.findById(eventID)!=null){
