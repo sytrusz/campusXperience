@@ -1,13 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
-import Appbar from './components/Appbar'
-import Signup from './components/Signup'
-import Login from './components/Login'
-import EventList from './components/Events' 
-import ReminderApp from './components/Reminder'
-import UserRecord from './components/UserRecord'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import CustomAppBar from './components/Appbar';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import Homepage from './pages/Homepage';
 
 function App() {
   return (
@@ -19,9 +16,8 @@ function App() {
             <Homepage />
           </>
         } />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/:login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        {/* Add other routes here as needed */}
       </Routes>
     </Router>
   );  

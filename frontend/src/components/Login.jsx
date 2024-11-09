@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
+
 import '../fonts.css';
 import { 
     Box, 
@@ -10,6 +11,7 @@ import {
     Grid,
     Paper
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const paperStyle = { padding: '10px 20px', width: 600, margin: '20px auto' };
@@ -20,7 +22,7 @@ export default function Login() {
     const [name, setName] = useState('');
     const [great, setGreat] = useState(false);
     
-    const navigate = useNavigate(); // Initialize navigate
+    const navigate = useNavigate();
 
 
     const handleSignIn = (e) => {
@@ -48,7 +50,7 @@ export default function Login() {
                 setError('Something went wrong. Please try again.');
             });
     
-        // Use the login endpoint with email and password
+
         fetch("http://localhost:8080/user/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

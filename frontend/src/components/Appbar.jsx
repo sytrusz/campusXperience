@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
 
 const CustomAppBar = () => {
-  const navigate = useNavigate(); // Move this inside the component
+  const navigate = useNavigate(); 
 
   const handleSignIn = () => {
-    navigate('/login'); // Keep the navigate call here
+    navigate('/login'); 
   };
 
   const handleSignUp = () => {
-    navigate('/signup'); // Keep the navigate call here
+    navigate('/signup'); 
   };
 
   return (
@@ -34,7 +34,6 @@ const CustomAppBar = () => {
           </Typography>
         </Box>
 
-        {/* Center-aligned navigation buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1, gap: '20px', padding: '60px 0px' }}>
           <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}>
             EVENT DISCOVERY
@@ -47,11 +46,11 @@ const CustomAppBar = () => {
           </Button>
         </Box>
 
-        {/* Right-aligned Login and Signup buttons */}
+  
         <Box sx={{ display: 'flex', gap: '20px', paddingRight: '60px' }}>
           <Button 
             sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }} 
-            onClick={handleSignIn} // Correctly set the onClick handler here
+            onClick={handleSignIn} 
           >
             LOGIN
           </Button>
