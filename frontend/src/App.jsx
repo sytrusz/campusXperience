@@ -10,7 +10,6 @@ import Homepage from './pages/Homepage';
 
 
 function App() {
-
   return (
 
     <Router>
@@ -23,10 +22,12 @@ function App() {
         } />
         <Route path="/:login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+
         <Route path="/events" element={<EventDashboard />} />
       </Routes>
     </Router>
   );  
+
 
 }
 

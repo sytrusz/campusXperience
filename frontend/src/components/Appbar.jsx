@@ -1,33 +1,67 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
 
-export default function Appbar() {
+const CustomAppBar = () => {
+  const navigate = useNavigate(); 
+
+  const handleSignIn = () => {
+    navigate('/login'); 
+  };
+
+  const handleSignUp = () => {
+    navigate('/signup'); 
+  };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Campus Xperience
+    <AppBar 
+      position="static" 
+      sx={{ 
+        backgroundColor: '#F8F5F2', 
+        boxShadow: 'none', 
+        marginTop: '20px',
+        fontFamily: 'Product Sans'
+      }}
+    >
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        {/* Logo without a link */}
+        <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '24px', fontFamily: 'Product Sans', color: '#292929' }}>
+            Campus
           </Typography>
-          <Button color="inherit">Login</Button>
-          <Button color="inherit">Sign up</Button>
-        </Toolbar>
-      </AppBar>
-    </Box>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '24px', fontFamily: 'Product Sans', color: '#C21807' }}>
+            Xperience
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1, gap: '20px', padding: '60px 0px' }}>
+          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}>
+            EVENT DISCOVERY
+          </Button>
+          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}>
+            RSVP & TICKETING
+          </Button>
+          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}>
+            EVENT REMINDER
+          </Button>
+        </Box>
+
+  
+        <Box sx={{ display: 'flex', gap: '20px', paddingRight: '60px' }}>
+          <Button 
+            sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }} 
+            onClick={handleSignIn} 
+          >
+            LOGIN
+          </Button>
+          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}
+          onClick={handleSignUp}>
+            SIGNUP
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
-}
+};
+
+export default CustomAppBar;

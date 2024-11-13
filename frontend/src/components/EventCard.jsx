@@ -69,4 +69,4 @@ const EventCard = ({
   );
 };
 
-export default EventCard;d
+export default EventCard;
