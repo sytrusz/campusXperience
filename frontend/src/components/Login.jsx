@@ -19,7 +19,7 @@ export default function Login() {
         e.preventDefault();
         setError('');
     
-        // Use the login endpoint with email and password
+
         fetch("http://localhost:8080/user/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -32,12 +32,11 @@ export default function Login() {
             return response.text(); 
         })
         .then(token => {
-            // Store JWT in localStorage
             localStorage.setItem('token', token);
             console.log("JWT Token:", token);
             setGreat(true);
             setName(email); 
-            navigate('/events'); // Redirect to Events page after successful login
+            navigate('/events'); 
         })
         .catch(err => {
             console.error("Error signing in:", err);
