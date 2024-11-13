@@ -52,6 +52,7 @@ public class AdminUserService {
     }
 
     // Delete by ID
+    @SuppressWarnings("unused")
     public String deleteAdmin(int id) {
         String msg = " ";
         if (adminUserRepo.findById(id)!=null){

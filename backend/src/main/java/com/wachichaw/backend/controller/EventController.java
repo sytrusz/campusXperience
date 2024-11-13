@@ -2,11 +2,12 @@ package com.wachichaw.backend.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wachichaw.backend.entity.EventEntity;
 import com.wachichaw.backend.service.EventService;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @RestController
@@ -24,9 +25,18 @@ public class EventController {
     }
 
     // Create
-    @PostMapping("/save")
-    public EventEntity saveEvent(@RequestBody EventEntity event) {
-        return eventService.saveEvent(event);
+  @PostMapping("/save")
+    public ResponseEntity<EventEntity> saveEvent(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("startTime") String startTime,
+            @RequestParam("endTime") String endTime,
+            @RequestParam("location") String location,
+            @RequestParam("maxCapacity") int maxCapacity) {
+        
+        EventEntity savedEvent = eventService.saveEvent(file, title, description, startTime, endTime, location, maxCapacity);
+        return ResponseEntity.ok(savedEvent);
     }
 
     // Get all
