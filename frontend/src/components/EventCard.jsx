@@ -10,7 +10,7 @@ const EventCard = ({
   category,
   attendees,
   description,
-  image,
+  image, // Now using this prop
   onEdit,
   onDelete
 }) => {
@@ -19,6 +19,11 @@ const EventCard = ({
       
       {/* Event Image */}
       <div className="relative h-48 overflow-hidden rounded-t-lg">
+        <img 
+          src={image} 
+          alt={title} 
+          className="w-full h-full object-cover" 
+        />
         <div className="absolute top-4 right-4">
           <span className="rounded-full bg-red-600 px-3 py-1 text-sm font-medium text-white">
             {category}
@@ -46,7 +51,7 @@ const EventCard = ({
           
           <div className="flex items-center">
             <Users className="mr-2 h-4 w-4" />
-            <span className="text-sm">{attendees} attending</span>
+            <span className="text-sm">{attendees} Capacity</span>
           </div>
         </div>
 

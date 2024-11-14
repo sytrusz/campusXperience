@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 @Service
 public class ImageUploadController {
 
-    private static final String IMAGE_DIR = "C:/Users/USER/Documents/GitHub/campusxperience/backend/uploads/";
+    private static final String IMAGE_DIR = "C:/Users/USER/Documents/GitHub/campusxperience/backend/src/main/resources/static/uploads/";
 
     public String uploadImage(MultipartFile file) throws IOException {
         // Ensure the upload directory exists
@@ -31,7 +31,6 @@ public class ImageUploadController {
         // Write the file to the directory
         Files.write(filePath, file.getBytes());
 
-        // Return the URL to access the image
-        return "/uploads/" + fileName;
+        return "/uploads/" + fileName; // Path relative to the static folder
     }
 }

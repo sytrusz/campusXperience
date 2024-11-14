@@ -42,7 +42,7 @@ public class EventService {
             newEvent.setMaxCapacity(maxCapacity);
             newEvent.setImageUrl(imageUrl);  
 
-
+            System.out.println(imageUrl);
             return eventRepo.save(newEvent);
 
         } catch (Exception e) {

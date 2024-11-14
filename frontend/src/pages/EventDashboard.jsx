@@ -6,18 +6,20 @@ const EventDashboard = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   // State for creating a new event
   const [open, setOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({
     title: '',
-    date: '',
-    time: '',
-    location: '',
-    category: '',
     description: '',
-    attendees: 0,
+    startTime: '',
+    endTime: '',
+    location: '',
+    maxCapacity: 0,
+    image: null,
   });
+
+  const [editEventId, setEditEventId] = useState(null); // State for tracking the event being edited
 
   const baseUrl = 'http://localhost:8080/event';  // Replace with your actual base URL
   const token = localStorage.getItem('token');
@@ -46,28 +48,78 @@ const EventDashboard = () => {
   }, [baseUrl, token]);
 
   const handleSaveEvent = async () => {
+    const formData = new FormData();
+    formData.append('title', newEvent.title);
+    formData.append('description', newEvent.description);
+    formData.append('startTime', newEvent.startTime);
+    formData.append('endTime', newEvent.endTime);
+    formData.append('location', newEvent.location);
+    formData.append('maxCapacity', newEvent.maxCapacity);
+
+    // Append the image if it's selected
+    if (newEvent.image) {
+      formData.append('file', newEvent.image);
+    }
+
     try {
       const response = await fetch(`${baseUrl}/save`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Include the token for saving
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(newEvent),
+        body: formData,
       });
       if (!response.ok) throw new Error('Failed to save event');
       const savedEvent = await response.json();
       setEvents([...events, savedEvent]);
       setOpen(false); // Close the modal
-      setNewEvent({ title: '', date: '', time: '', location: '', category: '', description: '', attendees: 0 });
+      setNewEvent({
+        title: '',
+        description: '',
+        startTime: '',
+        endTime: '',
+        location: '',
+        maxCapacity: 0,
+        image: null,
+      });
     } catch (err) {
       setError('Error saving event');
     }
   };
 
-  const handleEdit = (id) => {
-    // Logic to handle editing the event
-    console.log('Edit event with ID:', id);
+  const handleEdit = (event) => {
+    setEditEventId(event.eventId); // Set the event ID for the event being edited
+    setNewEvent({
+      title: event.title,
+      description: event.description,
+      startTime: event.startTime,
+      endTime: event.endTime,
+      location: event.location,
+      maxCapacity: event.maxCapacity,
+      image: event.image, // Keep the existing image if available
+    });
+    setOpen(true); // Open the dialog
+  };
+
+  const handleUpdateEvent = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/update?eventId=${editEventId}`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Include the token for updating
+        },
+        body: JSON.stringify(newEvent),
+      });
+      if (!response.ok) throw new Error('Failed to update event');
+      const updatedEvent = await response.json();
+      setEvents(events.map(event => (event.eventId === editEventId ? updatedEvent : event)));
+      setEditEventId(null);
+      setNewEvent({ title: '', description: '', startTime: '', endTime: '', location: '', maxCapacity: '' });
+      setOpen(false); // Close the modal after update
+    } catch (err) {
+      setError('Error updating event');
+    }
   };
 
   const handleDelete = async (id) => {
@@ -88,11 +140,7 @@ const EventDashboard = () => {
   };
 
   return (
-    <div style={{
-      padding: '40px',
-      backgroundColor: '#F8F5F2',
-      minHeight: '100vh'
-    }}>
+    <div style={{ padding: '40px', backgroundColor: '#F8F5F2', minHeight: '100vh' }}>
       <h1 style={{ textAlign: 'center', color: '#C21807' }}>Event Dashboard</h1>
 
       {error && <Typography color="error" align="center">{error}</Typography>}
@@ -100,12 +148,7 @@ const EventDashboard = () => {
       {loading ? (
         <CircularProgress />
       ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '20px',
-          padding: '20px'
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
           {events.map((event) => (
             <EventCard 
               key={event.eventId} 
@@ -115,17 +158,17 @@ const EventDashboard = () => {
               time={new Date(event.startTime).toLocaleTimeString()}
               location={event.location}
               category={event.category || 'General'}
-              attendees={event.attendees || 0}
+              attendees={event.maxCapacity || 0}
               description={event.description}
-              image={event.image || '/api/placeholder/400/320'}
-              onEdit={handleEdit}
+              image={event.imageUrl ? `/uploads/${event.imageUrl}` : '/path/to/placeholder.jpg'}
+              onEdit={() => handleEdit(event)}  // Pass the event to the handleEdit function
               onDelete={handleDelete}
             />
           ))}
         </div>
       )}
 
-      {/* Create Event Button */}
+      {/* Create or Edit Event Dialog */}
       <Button 
         variant="contained" 
         color="primary" 
@@ -135,9 +178,9 @@ const EventDashboard = () => {
         Create Event
       </Button>
 
-      {/* Create Event Dialog */}
+      {/* Create/Edit Event Dialog */}
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Create New Event</DialogTitle>
+        <DialogTitle>{editEventId ? 'Edit Event' : 'Create New Event'}</DialogTitle>
         <DialogContent>
           <TextField
             label="Title"
@@ -147,22 +190,30 @@ const EventDashboard = () => {
             style={{ marginBottom: 16 }}
           />
           <TextField
-            label="Date"
-            type="date"
+            label="Description"
+            multiline
             fullWidth
-            value={newEvent.date}
-            onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+            value={newEvent.description}
+            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+            style={{ marginBottom: 16 }}
+          />
+          <TextField
+            label="Start Time"
+            type="datetime-local"
+            fullWidth
+            value={newEvent.startTime}
+            onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })}
             style={{ marginBottom: 16 }}
             InputLabelProps={{
               shrink: true,
             }}
           />
           <TextField
-            label="Time"
-            type="time"
+            label="End Time"
+            type="datetime-local"
             fullWidth
-            value={newEvent.time}
-            onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
+            value={newEvent.endTime}
+            onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })}
             style={{ marginBottom: 16 }}
             InputLabelProps={{
               shrink: true,
@@ -176,24 +227,24 @@ const EventDashboard = () => {
             style={{ marginBottom: 16 }}
           />
           <TextField
-            label="Category"
+            label="Max Capacity"
+            type="number"
             fullWidth
-            value={newEvent.category}
-            onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value })}
+            value={newEvent.maxCapacity}
+            onChange={(e) => setNewEvent({ ...newEvent, maxCapacity: e.target.value })}
             style={{ marginBottom: 16 }}
           />
-          <TextField
-            label="Description"
-            multiline
-            fullWidth
-            value={newEvent.description}
-            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+          <input
+            type="file"
+            onChange={(e) => setNewEvent({ ...newEvent, image: e.target.files[0] })}
             style={{ marginBottom: 16 }}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)} color="primary">Cancel</Button>
-          <Button onClick={handleSaveEvent} color="primary">Save</Button>
+          <Button onClick={editEventId ? handleUpdateEvent : handleSaveEvent} color="primary">
+            {editEventId ? 'Update' : 'Save'}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
