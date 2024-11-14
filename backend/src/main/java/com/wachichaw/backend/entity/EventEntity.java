@@ -42,11 +42,14 @@ public class EventEntity {
     @Column(name = "max_capacity", nullable = false)
     private int maxCapacity;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    @Column(name = "image_url", nullable = true)
+    private String imageUrl;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ReminderEntity> reminders;
 
-    public EventEntity(int eventId, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int maxCapacity){
+    public EventEntity(int eventId, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int maxCapacity, String imageUrl){
         super();
         this.eventId = eventId;
         this.title = title;
@@ -55,6 +58,7 @@ public class EventEntity {
         this.endTime = endTime;
         this.location = location;
         this.maxCapacity = maxCapacity;
+        this.imageUrl = imageUrl;
     }
 
     public EventEntity() {
@@ -114,5 +118,12 @@ public class EventEntity {
 
     public void setMaxCapacity(int maxCapacity){
         this.maxCapacity = maxCapacity;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

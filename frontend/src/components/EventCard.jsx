@@ -2,6 +2,7 @@ import React from 'react';
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 
 const EventCard = ({
+  id,
   title,
   date,
   time,
@@ -9,13 +10,20 @@ const EventCard = ({
   category,
   attendees,
   description,
-  image
+  image, // Now using this prop
+  onEdit,
+  onDelete
 }) => {
   return (
     <div className="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-lg" style={{ backgroundColor: '#C21807', color: '#F8F5F2', borderRadius: '12px', padding: '16px' }}>
       
       {/* Event Image */}
       <div className="relative h-48 overflow-hidden rounded-t-lg">
+        <img 
+          src={image} 
+          alt={title} 
+          className="w-full h-full object-cover" 
+        />
         <div className="absolute top-4 right-4">
           <span className="rounded-full bg-red-600 px-3 py-1 text-sm font-medium text-white">
             {category}
@@ -43,7 +51,7 @@ const EventCard = ({
           
           <div className="flex items-center">
             <Users className="mr-2 h-4 w-4" />
-            <span className="text-sm">{attendees} attending</span>
+            <span className="text-sm">{attendees} Capacity</span>
           </div>
         </div>
 
@@ -54,8 +62,11 @@ const EventCard = ({
 
         {/* Action Buttons */}
         <div className="mt-4 flex gap-2">
-          <button className="rounded border border-red-600 bg-transparent px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-600 hover:text-white transition-colors duration-300">
-            RSVP Now
+          <button className="rounded border border-red-600 bg-transparent px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-600 hover:text-white transition-colors duration-300" onClick={() => onEdit(id)}>
+            Edit
+          </button>
+          <button className="rounded border border-red-600 bg-transparent px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-600 hover:text-white transition-colors duration-300" onClick={() => onDelete(id)}>
+            Delete
           </button>
         </div>
       </div>

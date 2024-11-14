@@ -19,6 +19,7 @@ export default function Login() {
   const [name, setName] = useState("");
   const [great, setGreat] = useState(false);
 
+
   const navigate = useNavigate();
 
   const handleSignIn = (e) => {
@@ -49,6 +50,9 @@ export default function Login() {
       })
       .catch(() => {
         // If admin login fails, attempt user login
+    const handleSignIn = (e) => {
+        e.preventDefault();
+        setError('');
         fetch("http://localhost:8080/user/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -72,6 +76,16 @@ export default function Login() {
           })
           .catch((err) => {
             // Both logins failed
+            return response.text(); 
+        })
+        .then(token => {
+            localStorage.setItem('token', token);
+            console.log("JWT Token:", token);
+            setGreat(true);
+            setName(email); 
+            navigate('/events'); 
+        })
+        .catch(err => {
             console.error("Error signing in:", err);
             setError(err.message || "Invalid email or password");
           });
