@@ -89,6 +89,7 @@ export default function Login() {
             console.error("Error signing in:", err);
             setError(err.message || "Invalid email or password");
           });
+        }
       });
   };
   return (
