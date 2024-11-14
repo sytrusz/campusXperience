@@ -1,7 +1,8 @@
 package com.wachichaw.backend.controller;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,11 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserEntity user) {
-    System.out.println("Login request received"); // Debugging output
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserEntity user) {
     String token = userService.authenticateUser(user.getEmail(), user.getPassword());
-    System.out.println(token); // Debugging output
-    return ResponseEntity.ok(token);
+    Map<String, String> response = new HashMap<>();
+    response.put("token", token);
+    return ResponseEntity.ok(response);
 }
    
 

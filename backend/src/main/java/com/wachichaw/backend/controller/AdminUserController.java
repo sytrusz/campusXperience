@@ -1,7 +1,11 @@
 package com.wachichaw.backend.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +22,7 @@ import com.wachichaw.backend.service.AdminUserService;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 
 public class AdminUserController {
     @Autowired
@@ -28,6 +32,23 @@ public class AdminUserController {
     @GetMapping("/print")
     public String print() {
         return "Hello, Admin! Test";
+    }
+
+    // Admin Login
+
+    @PostMapping("/login")
+
+    public ResponseEntity<Map<String, String>> login(@RequestBody AdminUserEntity admin) {
+
+        String token = adminUserService.authenticateAdmin(admin.getEmail(), admin.getPassword());
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("token", token);
+
+        response.put("role", "Admin"); // Optionally include the role in the response
+
+        return ResponseEntity.ok(response);
     }
 
     // Create
@@ -50,7 +71,7 @@ public class AdminUserController {
 
     // Delete by ID
     @DeleteMapping("/delete/{adminId}")
-    public String deleteAdmin(@PathVariable int adminId){
+    public String deleteAdmin(@PathVariable int adminId) {
         return adminUserService.deleteAdmin(adminId);
     }
 }
