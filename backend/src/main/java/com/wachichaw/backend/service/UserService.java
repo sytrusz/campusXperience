@@ -33,22 +33,25 @@ public class UserService {
     System.out.println("Authenticating user with email: " + email); 
     UserEntity user = userRepo.findByEmail(email); 
 
-    if (user != null) {
-        System.out.println("User found: " + user.getEmail()); 
-        if (user.getPassword().equals(password)) { 
-            System.out.println("Password is correct. Generating token."); 
-            System.out.println(jwtUtil.generateToken(user)); 
-            return jwtUtil.generateToken(user); 
+        if (user != null) {
+            System.out.println("User found: " + user.getEmail()); 
+            if (user.getPassword().equals(password)) { 
+                System.out.println("Password is correct. Generating token."); 
+                System.out.println(jwtUtil.generateToken(user)); 
+                return jwtUtil.generateToken(user); 
+            } else {
+                System.out.println("Invalid credentials: password does not match."); 
+                throw new RuntimeException("Invalid credentials"); 
+            }
         } else {
-            System.out.println("Invalid credentials: password does not match."); 
-            throw new RuntimeException("Invalid credentials"); 
+            System.out.println("User not found with email: " + email); 
+            throw new RuntimeException("User not found"); 
         }
-    } else {
-        System.out.println("User not found with email: " + email); 
-        throw new RuntimeException("User not found"); 
     }
-}
 
+    public boolean existsByEmail(String email) {
+        return userRepo.existsByEmail(email);
+    }
 
     public List<UserEntity> getAllUser() {
         return userRepo.findAll();
