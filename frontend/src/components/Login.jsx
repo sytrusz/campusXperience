@@ -12,21 +12,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const paperStyle = { padding: "10px 20px", width: 600, margin: "20px auto" };
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [great, setGreat] = useState(false);
-
-
   const navigate = useNavigate();
 
   const handleSignIn = (e) => {
     e.preventDefault();
     setError("");
-    
-    // Try logging in as an admin first
+
+    // Try admin login first
     fetch("http://localhost:8080/admin/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -34,7 +31,7 @@ export default function Login() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Admin login failed"); // If admin login fails, try user login
+          throw new Error("Admin login failed");
         }
         return response.json();
       })
@@ -42,17 +39,14 @@ export default function Login() {
         // Successful admin login
         console.log("Admin Login response:", adminData);
         localStorage.setItem("token", adminData.token);
-        localStorage.setItem("role", adminData.role);
-        localStorage.setItem("currentUser", JSON.stringify({ email, name: adminData.name, role: adminData.role }));
+        localStorage.setItem("role", "Admin");
+        localStorage.setItem("currentUser", JSON.stringify({ email, name: adminData.name, role: "Admin" }));
         setName(adminData.name);
         setGreat(true);
         navigate("/admin");
       })
       .catch(() => {
         // If admin login fails, attempt user login
-    const handleSignIn = (e) => {
-        e.preventDefault();
-        setError('');
         fetch("http://localhost:8080/user/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -68,29 +62,20 @@ export default function Login() {
             // Successful user login
             console.log("User Login response:", userData);
             localStorage.setItem("token", userData.token);
-            localStorage.setItem("role", userData.role || "User");
-            localStorage.setItem("currentUser", JSON.stringify({ email, name: userData.name, role: userData.role || "User" }));
+            localStorage.setItem("role", "User");
+            localStorage.setItem("currentUser", JSON.stringify({ email, name: userData.name, role: "User" }));
             setName(userData.name);
             setGreat(true);
-            navigate("/");
+            navigate("/events");
           })
           .catch((err) => {
             // Both logins failed
-            return response.text(); 
-        })
-        .then(token => {
-            localStorage.setItem('token', token);
-            console.log("JWT Token:", token);
-            setGreat(true);
-            setName(email); 
-            navigate('/events'); 
-        })
-        .catch(err => {
             console.error("Error signing in:", err);
-            setError(err.message || "Invalid email or password");
+            setError("Invalid email or password");
           });
       });
   };
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
