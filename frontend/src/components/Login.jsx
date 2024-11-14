@@ -42,6 +42,7 @@ export default function Login() {
         setName(adminData.name);
         setGreat(true);
         navigate("/admin");
+
         return;
       }
 
@@ -50,6 +51,51 @@ export default function Login() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+
+      })
+      .catch(() => {
+        // If admin login fails, attempt user login
+    const handleSignIn = (e) => {
+        e.preventDefault();
+        setError('');
+        fetch("http://localhost:8080/user/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Invalid email or password");
+            }
+            return response.json();
+          })
+          .then((userData) => {
+            // Successful user login
+            console.log("User Login response:", userData);
+            localStorage.setItem("token", userData.token);
+            localStorage.setItem("role", userData.role || "User");
+            localStorage.setItem("currentUser", JSON.stringify({ email, name: userData.name, role: userData.role || "User" }));
+            setName(userData.name);
+            setGreat(true);
+            navigate("/");
+          })
+          .catch((err) => {
+            // Both logins failed
+            return response.text(); 
+        })
+        .then(token => {
+            localStorage.setItem('token', token);
+            console.log("JWT Token:", token);
+            setGreat(true);
+            setName(email); 
+            navigate('/events'); 
+        })
+        .catch(err => {
+            console.error("Error signing in:", err);
+            setError(err.message || "Invalid email or password");
+          });
+        }
+
       });
 
       if (!response.ok) {

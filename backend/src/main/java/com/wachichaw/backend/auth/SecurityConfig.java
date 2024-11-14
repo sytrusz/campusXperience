@@ -32,16 +32,8 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/user/save").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/user/getAll").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/admin/getAll").permitAll()
-                        .requestMatchers("/user/login").permitAll() // Allow login without authentication
-                        .requestMatchers("/admin/login").permitAll()
-                        
+                        .requestMatchers("/user/login","/user/save").permitAll() // Allow login without authentication
 
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        
                         .anyRequest().authenticated()) // Other requests need authentication
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session management
 

@@ -24,7 +24,6 @@ export default function Homepage() {
             description: 'Explore the latest art pieces from local artists.',
             image: '/path/to/image2.jpg',
         },
-        // Add more events as needed
         {
             title: 'Jerjen Res Pangalay',
             date: 'November 22, 2024',
@@ -47,8 +46,10 @@ export default function Homepage() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundImage: 'url(/src/assets/images/cit.png)', // Update the image path
-                    backgroundSize: 'cover',
+                    backgroundImage: 'url(/src/assets/images/hero-image.png)',
+                    backgroundSize: '90%', // Adjust this to zoom out the image
+                    backgroundPosition: 'center', // Keeps the image centered
+                    backgroundRepeat: 'no-repeat', // Prevents tiling of the image
                     color: 'white',
                     textAlign: 'center',
                     p: 3,
@@ -56,9 +57,30 @@ export default function Homepage() {
             >
             </Box>
 
-            {/* Events Section */}
+            {/* Features Section */}
+            <Box sx={{ p: 4, backgroundColor: '#F8F5F2', textAlign: 'center' }}>
+                <Typography variant="h4" sx={{ mb: 3, color: '#C21807', fontWeight: 'bold' }}>
+                    Features You’ll Love
+                </Typography>
+                <Grid container spacing={4} justifyContent="center">
+                    <Grid item xs={12} sm={4}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Event Discovery</Typography>
+                        <Typography>Find events that match your interests in just a few clicks.</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>RSVP and Ticketing</Typography>
+                        <Typography>RSVP to events and get your tickets without the hassle.</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Event Reminders</Typography>
+                        <Typography>Get notifications so you never miss an important event.</Typography>
+                    </Grid>
+                </Grid>
+            </Box>
+
+            {/* Upcoming Events Section */}
             <Box sx={{ p: 4, backgroundColor: '#F8F5F2' }}>
-                <Typography variant="h4" sx={{ mb: 3, textAlign: 'center', color: '#C21807' , fontWeight: 'bold'}}>
+                <Typography variant="h4" sx={{ mb: 3, textAlign: 'center', color: '#C21807', fontWeight: 'bold' }}>
                     Upcoming Events
                 </Typography>
                 <Grid container spacing={4}>
@@ -89,7 +111,7 @@ export default function Homepage() {
                 }}
             >
                 <Typography variant="body1">
-                    © {new Date().getFullYear()} Campus Experience. All rights reserved.
+                    © {new Date().getFullYear()} CampusXperience. All rights reserved.
                 </Typography>
             </Box>
         </>
