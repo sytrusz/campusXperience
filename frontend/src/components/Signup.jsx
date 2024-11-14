@@ -18,21 +18,69 @@ export default function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPass] = useState('');
     const [added, setAdded] = useState(false);
-
-    const handleClick = (e) => {
+    const [validationError, setValidationError] = useState('');
+    
+    const handleClick = async (e) => {
         e.preventDefault();
-        const student = { name, email, password };
-        console.log(student);
+    
+        // Name validation: no numbers, capitalize each word
+        const nameRegex = /^[A-Za-z\s]+$/;
+        const capitalizeName = name.replace(/\b\w/g, (char) => char.toUpperCase());
+        if (!nameRegex.test(name)) {
+            setValidationError('Name must only contain letters and spaces.');
+            setAdded(false);
+            return;
+        }
+        setName(capitalizeName);
+    
+        // Email validation: must contain @____.com
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setValidationError('Email must be in a valid format and contain @____.com.');
+            setAdded(false);
+            return;
+        }
+    
+        // Password validation: at least 8 characters with letters and numbers
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            setValidationError('Password must be at least 8 characters with a combination of letters and numbers.');
+            setAdded(false);
+            return;
+        }
+    
+        setValidationError('');
+    
+        // Check if email is UNIQUE
+        try {
+            const response = await fetch(`http://localhost:8080/user/check-email?email=${encodeURIComponent(email)}`);
+            const isEmailUnique = await response.json();
+    
+            if (!isEmailUnique) {
+                setValidationError('Email already exists. Please use a different email.');
+                setAdded(false);
+                return;
+            }
+        } catch (error) {
+            console.error("Error checking email uniqueness:", error);
+            setValidationError('An error occurred while verifying email uniqueness.');
+            setAdded(false);
+            return;
+        }
+    
+        // If all validations pass, proceed to SAVE the user
+        const student = { name: capitalizeName, email, password };
         fetch("http://localhost:8080/user/save", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(student),
-        }).then(() => {
+            body: JSON.stringify(student)
+        })
+        .then(() => {
             console.log("New student added");
             setAdded(true);
         });
     };
-
+            
     return (
         <Grid container component="main" sx={{ height: '100vh' }}>
             {/* Left Side - Hero Image */}
@@ -140,6 +188,11 @@ export default function Signup() {
                         >
                             Sign Up
                         </Button>
+                        {validationError && (
+                        <Alert severity="error" style={{ marginTop: '10px' }}>
+                            {validationError}
+                        </Alert> 
+                        )}
                         {added && (
                             <Alert severity="success" sx={{ mt: 2 }}>
                                 New student added successfully!
