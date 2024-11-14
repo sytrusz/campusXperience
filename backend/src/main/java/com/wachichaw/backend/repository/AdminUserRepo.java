@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.wachichaw.backend.entity.AdminUserEntity;
 @Repository
 public interface AdminUserRepo extends JpaRepository<AdminUserEntity, Integer>{
-
+    AdminUserEntity findByEmail(String email);
 }

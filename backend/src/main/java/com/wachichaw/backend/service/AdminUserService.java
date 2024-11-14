@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.entity.AdminUserEntity;
 import com.wachichaw.backend.repository.AdminUserRepo;
 
@@ -13,6 +14,9 @@ import com.wachichaw.backend.repository.AdminUserRepo;
 public class AdminUserService {
     @Autowired
     private AdminUserRepo adminUserRepo;
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
     public AdminUserService(){
         super();
@@ -23,6 +27,27 @@ public class AdminUserService {
         return adminUserRepo.save(admin);
     }
 
+    //Read
+    public String authenticateAdmin(String email, String password) {
+        System.out.println("Authenticating admin with email: " + email); 
+        AdminUserEntity admin = adminUserRepo.findByEmail(email); 
+    
+        if (admin != null) {
+            System.out.println("Admin found: " + admin.getEmail()); 
+            if (admin.getPassword().equals(password)) { 
+                System.out.println("Password is correct. Generating token."); 
+                String token = jwtUtil.generateToken(admin); 
+                System.out.println(token);
+                return token;
+            } else {
+                System.out.println("Invalid credentials: password does not match."); 
+                throw new RuntimeException("Invalid credentials"); 
+            }
+        } else {
+            System.out.println("Admin not found with email: " + email); 
+            throw new RuntimeException("Admin not found"); 
+        }
+    }
     // Get all
     public List<AdminUserEntity> getAllAdmin() {
         return adminUserRepo.findAll();
