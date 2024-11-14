@@ -30,8 +30,9 @@ const CustomAppBar = () => {
           padding: '20px 80px',
         }}
       >
-        {/* Logo with a link */}
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        {/* Logo and navigation links in a single row */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+          {/* Combined Logo */}
           <Typography
             variant="h6"
             sx={{
@@ -39,66 +40,63 @@ const CustomAppBar = () => {
               fontSize: '24px',
               color: '#292929',
               fontFamily: 'Product Sans',
+              textTransform: 'none', // Disable all caps
             }}
           >
-            Campus
+            CAMPUS
+            <span style={{ color: '#C21807' }}>XPERIENCE</span>
           </Typography>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '24px',
-              color: '#C21807',
-              fontFamily: 'Product Sans',
-            }}
-          >
-            Xperience
-          </Typography>
+
+          {/* Navigation Links */}
+          <Box sx={{ display: 'flex', gap: '40px', fontFamily: 'Product Sans' }}>
+            <Button
+              sx={{
+                color: '#C21807',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                fontFamily: 'Product Sans',
+                textTransform: 'none', // Disable all caps
+              }}
+            >
+              Event Discovery
+            </Button>
+            <Button
+              sx={{
+                color: '#C21807',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                fontFamily: 'Product Sans',
+                textTransform: 'none', // Disable all caps
+              }}
+            >
+              Reservation and Ticketing
+            </Button>
+            <Button
+              sx={{
+                color: '#C21807',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                fontFamily: 'Product Sans',
+                textTransform: 'none', // Disable all caps
+              }}
+            >
+              Event Reminder
+            </Button>
+            <Button
+              sx={{
+                color: '#C21807',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                fontFamily: 'Product Sans',
+                textTransform: 'none', // Disable all caps
+              }}
+            >
+              About Us
+            </Button>
+          </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: '40px', fontFamily: 'Product Sans' }}>
-          <Button
-            sx={{
-              color: '#C21807',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              fontFamily: 'Product Sans',
-            }}
-          >
-            Event Discovery
-          </Button>
-          <Button
-            sx={{
-              color: '#C21807',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              fontFamily: 'Product Sans',
-            }}
-          >
-            Reservation And Ticketing
-          </Button>
-          <Button
-            sx={{
-              color: '#C21807',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              fontFamily: 'Product Sans',
-            }}
-          >
-            Event Reminder
-          </Button>
-          <Button
-            sx={{
-              color: '#C21807',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              fontFamily: 'Product Sans',
-            }}
-          >
-            About Us
-          </Button>
-        </Box>
-
+        {/* Login and Signup Buttons */}
         <Box sx={{ display: 'flex', gap: '20px', fontFamily: 'Product Sans' }}>
           <Button
             variant="outlined"
@@ -108,6 +106,7 @@ const CustomAppBar = () => {
               fontWeight: 'bold',
               fontSize: '16px',
               fontFamily: 'Product Sans',
+              textTransform: 'none', // Disable all caps
             }}
             onClick={handleSignIn}
           >
@@ -121,6 +120,7 @@ const CustomAppBar = () => {
               fontWeight: 'bold',
               fontSize: '16px',
               fontFamily: 'Product Sans',
+              textTransform: 'none', // Disable all caps
             }}
             onClick={handleSignUp}
           >
