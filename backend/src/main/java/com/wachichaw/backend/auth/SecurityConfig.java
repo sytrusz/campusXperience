@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/login","/user/save","/admin/login").permitAll() // Allow login without authentication
-
+                        .requestMatchers("/user/login", "/user/save", "/admin/login").permitAll() // Allow login without authentication
+                        .requestMatchers("/uploads/**").permitAll() // Allow access to static files in /uploads
                         .anyRequest().authenticated()) // Other requests need authentication
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session management
 
@@ -48,9 +48,13 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Specify allowed origins
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed HTTP methods
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); 
+        configuration.setAllowCredentials(true);
+
+        // Register CORS for all paths
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); // For all paths
+        source.registerCorsConfiguration("/uploads/**", configuration); // Specifically for uploads path
+
         return new CorsFilter(source);
     }
 }
