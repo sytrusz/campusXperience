@@ -29,26 +29,7 @@ export default function Login() {
         e.preventDefault();
         setError('');
 
-        fetch("http://localhost:8080/user/getAll")
-            .then(response => response.json())
-            .then(users => {
-                const user = users.find(u => 
-                    u.email === email && u.password === password
-                );
-                
-                if (user) {
-                    console.log("Successfully signed in", user);
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    setName(user.name);
-                    setGreat(true);
-                } else {
-                    setError('Invalid email or password');
-                }
-            })
-            .catch(err => {
-                console.error("Error signing in:", err);
-                setError('Something went wrong. Please try again.');
-            });
+     
     
 
         fetch("http://localhost:8080/user/login", {

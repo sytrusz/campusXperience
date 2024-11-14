@@ -10,7 +10,7 @@ import com.wachichaw.backend.service.ReminderService;
  
 @RestController
 @RequestMapping("/reminder")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5174")
 public class ReminderController {
  
     @Autowired
