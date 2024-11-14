@@ -81,13 +81,13 @@ const Login = () => {
             textAlign: 'center',
             fontSize: '0.975rem'
           }}>
-            Already have an account?{' '}
+            Don't have an account?{' '}
             <a href="/signup" style={{
               color: '#dc2626',
               fontWeight: "bold",
               textDecoration: 'none'
             }}>
-              Sign In
+              Sign Up
             </a>
           </p>
 
