@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import EventCard from '../components/EventCard';
+import CustomAppBar from '../components/Appbar';
 import { CircularProgress, Typography, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Box } from '@mui/system';
 
 const EventDashboard = () => {
   const [events, setEvents] = useState([]);
@@ -88,7 +90,7 @@ const EventDashboard = () => {
   };
 
   const handleEdit = (event) => {
-    setEditEventId(event.eventId); // Set the event ID for the event being edited
+    setEditEventId(event.eventId);
     setNewEvent({
       title: event.title,
       description: event.description,
@@ -96,27 +98,44 @@ const EventDashboard = () => {
       endTime: event.endTime,
       location: event.location,
       maxCapacity: event.maxCapacity,
-      image: event.image, // Keep the existing image if available
+      image: event.image,
     });
-    setOpen(true); // Open the dialog
+    setOpen(true);
   };
 
   const handleUpdateEvent = async () => {
+    const formData = new FormData();
+    formData.append('title', newEvent.title);
+    formData.append('description', newEvent.description);
+    formData.append('startTime', newEvent.startTime);
+    formData.append('endTime', newEvent.endTime);
+    formData.append('location', newEvent.location);
+    formData.append('maxCapacity', newEvent.maxCapacity);
+
+    // If there's a new image, append it to FormData
+    if (newEvent.image) {
+      formData.append('file', newEvent.image);
+    }
+
     try {
       const response = await fetch(`${baseUrl}/update?eventId=${editEventId}`, {
         method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Include the token for updating
+        headers: {
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(newEvent),
+        body: formData,
       });
+
       if (!response.ok) throw new Error('Failed to update event');
       const updatedEvent = await response.json();
-      setEvents(events.map(event => (event.eventId === editEventId ? updatedEvent : event)));
+
+      setEvents(events.map((event) =>
+        event.eventId === editEventId ? updatedEvent : event
+      ));
+
       setEditEventId(null);
-      setNewEvent({ title: '', description: '', startTime: '', endTime: '', location: '', maxCapacity: '' });
-      setOpen(false); // Close the modal after update
+      setNewEvent({ title: '', description: '', startTime: '', endTime: '', location: '', maxCapacity: '', image: null });
+      setOpen(false);
     } catch (err) {
       setError('Error updating event');
     }
@@ -140,114 +159,145 @@ const EventDashboard = () => {
   };
 
   return (
-    <div style={{ padding: '40px', backgroundColor: '#F8F5F2', minHeight: '100vh' }}>
-      <h1 style={{ textAlign: 'center', color: '#C21807' }}>Event Dashboard</h1>
+    <>
+      <CustomAppBar />
+      <div style={{ padding: '40px', backgroundColor: '#F8F5F2', minHeight: '100vh' }}>
+        <h1 style={{ textAlign: 'center', color: '#C21807' }}>Event Discovery</h1>
 
-      {error && <Typography color="error" align="center">{error}</Typography>}
+        
+          <Box
+            sx={{
+              height: '60vh',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundImage: 'url(/src/assets/images/hero-image.png)',
+              backgroundSize: '90%',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              color: 'white',
+              textAlign: 'center',
+              p: 3,
+            }}
+          />
+      
 
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
-          {events.map((event) => (
-            <EventCard 
-              key={event.eventId} 
-              id={event.eventId}
-              title={event.title}
-              date={new Date(event.startTime).toLocaleDateString()}
-              time={new Date(event.startTime).toLocaleTimeString()}
-              location={event.location}
-              category={event.category || 'General'}
-              attendees={event.maxCapacity || 0}
-              description={event.description}
-              image={event.imageUrl ? `/uploads/${event.imageUrl}` : '/path/to/placeholder.jpg'}
-              onEdit={() => handleEdit(event)}  // Pass the event to the handleEdit function
-              onDelete={handleDelete}
+        <h3 style={{ color: '#C21807' }}>Events happening in Campus</h3>
+
+        {error && <Typography color="error" align="center">{error}</Typography>}
+
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
+            {events.map((event) => {
+              console.log('Image URL for event', event.eventId, ':', event.imageUrl);
+
+              return (
+                <EventCard
+                  key={event.eventId}
+                  id={event.eventId}
+                  title={event.title}
+                  date={new Date(event.startTime).toLocaleDateString()}
+                  time={new Date(event.startTime).toLocaleTimeString()}
+                  location={event.location}
+                  category={event.category || 'General'}
+                  attendees={event.maxCapacity || 0}
+                  description={event.description}
+                  image={event.imageUrl ? `http://localhost:8080${event.imageUrl}` : '/path/to/placeholder.jpg'}
+                  onEdit={() => handleEdit(event)} // Pass the event to the handleEdit function
+                  onDelete={handleDelete}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {/* Create or Edit Event Dialog */}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setOpen(true)}
+          style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1000 }}
+        >
+          Create Event
+        </Button>
+
+        {/* Create/Edit Event Dialog */}
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle>{editEventId ? 'Edit Event' : 'Create New Event'}</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Title"
+              fullWidth
+              value={newEvent.title}
+              onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+              style={{ marginBottom: 16 }}
             />
-          ))}
-        </div>
-      )}
-
-      {/* Create or Edit Event Dialog */}
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={() => setOpen(true)} 
-        style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1000 }}
-      >
-        Create Event
-      </Button>
-
-      {/* Create/Edit Event Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>{editEventId ? 'Edit Event' : 'Create New Event'}</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Title"
-            fullWidth
-            value={newEvent.title}
-            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-            style={{ marginBottom: 16 }}
-          />
-          <TextField
-            label="Description"
-            multiline
-            fullWidth
-            value={newEvent.description}
-            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-            style={{ marginBottom: 16 }}
-          />
-          <TextField
-            label="Start Time"
-            type="datetime-local"
-            fullWidth
-            value={newEvent.startTime}
-            onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })}
-            style={{ marginBottom: 16 }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            label="End Time"
-            type="datetime-local"
-            fullWidth
-            value={newEvent.endTime}
-            onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })}
-            style={{ marginBottom: 16 }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            label="Location"
-            fullWidth
-            value={newEvent.location}
-            onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
-            style={{ marginBottom: 16 }}
-          />
-          <TextField
-            label="Max Capacity"
-            type="number"
-            fullWidth
-            value={newEvent.maxCapacity}
-            onChange={(e) => setNewEvent({ ...newEvent, maxCapacity: e.target.value })}
-            style={{ marginBottom: 16 }}
-          />
-          <input
-            type="file"
-            onChange={(e) => setNewEvent({ ...newEvent, image: e.target.files[0] })}
-            style={{ marginBottom: 16 }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} color="primary">Cancel</Button>
-          <Button onClick={editEventId ? handleUpdateEvent : handleSaveEvent} color="primary">
-            {editEventId ? 'Update' : 'Save'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+            <TextField
+              label="Description"
+              multiline
+              fullWidth
+              value={newEvent.description}
+              onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+              style={{ marginBottom: 16 }}
+            />
+            <TextField
+              label="Start Time"
+              type="datetime-local"
+              fullWidth
+              value={newEvent.startTime}
+              onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })}
+              style={{ marginBottom: 16 }}
+              InputLabelProps={{ shrink: true }}
+            />
+            <TextField
+              label="End Time"
+              type="datetime-local"
+              fullWidth
+              value={newEvent.endTime}
+              onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })}
+              style={{ marginBottom: 16 }}
+              InputLabelProps={{ shrink: true }}
+            />
+            <TextField
+              label="Location"
+              fullWidth
+              value={newEvent.location}
+              onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+              style={{ marginBottom: 16 }}
+            />
+            <TextField
+              label="Max Capacity"
+              type="number"
+              fullWidth
+              value={newEvent.maxCapacity}
+              onChange={(e) => setNewEvent({ ...newEvent, maxCapacity: e.target.value })}
+              style={{ marginBottom: 16 }}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setNewEvent({ ...newEvent, image: e.target.files[0] })}
+              style={{ marginBottom: 16 }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)} color="secondary">
+              Cancel
+            </Button>
+            <Button
+              onClick={editEventId ? handleUpdateEvent : handleSaveEvent}
+              color="primary"
+              variant="contained"
+            >
+              {editEventId ? 'Update Event' : 'Save Event'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    </>
   );
 };
 
