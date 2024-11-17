@@ -24,12 +24,16 @@ export default function CustomAppBar() {
     setIsLoggedIn(false);
     navigate('/');  // Use navigate instead of window.location.href
   };
+  const handleEventDiscovery = () => {
+    navigate('/events');
+  };
 
   const handleNavigate = (path) => {
     navigate(path);  // Use navigate for programmatic navigation
   };
 
   return (
+
     <AppBar position="static" sx={{ backgroundColor: '#F8F5F2', boxShadow: 'none' }}>
       <Toolbar
         sx={{
@@ -45,6 +49,7 @@ export default function CustomAppBar() {
           <Link to="/" style={{ textDecoration: 'none' }}>
             <Typography
               variant="h6"
+
               sx={{
                 fontWeight: 'bold',
                 fontSize: '24px',
@@ -67,7 +72,12 @@ export default function CustomAppBar() {
                     fontFamily: 'Product Sans',
                     textTransform: 'none',
                   }}
-                  onClick={() => label === 'About Us' && handleNavigate('/aboutUs')}  // Navigate to About Us page
+                  onClick={() => {
+                    if (label === 'Event Discovery') handleNavigate('/events'); 
+                    if (label === 'Reservation and Ticketing') handleNavigate('/reservation'); 
+                    if (label === 'Event Reminder') handleNavigate('/eventReminder'); 
+                    if (label === 'About Us') handleNavigate('/aboutUs'); 
+                  }}                    
                 >
                   {label}
                 </Button>

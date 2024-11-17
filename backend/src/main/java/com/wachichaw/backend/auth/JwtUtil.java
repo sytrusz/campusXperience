@@ -28,7 +28,6 @@ public class JwtUtil {
         return createToken(claims, String.valueOf(user.getUserId()));
     }
 
-    // Generate token for AdminUserEntity with role attribute
     public String generateToken(AdminUserEntity admin) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", admin.getEmail());

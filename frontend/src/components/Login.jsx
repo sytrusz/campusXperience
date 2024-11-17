@@ -61,7 +61,10 @@ const Login = () => {
       }));
       setName(userData.name);
       setGreat(true);
-      navigate("/events");
+
+      console.log("User name from response:", userData.name);
+      navigate("/");
+
 
     } catch (err) {
       console.error("Error signing in:", err);
