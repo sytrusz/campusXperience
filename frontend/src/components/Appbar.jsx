@@ -27,6 +27,10 @@ export default function CustomAppBar() {
     window.location.href = path;
   };
 
+  const handleAboutUs = () => {
+    navigate('/aboutUs');
+  };
+
   return (
     <AppBar position="static" sx={{ backgroundColor: '#F8F5F2', boxShadow: 'none' }}>
       <Toolbar
@@ -105,7 +109,7 @@ export default function CustomAppBar() {
               Login
             </Button>
             <Button
-              variant="contained"
+            onClick={handleAboutUs}
               sx={{
                 backgroundColor: '#C21807',
                 color: '#F8F5F2',
