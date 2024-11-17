@@ -32,8 +32,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
                 .authorizeHttpRequests(authorize -> authorize
 
+                        .requestMatchers("/user/login","/user/save", "admin/login").permitAll() // Allow login without authentication
+
+
                         .requestMatchers("/user/login", "/user/save", "/admin/login","/user/check-email").permitAll() // Allow login without authentication
                         .requestMatchers("/uploads/**").permitAll() // Allow access to static files in /uploads
+
 
                         .anyRequest().authenticated()) // Other requests need authentication
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session management
