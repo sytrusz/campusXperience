@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/AdminDashboard';
+import AboutUs from './pages/AboutUs';
 
 
 
@@ -15,10 +16,11 @@ function App() {
   return (
 
     <Router>
+      <CustomAppBar />
       <Routes>
         <Route path="/" element={
           <>
-            <CustomAppBar />
+            {/* <CustomAppBar /> */}
             <Homepage />
           </>
         } />
@@ -26,6 +28,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path="/events" element={<EventDashboard />} />
+        <Route path="/aboutUs" element={<AboutUs />} />
 
       </Routes>
     </Router>

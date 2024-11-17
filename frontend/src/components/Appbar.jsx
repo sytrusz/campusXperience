@@ -30,6 +30,10 @@ const CustomAppBar = () => {
     navigate('/signup');
   };
 
+  const handleAboutUs = () => {
+    navigate('/aboutUs');
+  };
+
   return (
     <AppBar position="static" sx={{ backgroundColor: '#F8F5F2', boxShadow: 'none', fontFamily: 'Product Sans' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 80px' }}>
@@ -72,6 +76,7 @@ const CustomAppBar = () => {
               Event Reminder
             </Button>
             <Button
+            onClick={handleAboutUs}
               sx={{
                 color: '#C21807',
                 fontWeight: 'bold',
