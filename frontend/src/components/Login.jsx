@@ -22,7 +22,7 @@ export default function Login() {
     setError("");
     
     try {
-      // Try admin login first
+      // Attempt admin login first
       let response = await fetch("http://localhost:8080/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,9 +30,9 @@ export default function Login() {
       });
 
       if (response.ok) {
-        // Successful admin login
         const adminData = await response.json();
-        localStorage.setItem("token", adminData.token);
+        localStorage.setItem("jwtToken", adminData.token);
+        console.log("Admin Login Token:", adminData.token);
         localStorage.setItem("role", adminData.role);
         localStorage.setItem("currentUser", JSON.stringify({
           email,
@@ -42,60 +42,14 @@ export default function Login() {
         setName(adminData.name);
         setGreat(true);
         navigate("/admin");
-
         return;
       }
 
-      // If admin login fails, try user login
+      // Attempt user login if admin login fails
       response = await fetch("http://localhost:8080/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-
-      })
-      .catch(() => {
-        // If admin login fails, attempt user login
-    const handleSignIn = (e) => {
-        e.preventDefault();
-        setError('');
-        fetch("http://localhost:8080/user/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Invalid email or password");
-            }
-            return response.json();
-          })
-          .then((userData) => {
-            // Successful user login
-            console.log("User Login response:", userData);
-            localStorage.setItem("token", userData.token);
-            localStorage.setItem("role", userData.role || "User");
-            localStorage.setItem("currentUser", JSON.stringify({ email, name: userData.name, role: userData.role || "User" }));
-            setName(userData.name);
-            setGreat(true);
-            navigate("/");
-          })
-          .catch((err) => {
-            // Both logins failed
-            return response.text(); 
-        })
-        .then(token => {
-            localStorage.setItem('token', token);
-            console.log("JWT Token:", token);
-            setGreat(true);
-            setName(email); 
-            navigate('/events'); 
-        })
-        .catch(err => {
-            console.error("Error signing in:", err);
-            setError(err.message || "Invalid email or password");
-          });
-        }
-
       });
 
       if (!response.ok) {
@@ -103,7 +57,8 @@ export default function Login() {
       }
 
       const userData = await response.json();
-      localStorage.setItem("token", userData.token);
+      localStorage.setItem("jwtToken", userData.token);
+      console.log("User Login Token:", userData.token);
       localStorage.setItem("role", userData.role || "User");
       localStorage.setItem("currentUser", JSON.stringify({
         email,
@@ -114,6 +69,7 @@ export default function Login() {
       setGreat(true);
       navigate("/events");
 
+     
     } catch (err) {
       console.error("Error signing in:", err);
       setError(err.message || "Invalid email or password");
