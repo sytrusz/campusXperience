@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { AppBar, Toolbar, Button, Typography, Box } from '@mui/material';
-import { Link } from 'react-router-dom';  // Import Link from react-router-dom
+import { Link, useNavigate } from 'react-router-dom';  // Import Link and useNavigate
 import ProfileDropdown from './ProfileDropDown';
 
 export default function CustomAppBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
   const [userType, setUserType] = useState("");
+  
+  const navigate = useNavigate();  // Initialize useNavigate for programmatic navigation
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -20,15 +22,11 @@ export default function CustomAppBar() {
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
-    window.location.href = '/';
+    navigate('/');  // Use navigate instead of window.location.href
   };
 
   const handleNavigate = (path) => {
-    window.location.href = path;
-  };
-
-  const handleAboutUs = () => {
-    navigate('/aboutUs');
+    navigate(path);  // Use navigate for programmatic navigation
   };
 
   return (
@@ -44,7 +42,7 @@ export default function CustomAppBar() {
       >
         {/* Logo and Navigation */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Link to="/" style={{ textDecoration: 'none' }}>  {/* Make the logo a clickable link */}
+          <Link to="/" style={{ textDecoration: 'none' }}>
             <Typography
               variant="h6"
               sx={{
@@ -69,6 +67,7 @@ export default function CustomAppBar() {
                     fontFamily: 'Product Sans',
                     textTransform: 'none',
                   }}
+                  onClick={() => label === 'About Us' && handleNavigate('/aboutUs')}  // Navigate to About Us page
                 >
                   {label}
                 </Button>
@@ -109,7 +108,6 @@ export default function CustomAppBar() {
               Login
             </Button>
             <Button
-            onClick={handleAboutUs}
               sx={{
                 backgroundColor: '#C21807',
                 color: '#F8F5F2',
@@ -118,7 +116,7 @@ export default function CustomAppBar() {
                 fontFamily: 'Product Sans',
                 textTransform: 'none',
               }}
-              onClick={() => handleNavigate('/signup')}
+              onClick={() => handleNavigate('/signup')}  // Navigate to Signup page
             >
               Signup
             </Button>
