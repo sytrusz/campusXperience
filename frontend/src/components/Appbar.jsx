@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
+import { AppBar, Toolbar, Button, Typography, Box } from '@mui/material';
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
+import ProfileDropdown from './ProfileDropDown';
 
-const CustomAppBar = () => {
-  const navigate = useNavigate();
+export default function CustomAppBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
+  const [userType, setUserType] = useState("");
 
   useEffect(() => {
-    // Check if user is logged in and get the user name
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if (currentUser) {
       setIsLoggedIn(true);
       setUserName(currentUser.name);
+      setUserType(currentUser.userType);
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
-    navigate('/');
+    window.location.href = '/';
   };
 
-  const handleSignIn = () => {
-    navigate('/login');
-  };
-
-  const handleSignUp = () => {
-    navigate('/signup');
+  const handleNavigate = (path) => {
+    window.location.href = path;
   };
 
   const handleAboutUs = () => {
@@ -35,117 +32,99 @@ const CustomAppBar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#F8F5F2', boxShadow: 'none', fontFamily: 'Product Sans' }}>
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 80px' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '24px', color: '#292929', fontFamily: 'Product Sans', textTransform: 'none' }}>
-            CAMPUS<span style={{ color: '#C21807' }}>XPERIENCE</span>
-          </Typography>
-          <Box sx={{ display: 'flex', gap: '40px', fontFamily: 'Product Sans' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#F8F5F2', boxShadow: 'none' }}>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          px: 5,
+          py: 3,
+        }}
+      >
+        {/* Logo and Navigation */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>  {/* Make the logo a clickable link */}
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '24px',
+                color: '#292929',
+                fontFamily: 'Product Sans',
+              }}
+            >
+              CAMPUS<span style={{ color: '#C21807' }}>XPERIENCE</span>
+            </Typography>
+          </Link>
+          <Box sx={{ display: 'flex', gap: 4 }}>
+            {['Event Discovery', 'Reservation and Ticketing', 'Event Reminder', 'About Us'].map(
+              (label) => (
+                <Button
+                  key={label}
+                  sx={{
+                    color: '#C21807',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    fontFamily: 'Product Sans',
+                    textTransform: 'none',
+                  }}
+                >
+                  {label}
+                </Button>
+              )
+            )}
+          </Box>
+        </Box>
+
+        {/* Profile Section */}
+        {isLoggedIn ? (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography
+              variant="body1"
+              sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '16px' }}
+            >
+              Hello, {userName}!
+            </Typography>
+            <ProfileDropdown
+              userType={userType}
+              onNavigate={handleNavigate}
+              onLogout={handleLogout}
+            />
+          </Box>
+        ) : (
+          <Box sx={{ display: 'flex', gap: 2 }}>
             <Button
+              variant="outlined"
               sx={{
                 color: '#C21807',
+                borderColor: '#C21807',
                 fontWeight: 'bold',
                 fontSize: '16px',
                 fontFamily: 'Product Sans',
-                textTransform: 'none', // Disable all caps
+                textTransform: 'none',
               }}
+              onClick={() => handleNavigate('/login')}
             >
-              Event Discovery
-            </Button>
-            <Button
-              sx={{
-                color: '#C21807',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                fontFamily: 'Product Sans',
-                textTransform: 'none', // Disable all caps
-              }}
-            >
-              Reservation and Ticketing
-            </Button>
-            <Button
-              sx={{
-                color: '#C21807',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                fontFamily: 'Product Sans',
-                textTransform: 'none', // Disable all caps
-              }}
-            >
-              Event Reminder
+              Login
             </Button>
             <Button
             onClick={handleAboutUs}
               sx={{
-                color: '#C21807',
+                backgroundColor: '#C21807',
+                color: '#F8F5F2',
                 fontWeight: 'bold',
                 fontSize: '16px',
                 fontFamily: 'Product Sans',
-                textTransform: 'none', // Disable all caps
+                textTransform: 'none',
               }}
+              onClick={() => handleNavigate('/signup')}
             >
-              About Us
+              Signup
             </Button>
           </Box>
-        </Box>
-        <Box sx={{ display: 'flex', gap: '20px', fontFamily: 'Product Sans', alignItems: 'center' }}>
-          {isLoggedIn ? (
-            <>
-              <Typography variant="body1" sx={{ color: '#C21807', fontWeight: 'bold' }}>
-                Hello, {userName} !
-              </Typography>
-              <Button
-                variant="outlined"
-                onClick={handleLogout}
-                sx={{
-                  color: '#C21807',
-                  borderColor: '#C21807',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  fontFamily: 'Product Sans',
-                  textTransform: 'none',
-                }}
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="outlined"
-                sx={{
-                  color: '#C21807',
-                  borderColor: '#C21807',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  fontFamily: 'Product Sans',
-                  textTransform: 'none',
-                }}
-                onClick={handleSignIn}
-              >
-                Login
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: '#C21807',
-                  color: '#F8F5F2',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  fontFamily: 'Product Sans',
-                  textTransform: 'none',
-                }}
-                onClick={handleSignUp}
-              >
-                Signup
-              </Button>
-            </>
-          )}
-        </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
-};
-
-export default CustomAppBar;
+}

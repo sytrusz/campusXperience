@@ -10,11 +10,11 @@ import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/AdminDashboard';
 import AboutUs from './pages/AboutUs';
 
+import Profile from './pages/Profile'; // Import the Profile page component
 
 
 function App() {
   return (
-
     <Router>
       <CustomAppBar />
       <Routes>
@@ -24,17 +24,15 @@ function App() {
             <Homepage />
           </>
         } />
-        <Route path="/:login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path='/admin' element={<AdminDashboard />} />
         <Route path="/events" element={<EventDashboard />} />
         <Route path="/aboutUs" element={<AboutUs />} />
-
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );  
-
-
 }
 
 export default App;
