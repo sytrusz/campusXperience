@@ -44,8 +44,8 @@ export default function Login() {
         navigate("/admin");
         return;
       }
-
-      // Attempt user login if admin login fails
+      //
+      // Attempt user login if admin login fails //
       response = await fetch("http://localhost:8080/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
