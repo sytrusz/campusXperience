@@ -38,6 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     
         String userId = null;
         String jwt = null;
+        
     
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7); // Remove "Bearer " prefix

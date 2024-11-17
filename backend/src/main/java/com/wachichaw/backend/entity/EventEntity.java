@@ -42,7 +42,7 @@ public class EventEntity {
     @Column(name = "max_capacity", nullable = false)
     private int maxCapacity;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = true)
     private String imageUrl;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)

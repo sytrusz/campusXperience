@@ -1,12 +1,14 @@
 package com.wachichaw.backend.controller;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.entity.UserEntity;
 import com.wachichaw.backend.service.UserService;
 
@@ -17,19 +19,33 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    private final JwtUtil jwtUtil;
+
+    public UserController(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     
+   
 
-
+    // Token
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserEntity user) {
-    System.out.println("Login request received"); // Debugging output
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserEntity user) {
+    
     String token = userService.authenticateUser(user.getEmail(), user.getPassword());
-    System.out.println(token); // Debugging output
-    return ResponseEntity.ok(token);
-}
+    Map<String, String> response = new HashMap<>();
+    response.put("token", token);
+    response.put("name", jwtUtil.extractUsername(token));
+    return ResponseEntity.ok(response);
+    }
    
+    // Check Email uniqueness
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkEmailUnique(@RequestParam String email) {
+        boolean isEmailUnique = !userService.existsByEmail(email);
+        return ResponseEntity.ok(isEmailUnique);
+    }
 
-   
     // Check
     @GetMapping("/print")
     public String print() {

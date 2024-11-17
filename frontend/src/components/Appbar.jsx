@@ -1,67 +1,138 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { AppBar, Toolbar, Button, Typography, Box } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';  // Import Link and useNavigate
+import ProfileDropdown from './ProfileDropDown';
 
-const CustomAppBar = () => {
-  const navigate = useNavigate(); 
+export default function CustomAppBar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userType, setUserType] = useState("");
+  
+  const navigate = useNavigate();  // Initialize useNavigate for programmatic navigation
 
-  const handleSignIn = () => {
-    navigate('/login'); 
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      setIsLoggedIn(true);
+      setUserName(currentUser.name);
+      setUserType(currentUser.userType);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    navigate('/');  // Use navigate instead of window.location.href
+  };
+  const handleEventDiscovery = () => {
+    navigate('/events');
   };
 
-  const handleSignUp = () => {
-    navigate('/signup'); 
+  const handleNavigate = (path) => {
+    navigate(path);  // Use navigate for programmatic navigation
   };
 
   return (
-    <AppBar 
-      position="static" 
-      sx={{ 
-        backgroundColor: '#F8F5F2', 
-        boxShadow: 'none', 
-        marginTop: '20px',
-        fontFamily: 'Product Sans'
-      }}
-    >
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        {/* Logo without a link */}
-        <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '24px', fontFamily: 'Product Sans', color: '#292929' }}>
-            Campus
-          </Typography>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '24px', fontFamily: 'Product Sans', color: '#C21807' }}>
-            Xperience
-          </Typography>
+
+    <AppBar position="static" sx={{ backgroundColor: '#F8F5F2', boxShadow: 'none' }}>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          px: 5,
+          py: 3,
+        }}
+      >
+        {/* Logo and Navigation */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Typography
+              variant="h6"
+
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '24px',
+                color: '#292929',
+                fontFamily: 'Product Sans',
+              }}
+            >
+              CAMPUS<span style={{ color: '#C21807' }}>XPERIENCE</span>
+            </Typography>
+          </Link>
+          <Box sx={{ display: 'flex', gap: 4 }}>
+            {['Event Discovery', 'Reservation and Ticketing', 'Event Reminder', 'About Us'].map(
+              (label) => (
+                <Button
+                  key={label}
+                  sx={{
+                    color: '#C21807',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    fontFamily: 'Product Sans',
+                    textTransform: 'none',
+                  }}
+                  onClick={() => {
+                    if (label === 'Event Discovery') handleNavigate('/events'); 
+                    if (label === 'Reservation and Ticketing') handleNavigate('/reservation'); 
+                    if (label === 'Event Reminder') handleNavigate('/eventReminder'); 
+                    if (label === 'About Us') handleNavigate('/aboutUs'); 
+                  }}                    
+                >
+                  {label}
+                </Button>
+              )
+            )}
+          </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1, gap: '20px', padding: '60px 0px' }}>
-          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}>
-            EVENT DISCOVERY
-          </Button>
-          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}>
-            RSVP & TICKETING
-          </Button>
-          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}>
-            EVENT REMINDER
-          </Button>
-        </Box>
-
-  
-        <Box sx={{ display: 'flex', gap: '20px', paddingRight: '60px' }}>
-          <Button 
-            sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }} 
-            onClick={handleSignIn} 
-          >
-            LOGIN
-          </Button>
-          <Button sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '20px', fontFamily: 'Product Sans' }}
-          onClick={handleSignUp}>
-            SIGNUP
-          </Button>
-        </Box>
+        {/* Profile Section */}
+        {isLoggedIn ? (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography
+              variant="body1"
+              sx={{ color: '#C21807', fontWeight: 'bold', fontSize: '16px' }}
+            >
+              Hello, {userName}!
+            </Typography>
+            <ProfileDropdown
+              userType={userType}
+              onNavigate={handleNavigate}
+              onLogout={handleLogout}
+            />
+          </Box>
+        ) : (
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button
+              variant="outlined"
+              sx={{
+                color: '#C21807',
+                borderColor: '#C21807',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                fontFamily: 'Product Sans',
+                textTransform: 'none',
+              }}
+              onClick={() => handleNavigate('/login')}
+            >
+              Login
+            </Button>
+            <Button
+              sx={{
+                backgroundColor: '#C21807',
+                color: '#F8F5F2',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                fontFamily: 'Product Sans',
+                textTransform: 'none',
+              }}
+              onClick={() => handleNavigate('/signup')}  // Navigate to Signup page
+            >
+              Signup
+            </Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
-};
-
-export default CustomAppBar;
+}
