@@ -24,7 +24,8 @@ const EventDashboard = () => {
   const [editEventId, setEditEventId] = useState(null); // State for tracking the event being edited
 
   const baseUrl = 'http://localhost:8080/event';  // Replace with your actual base URL
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('jwtToken');
+  console.log(token);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -160,11 +161,7 @@ const EventDashboard = () => {
 
   return (
     <>
-      <CustomAppBar />
       <div style={{ padding: '40px', backgroundColor: '#F8F5F2', minHeight: '100vh' }}>
-        <h1 style={{ textAlign: 'center', color: '#C21807' }}>Event Discovery</h1>
-
-        
           <Box
             sx={{
               height: '60vh',
@@ -206,7 +203,7 @@ const EventDashboard = () => {
                   attendees={event.maxCapacity || 0}
                   description={event.description}
                   image={event.imageUrl ? `http://localhost:8080${event.imageUrl}` : '/path/to/placeholder.jpg'}
-                  onEdit={() => handleEdit(event)} // Pass the event to the handleEdit function
+                  onEdit={() => handleEdit(event)} 
                   onDelete={handleDelete}
                 />
               );
