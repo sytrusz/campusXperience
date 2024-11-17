@@ -20,17 +20,22 @@ public class UserController {
     private UserService userService;
     
 
-
+    // Token
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserEntity user) {
     String token = userService.authenticateUser(user.getEmail(), user.getPassword());
     Map<String, String> response = new HashMap<>();
     response.put("token", token);
     return ResponseEntity.ok(response);
-}
+    }
    
+    // Check Email uniqueness
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkEmailUnique(@RequestParam String email) {
+        boolean isEmailUnique = !userService.existsByEmail(email);
+        return ResponseEntity.ok(isEmailUnique);
+    }
 
-   
     // Check
     @GetMapping("/print")
     public String print() {
