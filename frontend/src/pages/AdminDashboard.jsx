@@ -106,30 +106,14 @@ function UserManagement() {
     email: '',
     password: ''
   });
-  const token = localStorage.getItem('token');
-
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-
   const fetchUsers = async () => {
     try {
-
       const usersData = await makeAuthorizedRequest("http://localhost:8080/user/getAll");
-
-      const response = await fetch("http://localhost:8080/user/getAll", {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-      const usersData = await response.json();
       setUsers(usersData);
     } catch (err) {
       console.error("Error fetching users:", err);
