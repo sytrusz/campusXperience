@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.entity.UserEntity;
 import com.wachichaw.backend.service.UserService;
 
@@ -18,14 +19,23 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    private final JwtUtil jwtUtil;
+
+    public UserController(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     
+   
 
     // Token
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserEntity user) {
+    
     String token = userService.authenticateUser(user.getEmail(), user.getPassword());
     Map<String, String> response = new HashMap<>();
     response.put("token", token);
+    response.put("name", jwtUtil.extractUsername(token));
     return ResponseEntity.ok(response);
     }
    

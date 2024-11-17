@@ -30,6 +30,7 @@ const Login = () => {
       localStorage.setItem("currentUser", JSON.stringify({ email, name: userData.name, role: userData.role || "User" }));
       setName(userData.name);
       setGreat(true);
+      console.log("User name from response:", userData.name);
       navigate("/");
 
     } catch (err) {

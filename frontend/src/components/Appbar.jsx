@@ -8,7 +8,6 @@ const CustomAppBar = () => {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    // Check if user is logged in and get the user name
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if (currentUser) {
       setIsLoggedIn(true);
@@ -20,6 +19,9 @@ const CustomAppBar = () => {
     localStorage.clear();
     setIsLoggedIn(false);
     navigate('/');
+  };
+  const handleEventDiscovery = () => {
+    navigate('/events');
   };
 
   const handleSignIn = () => {
@@ -39,6 +41,7 @@ const CustomAppBar = () => {
           </Typography>
           <Box sx={{ display: 'flex', gap: '40px', fontFamily: 'Product Sans' }}>
             <Button
+            onClick={handleEventDiscovery}
               sx={{
                 color: '#C21807',
                 fontWeight: 'bold',
