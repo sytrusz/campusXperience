@@ -71,6 +71,30 @@ const demoTheme = createTheme({
   },
 });
 
+const makeAuthorizedRequest = async (url, options = {}) => {
+  const token = localStorage.getItem("jwtToken");
+  if (!token) {
+    throw new Error("No authentication token found");
+  }
+
+  const headers = {
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
+    ...options.headers
+  };
+
+  const response = await fetch(url, {
+    ...options,
+    headers
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.statusText}`);
+  }
+
+  return response.json();
+};
+
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
@@ -82,8 +106,6 @@ function UserManagement() {
     email: '',
     password: ''
   });
-  const token = localStorage.getItem('token');
-
 
   useEffect(() => {
     fetchUsers();
@@ -91,17 +113,7 @@ function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:8080/user/getAll", {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-      const usersData = await response.json();
+      const usersData = await makeAuthorizedRequest("http://localhost:8080/user/getAll");
       setUsers(usersData);
     } catch (err) {
       console.error("Error fetching users:", err);
@@ -132,12 +144,9 @@ function UserManagement() {
   const handleDelete = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        const response = await fetch(`http://localhost:8080/user/delete/${userId}`, {
-          method: 'DELETE',
+        await makeAuthorizedRequest(`http://localhost:8080/user/delete/${userId}`, {
+          method: 'DELETE'
         });
-        if (!response.ok) {
-          throw new Error('Failed to delete user');
-        }
         fetchUsers(); // Refresh the list
       } catch (err) {
         console.error("Error deleting user:", err);
@@ -167,17 +176,10 @@ function UserManagement() {
       
       const method = selectedUser ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
+      await makeAuthorizedRequest(url, {
         method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
-
-      if (!response.ok) {
-        throw new Error(selectedUser ? 'Failed to update user' : 'Failed to create user');
-      }
 
       fetchUsers(); // Refresh the list
       handleDialogClose();
@@ -304,11 +306,7 @@ function AdminManagement() {
 
   const fetchAdmins = async () => {
     try {
-      const response = await fetch("http://localhost:8080/admin/getAll");
-      if (!response.ok) {
-        throw new Error("Failed to fetch admins");
-      }
-      const adminsData = await response.json();
+      const adminsData = await makeAuthorizedRequest("http://localhost:8080/admin/getAll");
       setAdmins(adminsData);
     } catch (err) {
       console.error("Error fetching admins:", err);
@@ -341,12 +339,9 @@ function AdminManagement() {
   const handleDelete = async (adminId) => {
     if (window.confirm('Are you sure you want to delete this admin?')) {
       try {
-        const response = await fetch(`http://localhost:8080/admin/delete/${adminId}`, {
-          method: 'DELETE',
+        await makeAuthorizedRequest(`http://localhost:8080/admin/delete/${adminId}`, {
+          method: 'DELETE'
         });
-        if (!response.ok) {
-          throw new Error('Failed to delete admin');
-        }
         fetchAdmins(); // Refresh the list
       } catch (err) {
         console.error("Error deleting admin:", err);
@@ -376,17 +371,10 @@ function AdminManagement() {
       
       const method = selectedAdmin ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
+      await makeAuthorizedRequest(url, {
         method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
-
-      if (!response.ok) {
-        throw new Error(selectedAdmin ? 'Failed to update admin' : 'Failed to create admin');
-      }
 
       fetchAdmins(); // Refresh the list
       handleDialogClose();

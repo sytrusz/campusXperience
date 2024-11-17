@@ -180,7 +180,8 @@ const SignUp = () => {
                 color: 'white',
                 border: 'none',
                 cursor: 'pointer',
-                marginTop: '1rem'
+                marginTop: '1rem',
+                fontWeight: "bold"
               }}
             >
               Sign Up

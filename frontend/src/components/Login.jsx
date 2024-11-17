@@ -1,20 +1,47 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [validationError, setValidationError] = useState('');
+  const [name, setName] = useState('');
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
 
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event) => event.preventDefault();
+
   const handleSignIn = async (e) => {
     e.preventDefault();
-    setError("");
-
+    setValidationError('');
+    
     try {
-      let response = await fetch("http://localhost:8080/user/login", {
+      // Attempt admin login first
+      let response = await fetch("http://localhost:8080/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const adminData = await response.json();
+        localStorage.setItem("jwtToken", adminData.token);
+        localStorage.setItem("role", adminData.role);
+        localStorage.setItem("currentUser", JSON.stringify({
+          email,
+          name: adminData.name,
+          role: adminData.role
+        }));
+        setName(adminData.name);
+        setGreat(true);
+        navigate("/admin");
+        return;
+      }
+
+      // Attempt user login if admin login fails
+      response = await fetch("http://localhost:8080/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -25,17 +52,23 @@ const Login = () => {
       }
 
       const userData = await response.json();
-      localStorage.setItem("token", userData.token);
+      localStorage.setItem("jwtToken", userData.token);
       localStorage.setItem("role", userData.role || "User");
-      localStorage.setItem("currentUser", JSON.stringify({ email, name: userData.name, role: userData.role || "User" }));
+      localStorage.setItem("currentUser", JSON.stringify({
+        email,
+        name: userData.name,
+        role: userData.role || "User"
+      }));
       setName(userData.name);
       setGreat(true);
+
       console.log("User name from response:", userData.name);
       navigate("/");
 
+
     } catch (err) {
       console.error("Error signing in:", err);
-      setError(err.message || "Invalid email or password");
+      setValidationError(err.message || "Invalid email or password");
     }
   };
 
@@ -76,7 +109,7 @@ const Login = () => {
         fontFamily: 'Product Sans, sans-serif'
       }}>
         <div style={formContainerStyles}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Sign In</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Sign in</h1>
 
           <p style={{
             textAlign: 'center',
@@ -120,7 +153,7 @@ const Login = () => {
                 marginBottom: '0.5rem'
               }}>Password</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={formFieldStyles}
@@ -128,11 +161,11 @@ const Login = () => {
               />
             </div>
 
-            {error && (
+            {validationError && (
               <div style={{
                 color: '#dc2626',
                 fontSize: '0.875rem'
-              }}>{error}</div>
+              }}>{validationError}</div>
             )}
 
             <button
@@ -143,7 +176,8 @@ const Login = () => {
                 color: 'white',
                 border: 'none',
                 cursor: 'pointer',
-                marginTop: '1rem'
+                marginTop: '1rem',
+                fontWeight: "bold"
               }}
             >
               Sign In
@@ -155,7 +189,7 @@ const Login = () => {
                 fontSize: '0.875rem',
                 textAlign: 'center'
               }}>
-                Logged in successfully!
+                Welcome back, {name}!
               </div>
             )}
           </form>
