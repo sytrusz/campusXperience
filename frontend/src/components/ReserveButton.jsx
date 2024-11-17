@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Button = styled.button`
-  background-color: ${(props) => (props.isReserved ? '#181A2F' : '#B4182D')};
+  background-color: ${(props) => (props.isReserved ? '#B4182D' : '#181A2F')};
   color: white;
   padding: 10px 20px;
   border: none;
