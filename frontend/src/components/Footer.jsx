@@ -89,7 +89,7 @@ const styles = {
     margin: '20px 0',
   },
   emailText: {
-    fontSize: '24px',
+    fontSize: '16px',
     marginBottom: '10px',
   },
   emailInputContainer: {
@@ -101,7 +101,7 @@ const styles = {
     padding: '10px',
     borderRadius: '5px',
     border: 'none',
-    width: '250px',
+    width: '300px',
     height: '40px',
   },
   submitButton: {
