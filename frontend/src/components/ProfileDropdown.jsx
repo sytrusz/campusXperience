@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 export default function ProfileDropdown({ userType, onLogout }) {
   const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
   const navigate = useNavigate(); // Hook to navigate
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const profPic = currentUser?.prof_pic;
+
 
   const handleMenuClick = (action) => {
     switch (action) {
@@ -43,11 +46,18 @@ export default function ProfileDropdown({ userType, onLogout }) {
     <div className="flex items-center gap-3">
       <Dropdown>
         <MenuButton>
-          <img
-            src="/api/placeholder/40/40"
-            alt="Profile"
-            className="w-10 h-10 rounded-full object-cover"
-          />
+        <img
+  src={currentUser?.prof_pic ? `http://localhost:8080${currentUser.prof_pic}` : 'http://localhost:8080/profile_pictures/profile_pictures.png'}
+  alt="Profile"
+  style={{
+    width: '40px', 
+    height: '40px', 
+    borderRadius: '50%', 
+    objectFit: 'cover', 
+    display: 'block', 
+  }}
+  className="rounded-full"
+/>
         </MenuButton>
         <Menu slots={{ listbox: AnimatedListbox }}>
           <MenuItem onClick={() => handleMenuClick('profile')}>
