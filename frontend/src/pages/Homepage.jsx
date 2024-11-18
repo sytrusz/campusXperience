@@ -86,38 +86,24 @@ export default function Homepage() {
                             px: 4,
                         }}
                     >
-                        Register Now
-                    </Button>
-                    <Button 
-                        variant="outlined" 
-                        size="large"
-                        sx={{
-                            borderColor: '#C21807',
-                            color: '#C21807',
-                            '&:hover': {
-                                borderColor: '#A61506',
-                                backgroundColor: 'rgba(194, 24, 7, 0.04)',
-                            },
-                            px: 4,
-                        }}
-                    >
-                        Login to View Events
+                        Learn More
                     </Button>
                 </Box>
             </Box> */}
 
             {/* Features Section */}
             <Box sx={{ py: 8, px: 4, backgroundColor: 'white' }}>
-                <Typography variant="h3" sx={{ mb: 6, textAlign: 'center', color: '#C21807', fontWeight: 'bold' , fontFamily: "'Product Sans', sans-serif"}}>
+                <Typography variant="h3" sx={{ mb: 6, textAlign: 'center', color: '#C21807', fontWeight: 'bold' , fontFamily: "'Product Sans', sans-serif" }}>
                     Everything You Need for Successful Events
                 </Typography>
+
+                {/* Feature Cards in 3 Rows and 2 Columns */}
                 <Grid container spacing={4}>
                     {features.map((feature, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <Box
                                 sx={{
                                     p: 4,
-                                    height: '100%',
                                     backgroundColor: '#F8F5F2',
                                     borderRadius: 2,
                                     textAlign: 'center',
@@ -128,7 +114,7 @@ export default function Homepage() {
                                 }}
                             >
                                 <Box sx={{ mb: 2 }}>{feature.icon}</Box>
-                                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#C21807' , fontFamily: "'Product Sans', sans-serif"}}>
+                                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#C21807' , fontFamily: "'Product Sans', sans-serif" }}>
                                     {feature.title}
                                 </Typography>
                                 <Typography color="text.secondary">
@@ -138,6 +124,38 @@ export default function Homepage() {
                         </Grid>
                     ))}
                 </Grid>
+            </Box>
+
+            {/* Call to Action Section */}
+            <Box sx={{
+                py: 8, 
+                backgroundColor: '#FFFFFF', 
+                color: 'white', 
+                textAlign: 'center',
+                fontFamily: "'Product Sans', sans-serif"
+            }}>
+                <Typography variant="h4" sx={{ mb: 2, color: "black", fontWeight: "bold", fontFamily: "Product Sans"}}>
+                    Ready to Transform Your Event Experience?
+                </Typography>
+                <Typography variant="h6" sx={{ mb: 4, color: "gray", fontFamily: "Product Sans", fontSize:"14px"  }}>
+                    Join thousands of event organizers and attendees who are already using our platform
+                </Typography>
+                <Button 
+                    variant="contained" 
+                    size="large"
+                    sx={{
+                        backgroundColor: '#C21807',
+                        borderRadius: '10px',
+                        color: '#FFFFFF',
+                        '&:hover': {
+                            backgroundColor: '#A61506',
+                            color: '#fff',
+                        },
+                        px: 4,
+                    }}
+                >
+                    Get Started Now
+                </Button>
             </Box>
         </>
     );
