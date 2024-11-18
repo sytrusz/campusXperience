@@ -84,22 +84,38 @@ public class UserService {
     }
 
     // Update by ID
-    @SuppressWarnings("finally")
     public UserEntity updateUser(int id, UserEntity updatedUser) {
-        UserEntity userEntity = new UserEntity();
-
-        try{
-            userEntity = userRepo.findById(id).get();
-            
-            userEntity.setName(updatedUser.getName());
-            userEntity.setEmail(updatedUser.getEmail());
-            userEntity.setPassword(updatedUser.getPassword());
-        }catch(NoSuchElementException nex){
-            throw new Exception ("User " + id + " not found");
-        }finally{
-            return userRepo.save(userEntity);
+        // Retrieve the existing user
+        UserEntity existingUser = userRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    
+        // Verify the current password
+        if (!existingUser.getPassword().equals(updatedUser.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
         }
+    
+        // Update name if provided
+        if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
+            existingUser.setName(updatedUser.getName());
+        }
+    
+        // Check if the email is being updated and if it's unique
+        if (updatedUser.getEmail() != null && !existingUser.getEmail().equals(updatedUser.getEmail())) {
+            if (userRepo.existsByEmail(updatedUser.getEmail())) {
+                throw new RuntimeException("Email already in use");
+            }
+            existingUser.setEmail(updatedUser.getEmail());
+        }
+    
+        // Update password if a new one is provided
+        if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
+            existingUser.setPassword(updatedUser.getNewPassword());
+        }
+    
+        // Save and return the updated user
+        return userRepo.save(existingUser);
     }
+    
 
     // Delete by ID
     @SuppressWarnings("unused")

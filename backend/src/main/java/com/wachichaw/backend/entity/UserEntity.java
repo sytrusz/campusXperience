@@ -36,8 +36,10 @@ public class UserEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+
     @Column(name = "prof_pic", nullable = true)
     private String profPic;
+
 
     @OneToMany(mappedBy = "user")
     private List<ReminderEntity> reminders;
@@ -95,11 +97,13 @@ public class UserEntity {
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
     }
+
     public String getProfPic() {
         return profPic;
     }
 
     public void setProfPic(String profPic) {
         this.profPic = profPic;
+
     }
 }

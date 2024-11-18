@@ -10,8 +10,17 @@ const Login = () => {
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignIn = async (event) => {
-    event.preventDefault(); // Prevent form reload
+
+
+
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event) => event.preventDefault();
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    setValidationError('');
+    
 
     try {
       // Attempt admin login first
@@ -61,7 +70,6 @@ const Login = () => {
       setName(userData.name);
       setGreat(true);
       navigate("/");
-
     } catch (err) {
       console.error("Error signing in:", err);
       setValidationError(err.message || "Invalid email or password");

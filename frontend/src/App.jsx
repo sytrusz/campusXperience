@@ -10,7 +10,7 @@ import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/AdminDashboard';
 import AboutUs from './pages/AboutUs';
 import Profile from './pages/Profile'; // Import the Profile page component
-
+import Footer from './components/Footer';
 // Component to conditionally render AppBar based on the current route
 function AppWithAppBar() {
   const location = useLocation();
@@ -30,6 +30,7 @@ function AppWithAppBar() {
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
+      <Footer/>
     </>
   );
 }
