@@ -169,7 +169,7 @@ const EventDashboard = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundImage: 'url(/src/assets/images/hero-image.png)',
+              backgroundImage: 'url(/src/assets/images/hero.jpg)',
               backgroundSize: '90%',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',

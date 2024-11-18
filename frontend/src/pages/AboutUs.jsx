@@ -1,23 +1,24 @@
 import React from 'react';
 import { Lightbulb, Users, Accessibility, Clock, ChevronRight } from 'lucide-react';
+import { fontSize } from '@mui/system';
 
 const globalStyles = {
-  fontFamily: 'Product Sans, sans-serif',  // Apply globally
+  fontFamily: 'Product Sans, sans-serif',  
   container: { 
     minHeight: '100vh', 
     background: 'linear-gradient(to bottom, #ffffff, #fff5f5)',
-    fontFamily: 'Product Sans, sans-serif',  // Apply font to entire container
+    fontFamily: 'Product Sans, sans-serif', 
     padding: '0'
   },
   section: { maxWidth: '1200px', margin: '0 auto', padding: '64px 20px' },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' },
   card: { backgroundColor: '#ffffff', padding: '32px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' },
   iconWrapper: { display: 'flex', justifyContent: 'center', marginBottom: '16px' },
-  button: { backgroundColor: '#ffffff', color: '#dc2626', padding: '12px 32px', borderRadius: '8px', fontWeight: 'bold', border: 'none', cursor: 'pointer', transition: 'background-color 0.2s' },
-  cta: { backgroundColor: '#dc2626', color: '#ffffff', padding: '64px 20px', textAlign: 'center' },
+  button: { backgroundColor: '#dc2626', color: '#ffffff', padding: '12px 32px', borderRadius: '8px', fontWeight: 'bold', border: 'none', cursor: 'pointer', transition: 'background-color 0.2s' },
+  cta: { backgroundColor: '#FFFFFFF', color: '#000000', padding: '64px 20px', textAlign: 'center' },
   hero: { position: 'relative', overflow: 'hidden', backgroundColor: '#dc2626', color: '#ffffff', padding: '60px 20px' },
   heroOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2 },
-  heroContent: { position: 'relative', maxWidth: '1200px', margin: '0 auto' },
+  heroContent: { position: 'relative', maxWidth: '1200px', margin: '0 auto', fontSize: '24px'},
   devTeamCard: { backgroundColor: '#ffffff', padding: '32px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', textAlign: 'center' },
 };
 
@@ -109,8 +110,8 @@ const CTASection = () => (
     <p>Start your journey with Campus Xperience today.</p>
     <button
       style={globalStyles.button}
-      onMouseOver={(e) => (e.target.style.backgroundColor = '#f8f8f8')}
-      onMouseOut={(e) => (e.target.style.backgroundColor = '#ffffff')}
+      onMouseOver={(e) => (e.target.style.backgroundColor = '#b91c1c')}
+      onMouseOut={(e) => (e.target.style.backgroundColor = '#dc2626')}
     >
       Get Started
       <ChevronRight style={{ marginLeft: '8px' }} size={20} />
