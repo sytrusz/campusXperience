@@ -11,11 +11,12 @@ import java.nio.file.Paths;
 @Service
 public class ImageUploadController {
 
-    private static final String IMAGE_DIR = "C:/Users/USER/Documents/GitHub/campusxperience/backend/src/main/resources/static/uploads/";
+    private static final String EVENTS_DIR = "C:/Users/USER/Documents/GitHub/campusxperience/backend/src/main/resources/static/uploads/";
+    private static final String prof_DIR = "C:/Users/USER/Documents/GitHub/campusxperience/backend/src/main/resources/static/profile_pictures/";
 
     public String uploadImage(MultipartFile file) throws IOException {
         // Ensure the upload directory exists
-        Path uploadDir = Paths.get(IMAGE_DIR);
+        Path uploadDir = Paths.get(EVENTS_DIR);
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }
@@ -31,6 +32,26 @@ public class ImageUploadController {
         // Write the file to the directory
         Files.write(filePath, file.getBytes());
 
-        return "/uploads/" + fileName; // Path relative to the static folder
+        return "/uploads/" + fileName; 
+    }
+    public String uploadProfpic(MultipartFile file) throws IOException {
+        // Ensure the upload directory exists
+        Path uploadDir = Paths.get(prof_DIR);
+        if (!Files.exists(uploadDir)) {
+            Files.createDirectories(uploadDir);
+        }
+
+        // Get the original file name and resolve the path
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) {
+            throw new IOException("File name is empty.");
+        }
+
+        Path filePath = uploadDir.resolve(fileName);
+        
+        // Write the file to the directory
+        Files.write(filePath, file.getBytes());
+
+        return "/profile_pictures/" + fileName; // Path relative to the static folder
     }
 }

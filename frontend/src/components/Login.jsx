@@ -9,7 +9,10 @@ const Login = () => {
   const [name, setName] = useState('');
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
-    
+
+  const handleSignIn = async (event) => {
+    event.preventDefault(); // Prevent form reload
+
     try {
       // Attempt admin login first
       let response = await fetch("http://localhost:8080/admin/login", {
@@ -50,14 +53,14 @@ const Login = () => {
       localStorage.setItem("currentUser", JSON.stringify({
         email,
         name: userData.name,
-        role: userData.role || "User"
+        role: userData.role || "User",
+        prof_pic: userData.prof_pic
+        
       }));
+      console.log(userData.prof_pic)
       setName(userData.name);
       setGreat(true);
-
-      console.log("User name from response:", userData.name);
       navigate("/");
-
 
     } catch (err) {
       console.error("Error signing in:", err);
@@ -65,7 +68,6 @@ const Login = () => {
     }
   };
 
-  // Common styles for form elements
   const formFieldStyles = {
     width: '100%',
     boxSizing: 'border-box',
@@ -104,16 +106,9 @@ const Login = () => {
         <div style={formContainerStyles}>
           <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Sign in</h1>
 
-          <p style={{
-            textAlign: 'center',
-            fontSize: '0.975rem'
-          }}>
+          <p style={{ textAlign: 'center', fontSize: '0.975rem' }}>
             Don't have an account?{' '}
-            <a href="/signup" style={{
-              color: '#dc2626',
-              fontWeight: "bold",
-              textDecoration: 'none'
-            }}>
+            <a href="/signup" style={{ color: '#dc2626', fontWeight: "bold", textDecoration: 'none' }}>
               Sign Up
             </a>
           </p>

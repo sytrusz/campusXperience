@@ -29,18 +29,18 @@ const EventCard = ({
       {/* Event Image */}
       <div
         className="relative w-full overflow-hidden rounded-t-lg"
-        style={{ height: '200px' }} // Fixed height for the image container
+        style={{ height: '200px' }} 
       >
         <img
-          src={`${image}?t=${new Date().getTime()}`}  // Cache busting with timestamp
+          src={`${image}?t=${new Date().getTime()}`}  
           alt={title}
           className="w-full h-full object-cover"
           style={{
             maxWidth: '100%',
             maxHeight: '100%',
-            objectFit: 'cover', // Ensure the image covers the container
-            display: 'block', // Ensure the image is block level (no spacing issues)
-          }} // Ensure the image fills the container without distortion
+            objectFit: 'cover', 
+            display: 'block', 
+          }} 
         />
         <div className="absolute top-4 right-4">
           <span className="rounded-full bg-red-600 px-3 py-1 text-sm font-medium text-white">

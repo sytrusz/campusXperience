@@ -36,7 +36,7 @@ public class SecurityConfig {
 
 
                         .requestMatchers("/user/login", "/user/save", "/admin/login","/user/check-email").permitAll() // Allow login without authentication
-                        .requestMatchers("/uploads/**").permitAll() // Allow access to static files in /uploads
+                        .requestMatchers("/uploads/**","/profile_pictures/**").permitAll() 
 
 
                         .anyRequest().authenticated()) // Other requests need authentication
@@ -51,7 +51,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5174")); // Specify allowed origins
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Specify allowed origins
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed HTTP methods
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -59,7 +59,8 @@ public class SecurityConfig {
         // Register CORS for all paths
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // For all paths
-        source.registerCorsConfiguration("/uploads/**", configuration); // Specifically for uploads path
+        source.registerCorsConfiguration("/uploads/**", configuration); 
+        source.registerCorsConfiguration("/profile_pictures/**", configuration);
 
         return new CorsFilter(source);
     }

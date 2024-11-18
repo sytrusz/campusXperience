@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.entity.UserEntity;
@@ -36,6 +37,8 @@ public class UserController {
     Map<String, String> response = new HashMap<>();
     response.put("token", token);
     response.put("name", jwtUtil.extractUsername(token));
+    response.put("prof_pic", jwtUtil.extractProfpic(token));
+    System.out.println(response);
     return ResponseEntity.ok(response);
     }
    
@@ -53,11 +56,22 @@ public class UserController {
     }
 
     // Create
-    @PostMapping("/save")
-    public UserEntity saveUser(@RequestBody UserEntity user) {
-        return userService.saveUser(user);
-    }
 
+    @PostMapping("/save")
+    public ResponseEntity<UserEntity> saveUser(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("name") String name,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("createdAt") String createdAt
+            ) {
+        
+                UserEntity savedUser = userService.saveUser(file, name, email, password, createdAt);
+        System.out.println(file); // Debugging output
+
+        return ResponseEntity.ok(savedUser);
+    }
+    
     // Get all
     @GetMapping("/getAll")
     public List<UserEntity> getAllUser() {

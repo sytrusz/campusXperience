@@ -30,10 +30,14 @@ public class UserEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+    
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "prof_pic", nullable = true)
+    private String profPic;
 
     @OneToMany(mappedBy = "user")
     private List<ReminderEntity> reminders;
@@ -42,13 +46,14 @@ public class UserEntity {
         super();
     }
 
-    public UserEntity(int userId, String name, String email, String password, LocalDateTime createdAt){
+    public UserEntity(int userId, String name, String email, String password, LocalDateTime createdAt, String profPic){
         super();
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.createdAt = createdAt;
+        this.profPic = profPic;
     }
 
     public int getUserId(){
@@ -89,5 +94,12 @@ public class UserEntity {
 
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
+    }
+    public String getProfPic() {
+        return profPic;
+    }
+
+    public void setProfPic(String profPic) {
+        this.profPic = profPic;
     }
 }
