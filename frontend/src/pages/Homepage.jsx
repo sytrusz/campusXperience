@@ -5,32 +5,32 @@ import { Search, Security, Notifications, CalendarMonth, Group, Star } from '@mu
 export default function Homepage() {
     const features = [
         {
-            icon: <Search sx={{ fontSize: 40, color: '#C21807' }} />,
+            icon: <Search sx={{ fontSize: 40, color: '#C21807'}} />,
             title: "Smart Event Discovery",
             description: "Find events that match your interests with our intelligent recommendation system"
         },
         {
-            icon: <Security sx={{ fontSize: 40, color: '#C21807' }} />,
+            icon: <Security sx={{ fontSize: 40, color: '#C21807'}} />,
             title: "Secure RSVPs",
             description: "Manage your attendance with encrypted, fraud-proof registration"
         },
         {
-            icon: <Notifications sx={{ fontSize: 40, color: '#C21807' }} />,
+            icon: <Notifications sx={{ fontSize: 40, color: '#C21807'}} />,
             title: "Real-time Updates",
             description: "Never miss an update with instant notifications about your events"
         },
         {
-            icon: <CalendarMonth sx={{ fontSize: 40, color: '#C21807' }} />,
+            icon: <CalendarMonth sx={{ fontSize: 40, color: '#C21807'}} />,
             title: "Smart Scheduling",
             description: "Coordinate with ease using our conflict-free scheduling system"
         },
         {
-            icon: <Group sx={{ fontSize: 40, color: '#C21807' }} />,
+            icon: <Group sx={{ fontSize: 40, color: '#C21807'}} />,
             title: "Community Engagement",
             description: "Connect with like-minded attendees before, during, and after events"
         },
         {
-            icon: <Star sx={{ fontSize: 40, color: '#C21807' }} />,
+            icon: <Star sx={{ fontSize: 40, color: '#C21807'}} />,
             title: "Exclusive Access",
             description: "Get early bird tickets and special rates for premium events"
         }
@@ -49,6 +49,7 @@ export default function Homepage() {
                     backgroundColor: '#F8F5F2',
                     textAlign: 'center',
                     p: 4,
+                    fontFamily: "'Product Sans', sans-serif"
                 }}
             >
                 <Typography variant="h2" component="h1" 
@@ -56,7 +57,8 @@ export default function Homepage() {
                         mb: 2, 
                         color: '#C21807',
                         fontWeight: 'bold',
-                        fontSize: { xs: '2.5rem', md: '3.75rem' }
+                        fontSize: { xs: '2.5rem', md: '3.75rem' },
+                        fontFamily: "'Product Sans', sans-serif"
                     }}>
                     Your Events, Elevated
                 </Typography>
@@ -65,11 +67,12 @@ export default function Homepage() {
                         mb: 4, 
                         color: '#333',
                         maxWidth: '800px',
-                        mx: 'auto'
+                        mx: 'auto',
+                        fontFamily: "'Product Sans', sans-serif"
                     }}>
                     Discover, join, and manage memorable events with our all-in-one platform
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', fontFamily: "'Product Sans', sans-serif" }}>
                     <Button 
                         variant="contained" 
                         size="large"
@@ -103,7 +106,7 @@ export default function Homepage() {
 
             {/* Features Section */}
             <Box sx={{ py: 8, px: 4, backgroundColor: 'white' }}>
-                <Typography variant="h3" sx={{ mb: 6, textAlign: 'center', color: '#C21807', fontWeight: 'bold' }}>
+                <Typography variant="h3" sx={{ mb: 6, textAlign: 'center', color: '#C21807', fontWeight: 'bold' , fontFamily: "'Product Sans', sans-serif"}}>
                     Everything You Need for Successful Events
                 </Typography>
                 <Grid container spacing={4}>
@@ -123,7 +126,7 @@ export default function Homepage() {
                                 }}
                             >
                                 <Box sx={{ mb: 2 }}>{feature.icon}</Box>
-                                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#C21807' }}>
+                                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#C21807' , fontFamily: "'Product Sans', sans-serif"}}>
                                     {feature.title}
                                 </Typography>
                                 <Typography color="text.secondary">
@@ -133,45 +136,6 @@ export default function Homepage() {
                         </Grid>
                     ))}
                 </Grid>
-            </Box>
-
-            {/* CTA Section */}
-            <Box sx={{ py: 8, px: 4, backgroundColor: '#C21807', color: 'white', textAlign: 'center' }}>
-                <Typography variant="h3" sx={{ mb: 3, fontWeight: 'bold' }}>
-                    Ready to Transform Your Event Experience?
-                </Typography>
-                <Typography variant="h6" sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.9)' }}>
-                    Join thousands of event organizers and attendees who are already using our platform
-                </Typography>
-                <Button 
-                    variant="contained" 
-                    size="large"
-                    sx={{
-                        backgroundColor: 'white',
-                        color: '#C21807',
-                        '&:hover': {
-                            backgroundColor: '#F8F5F2',
-                        },
-                        px: 4,
-                    }}
-                >
-                    Get Started Now
-                </Button>
-            </Box>
-
-            {/* Footer Section */}
-            <Box
-                sx={{
-                    p: 3,
-                    backgroundColor: '#C21807',
-                    color: 'white',
-                    textAlign: 'center',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-            >
-                <Typography variant="body1">
-                    © {new Date().getFullYear()} CampusXperience. All rights reserved.
-                </Typography>
             </Box>
         </>
     );

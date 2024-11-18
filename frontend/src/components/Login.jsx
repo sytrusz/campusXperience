@@ -9,6 +9,13 @@ const Login = () => {
   const [name, setName] = useState('');
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event) => event.preventDefault();
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    setValidationError('');
     
     try {
       // Attempt admin login first
@@ -54,10 +61,7 @@ const Login = () => {
       }));
       setName(userData.name);
       setGreat(true);
-
-      console.log("User name from response:", userData.name);
-      navigate("/");
-
+      navigate("/events");
 
     } catch (err) {
       console.error("Error signing in:", err);
