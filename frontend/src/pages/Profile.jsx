@@ -18,7 +18,6 @@ const Profile = ({ userType, userData, onSaveProfile }) => {
 
   return (
     <div>
-        <CustomAppBar />
         <EditProfile userType={userType} userData={user} onSave={handleSaveProfile} />
     </div>
   );

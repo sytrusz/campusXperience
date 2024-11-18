@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -7,6 +8,9 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [validationError, setValidationError] = useState('');
   const [added, setAdded] = useState(false);
+  
+  // Initialize the navigate function
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event) => event.preventDefault();
@@ -56,6 +60,12 @@ const SignUp = () => {
       });
       setAdded(true);
       setValidationError('');
+
+      // Redirect to Login page after successful sign-up
+      setTimeout(() => {
+        navigate('/login'); // Navigate to login page
+      }, 2000); // Delay to show success message before redirecting
+
     } catch (error) {
       setValidationError('An error occurred. Please try again.');
     }

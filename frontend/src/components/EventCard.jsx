@@ -1,106 +1,41 @@
 import React from 'react';
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
+import { Card, CardContent, Typography, Button, CardMedia, Chip, Box } from '@mui/material';
+import { LocationOn } from '@mui/icons-material';
 
-const EventCard = ({
-  id,
-  title,
-  date,
-  time,
-  location,
-  category,
-  attendees,
-  description,
-  image, // Image prop
-  onEdit,
-  onDelete
-}) => {
+const EventCard = ({ title, date, time, location, description, image, category, status, onEdit, onDelete }) => {
   return (
-    <div
-      className="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-lg"
-      style={{
-        backgroundColor: '#C21807',
-        color: '#F8F5F2',
-        borderRadius: '12px',
-        padding: '16px',
-        width: '300px', // Fixed width for the card
-        height: 'auto', // Auto height to accommodate content
-      }}
-    >
-      {/* Event Image */}
-      <div
-        className="relative w-full overflow-hidden rounded-t-lg"
-        style={{ height: '200px' }} // Fixed height for the image container
-      >
-        <img
-          src={`${image}?t=${new Date().getTime()}`}  // Cache busting with timestamp
+    <Card sx={{ maxWidth: 345, borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', overflow: 'hidden' }}>
+      {image && (
+        <CardMedia
+          component="img"
           alt={title}
-          className="w-full h-full object-cover"
-          style={{
-            maxWidth: '100%',
-            maxHeight: '100%',
-            objectFit: 'cover', // Ensure the image covers the container
-            display: 'block', // Ensure the image is block level (no spacing issues)
-          }} // Ensure the image fills the container without distortion
+          height="180"
+          image={image}
+          sx={{ objectFit: 'cover', borderBottom: '2px solid #eee' }}
         />
-        <div className="absolute top-4 right-4">
-          <span className="rounded-full bg-red-600 px-3 py-1 text-sm font-medium text-white">
-            {category}
-          </span>
-        </div>
-      </div>
-
-      {/* Event Content */}
-      <div className="p-4">
-        <h3 className="mb-2 text-xl font-bold truncate">{title}</h3> {/* Truncate to avoid title overflow */}
-        
-        {/* Event Details */}
-        <div className="space-y-2">
-          <div className="flex items-center text-sm">
-            <Calendar className="mr-2 h-4 w-4" />
-            <span>{date}</span>
-            <Clock className="ml-4 mr-2 h-4 w-4" />
-            <span>{time}</span>
-          </div>
-          
-          <div className="flex items-center text-sm">
-            <MapPin className="mr-2 h-4 w-4" />
-            <span>{location}</span>
-          </div>
-          
-          <div className="flex items-center text-sm">
-            <Users className="mr-2 h-4 w-4" />
-            <span>{attendees} Capacity</span>
-          </div>
-        </div>
-
-        {/* Description */}
-        <p className="mt-3 text-sm truncate" style={{ maxHeight: '60px', overflow: 'hidden' }}>
+      )}
+      <CardContent sx={{ padding: '16px' }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+          {title}
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+          <LocationOn sx={{ color: '#C21807', marginRight: '4px' }} />
+          <Typography variant="body2" color="textSecondary" sx={{ flexGrow: 1 }}>
+            {location}
+          </Typography>
+        </Box>
+        <Typography variant="body2" color="textSecondary" sx={{ marginBottom: '8px' }}>
+          <strong>Date:</strong> {date}, <strong>Time:</strong> {time}
+        </Typography>
+        <Typography variant="body2" sx={{ marginBottom: '16px' }}>
           {description}
-        </p>
-
-        {/* Action Buttons */}
-        <div className="mt-4 flex gap-2">
-          <button
-            className="rounded border border-red-600 bg-transparent px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-600 hover:text-white transition-colors duration-300"
-            onClick={() => onEdit(id)}
-          >
-            Edit
-          </button>
-          <button
-            className="rounded border border-red-600 bg-transparent px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-600 hover:text-white transition-colors duration-300"
-            onClick={() => onDelete(id)}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
+        </Typography>
+        {status && (
+          <Chip label={status} color={status === 'Upcoming' ? 'primary' : 'secondary'} size="small" sx={{ marginBottom: '16px' }} />
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
 export default EventCard;
-
-
-
-
-

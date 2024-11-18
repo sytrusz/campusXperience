@@ -68,27 +68,39 @@ export default function ProfileDropdown({ userType, onLogout }) {
       </Dropdown>
 
       {/* Logout Confirmation Modal */}
-      <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-        <DialogTitle>Confirm Logout</DialogTitle>
-        <DialogContent>
-          Are you sure you want to logout?
-        </DialogContent>
-        <DialogActions>
-            <Button 
-                onClick={() => handleLogoutConfirmation(false)} 
+      <Dialog
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            maxWidth="sm" // Adjusted to 'sm' for a better balance of size
+            fullWidth={true} // Ensure the modal stretches to full width (or adjust to a specific width as needed)
+            PaperProps={{
+              style: {
+                minWidth: '400px', // Ensure the dialog has a minimum width
+                padding: '16px', // Optional: Add some padding around the modal content
+              },
+            }}
+>
+            <DialogTitle>Confirm Logout</DialogTitle>
+            <DialogContent sx={{ padding: '24px' }}> {/* Larger padding for content */}
+              Are you sure you want to logout?
+            </DialogContent>
+            <DialogActions sx={{ padding: '16px' }}> {/* Adjust padding of actions */}
+              <Button
+                onClick={() => handleLogoutConfirmation(false)}
                 sx={{ backgroundColor: '#f0f0f0', color: '#555' }}
-            >
+              >
                 Cancel
-            </Button>
-            <Button 
-                onClick={() => handleLogoutConfirmation(true)} 
+              </Button>
+              <Button
+                onClick={() => handleLogoutConfirmation(true)}
                 sx={{ backgroundColor: '#d32f2f', color: '#fff' }}
-            >
+              >
                 Logout
-            </Button>
-        </DialogActions>
+              </Button>
+            </DialogActions>
+        </Dialog>
 
-      </Dialog>
+
     </div>
   );
 }

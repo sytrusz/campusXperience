@@ -1,5 +1,5 @@
 const fetchImageUrl = async (imageUrl) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('jwtToken');
     
     // Make sure you send the token with the request
     const response = await fetch(imageUrl, {
