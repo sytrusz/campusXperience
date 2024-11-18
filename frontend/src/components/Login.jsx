@@ -9,13 +9,6 @@ const Login = () => {
   const [name, setName] = useState('');
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
-
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleMouseDownPassword = (event) => event.preventDefault();
-
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    setValidationError('');
     
     try {
       // Attempt admin login first
