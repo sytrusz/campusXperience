@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, Typography, Grid } from '@mui/material';
 import { Search, Security, Notifications, CalendarMonth, Group, Star } from '@mui/icons-material';
+import HeroSection from '../components/HeroSection';
 
 export default function Homepage() {
     const features = [
@@ -38,7 +39,8 @@ export default function Homepage() {
 
     return (
         <>
-            {/* Hero Section */}
+        <HeroSection />
+            {/* Hero Section
             <Box
                 sx={{
                     minHeight: '80vh',
@@ -102,7 +104,7 @@ export default function Homepage() {
                         Login to View Events
                     </Button>
                 </Box>
-            </Box>
+            </Box> */}
 
             {/* Features Section */}
             <Box sx={{ py: 8, px: 4, backgroundColor: 'white' }}>
