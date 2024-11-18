@@ -1,7 +1,6 @@
 package com.wachichaw.backend.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,9 +107,6 @@ public class UserService {
         }
     
         // Update password if a new one is provided
-        if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
-            existingUser.setPassword(updatedUser.getNewPassword());
-        }
     
         // Save and return the updated user
         return userRepo.save(existingUser);

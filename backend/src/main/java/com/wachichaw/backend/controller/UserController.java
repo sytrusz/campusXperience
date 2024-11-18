@@ -88,7 +88,6 @@ public class UserController {
         try {
             // Extract data from the request
             String currentPassword = updateRequest.get("currentPassword");
-            String newPassword = updateRequest.get("newPassword");
             String name = updateRequest.get("name");
             String email = updateRequest.get("email");
     
@@ -98,7 +97,6 @@ public class UserController {
             updatedUser.setName(name);
             updatedUser.setEmail(email);
             updatedUser.setPassword(currentPassword);
-            updatedUser.setNewPassword(newPassword);
     
             // Call the service to update the user
             UserEntity savedUser = userService.updateUser(userId, updatedUser);
