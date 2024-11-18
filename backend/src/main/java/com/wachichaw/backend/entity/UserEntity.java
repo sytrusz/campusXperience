@@ -11,6 +11,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "User")
@@ -34,6 +35,9 @@ public class UserEntity {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Transient
+    private String newPassword;
 
     @OneToMany(mappedBy = "user")
     private List<ReminderEntity> reminders;
@@ -89,5 +93,13 @@ public class UserEntity {
 
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+    
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }
