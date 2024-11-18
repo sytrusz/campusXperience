@@ -10,6 +10,10 @@ const Login = () => {
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
 
+
+
+
+
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event) => event.preventDefault();
 
@@ -17,6 +21,7 @@ const Login = () => {
     e.preventDefault();
     setValidationError('');
     
+
     try {
       // Attempt admin login first
       let response = await fetch("http://localhost:8080/admin/login", {
@@ -57,19 +62,20 @@ const Login = () => {
       localStorage.setItem("currentUser", JSON.stringify({
         email,
         name: userData.name,
-        role: userData.role || "User"
+        role: userData.role || "User",
+        prof_pic: userData.prof_pic
+        
       }));
+      console.log(userData.prof_pic)
       setName(userData.name);
       setGreat(true);
-      navigate("/events");
-
+      navigate("/");
     } catch (err) {
       console.error("Error signing in:", err);
       setValidationError(err.message || "Invalid email or password");
     }
   };
 
-  // Common styles for form elements
   const formFieldStyles = {
     width: '100%',
     boxSizing: 'border-box',
@@ -108,16 +114,9 @@ const Login = () => {
         <div style={formContainerStyles}>
           <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Sign in</h1>
 
-          <p style={{
-            textAlign: 'center',
-            fontSize: '0.975rem'
-          }}>
+          <p style={{ textAlign: 'center', fontSize: '0.975rem' }}>
             Don't have an account?{' '}
-            <a href="/signup" style={{
-              color: '#dc2626',
-              fontWeight: "bold",
-              textDecoration: 'none'
-            }}>
+            <a href="/signup" style={{ color: '#dc2626', fontWeight: "bold", textDecoration: 'none' }}>
               Sign Up
             </a>
           </p>

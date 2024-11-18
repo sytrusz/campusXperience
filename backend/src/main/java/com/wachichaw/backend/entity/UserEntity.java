@@ -11,7 +11,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "User")
@@ -31,13 +30,16 @@ public class UserEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+    
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Transient
-    private String newPassword;
+
+    @Column(name = "prof_pic", nullable = true)
+    private String profPic;
+
 
     @OneToMany(mappedBy = "user")
     private List<ReminderEntity> reminders;
@@ -46,13 +48,14 @@ public class UserEntity {
         super();
     }
 
-    public UserEntity(int userId, String name, String email, String password, LocalDateTime createdAt){
+    public UserEntity(int userId, String name, String email, String password, LocalDateTime createdAt, String profPic){
         super();
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.createdAt = createdAt;
+        this.profPic = profPic;
     }
 
     public int getUserId(){
@@ -95,11 +98,12 @@ public class UserEntity {
         this.createdAt = createdAt;
     }
 
-    public String getNewPassword() {
-        return newPassword;
+    public String getProfPic() {
+        return profPic;
     }
-    
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+
+    public void setProfPic(String profPic) {
+        this.profPic = profPic;
+
     }
 }

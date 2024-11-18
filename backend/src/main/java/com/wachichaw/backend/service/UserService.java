@@ -1,13 +1,14 @@
 package com.wachichaw.backend.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wachichaw.backend.auth.JwtUtil;
+import com.wachichaw.backend.controller.ImageUploadController;
 import com.wachichaw.backend.entity.UserEntity;
 import com.wachichaw.backend.repository.UserRepo;
 
@@ -18,16 +19,35 @@ public class UserService {
     private UserRepo userRepo;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private ImageUploadController imageUploadController;  
 
     public UserService(){
         super();
     }
 
     // Create
-    public UserEntity saveUser(UserEntity user) {
-        return userRepo.save(user);
-    }
+    public UserEntity saveUser(MultipartFile file, String name, String email, String password,
+                                 String createdAt) {
 
+        try {
+            String imageUrl = imageUploadController.uploadProfpic(file);
+
+            UserEntity newUser = new UserEntity();
+            newUser.setName(name);
+            newUser.setEmail(email);
+            newUser.setPassword(password);  
+            newUser.setCreatedAt(java.time.LocalDateTime.parse(createdAt));  
+            newUser.setProfPic(imageUrl);  
+
+            System.out.println(imageUrl);
+            return userRepo.save(newUser);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while saving the event: " + e.getMessage());
+        }
+    }
+    
     // Read
    public String authenticateUser(String email, String password) {
     System.out.println("Authenticating user with email: " + email); 
@@ -87,9 +107,6 @@ public class UserService {
         }
     
         // Update password if a new one is provided
-        if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
-            existingUser.setPassword(updatedUser.getNewPassword());
-        }
     
         // Save and return the updated user
         return userRepo.save(existingUser);

@@ -4,6 +4,7 @@ import { LocationOn } from '@mui/icons-material';
 
 const EventCard = ({ title, date, time, location, description, image, category, status, onEdit, onDelete }) => {
   return (
+
     <Card sx={{ maxWidth: 345, borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', overflow: 'hidden' }}>
       {image && (
         <CardMedia
@@ -12,6 +13,7 @@ const EventCard = ({ title, date, time, location, description, image, category, 
           height="180"
           image={image}
           sx={{ objectFit: 'cover', borderBottom: '2px solid #eee' }}
+
         />
       )}
       <CardContent sx={{ padding: '16px' }}>
