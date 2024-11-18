@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Box } from '@mui/material';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { 
+  TextField, 
+  Button, 
+  Typography, 
+  Box, 
+  Container, 
+  Paper,
+  Alert,
+  IconButton,
+  InputAdornment
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const EditProfile = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
+    currentPassword: '',
     newPassword: '',
     confirmNewPassword: ''
   });
-  const [validationError, setValidationError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPasswords, setShowPasswords] = useState(false);
 
+  // Load current user details from localStorage
   useEffect(() => {
-    // Get current user data from localStorage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (!currentUser) {
-      navigate('/login');
+      window.location.href = '/login';
       return;
     }
 
@@ -28,7 +38,106 @@ const EditProfile = () => {
       name: currentUser.name || '',
       email: currentUser.email || ''
     }));
-  }, [navigate]);
+  }, []);
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setError('Name is required');
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+
+    if (!formData.currentPassword) {
+      setError('Current password is required');
+      return false;
+    }
+
+    if (formData.newPassword) {
+      if (formData.newPassword.length < 8) {
+        setError('New password must be at least 8 characters long');
+        return false;
+      }
+
+      if (formData.newPassword !== formData.confirmNewPassword) {
+        setError('New passwords do not match');
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser?.email) {
+        throw new Error('User session not found');
+      }
+
+      const response = await fetch(`/user/update?userId=${currentUser.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword || null
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to update profile');
+      }
+
+      const updatedUser = await response.json();
+      localStorage.setItem('currentUser', JSON.stringify({
+        ...currentUser,
+        name: updatedUser.name,
+        email: updatedUser.email
+      }));
+
+      setSuccess('Profile updated successfully!');
+      
+      // Clear sensitive form fields
+      setFormData(prev => ({
+        ...prev,
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: ''
+      }));
+
+    } catch (error) {
+      if (error.message.includes('401')) {
+        setError('Current password is incorrect or session expired');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('jwtToken');
+        window.location.href = '/login';
+      } else {
+        setError(error.message || 'Failed to update profile');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,154 +145,141 @@ const EditProfile = () => {
       ...prev,
       [name]: value
     }));
-  };
-
-  const handleSave = async (e) => {
-    e.preventDefault();
-    setValidationError('');
-
-    // Validation
-    const nameRegex = /^[A-Za-z\s]+$/;
-    if (!nameRegex.test(formData.name)) {
-      setValidationError('Name must only contain letters and spaces.');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setValidationError('Please enter a valid email address.');
-      return;
-    }
-
-    if (formData.newPassword) {
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      if (!passwordRegex.test(formData.newPassword)) {
-        setValidationError('New password must be at least 8 characters with letters and numbers.');
-        return;
-      }
-
-      if (formData.newPassword !== formData.confirmNewPassword) {
-        setValidationError('New passwords do not match');
-        return;
-      }
-    }
-
-    try {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      const token = localStorage.getItem('jwtToken');
-
-      if (!token || !currentUser) {
-        navigate('/login');
-        return;
-      }
-
-      const response = await axios.put(
-        `http://localhost:8080/user/update?userId=${currentUser.id}`,
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          newPassword: formData.newPassword || null
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      // Update local storage with new user data
-      const updatedUser = {
-        ...currentUser,
-        name: response.data.name,
-        email: response.data.email
-      };
-      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-
-      // Show success message
-      alert('Profile updated successfully!');
-      navigate('/profile'); // or wherever you want to redirect after success
-
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      if (error.response?.status === 401) {
-        setValidationError('Current password is incorrect or session expired.');
-        navigate('/login');
-      } else {
-        setValidationError(error.response?.data || 'Failed to update profile. Please try again.');
-      }
-    }
+    setError('');
   };
 
   return (
-    <Box sx={{ maxWidth: 600, margin: '0 auto', padding: 3 }}>
-      <Typography variant="h4" gutterBottom>Edit Profile</Typography>
-      <Box component="form" onSubmit={handleSave} noValidate>
-        <TextField
-          name="name"
-          label="Name"
-          fullWidth
-          margin="normal"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <TextField
-          name="email"
-          label="Email"
-          fullWidth
-          margin="normal"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <TextField
-          name="password"
-          label="Current Password"
-          fullWidth
-          margin="normal"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <TextField
-          name="newPassword"
-          label="New Password"
-          fullWidth
-          margin="normal"
-          type={showPassword ? "text" : "password"}
-          value={formData.newPassword}
-          onChange={handleChange}
-        />
-        <TextField
-          name="confirmNewPassword"
-          label="Confirm New Password"
-          fullWidth
-          margin="normal"
-          type={showPassword ? "text" : "password"}
-          value={formData.confirmNewPassword}
-          onChange={handleChange}
-        />
-        
-        {validationError && (
-          <Typography color="error" variant="body2" sx={{ mt: 2 }}>
-            {validationError}
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Edit Profile
           </Typography>
-        )}
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 3 }}
-        >
-          Save Changes
-        </Button>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              disabled={isLoading}
+              required
+            />
+
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              disabled={isLoading}
+              required
+            />
+
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Current Password"
+              name="currentPassword"
+              type={showPasswords ? "text" : "password"}
+              value={formData.currentPassword}
+              onChange={handleChange}
+              disabled={isLoading}
+              required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPasswords(!showPasswords)}
+                      edge="end"
+                    >
+                      {showPasswords ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <TextField
+              fullWidth
+              margin="normal"
+              label="New Password"
+              name="newPassword"
+              type={showPasswords ? "text" : "password"}
+              value={formData.newPassword}
+              onChange={handleChange}
+              disabled={isLoading}
+              helperText="Leave blank to keep current password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPasswords(!showPasswords)}
+                      edge="end"
+                    >
+                      {showPasswords ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            {formData.newPassword && (
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Confirm New Password"
+                name="confirmNewPassword"
+                type={showPasswords ? "text" : "password"}
+                value={formData.confirmNewPassword}
+                onChange={handleChange}
+                disabled={isLoading}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPasswords(!showPasswords)}
+                        edge="end"
+                      >
+                        {showPasswords ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error}
+              </Alert>
+            )}
+
+            {success && (
+              <Alert severity="success" sx={{ mt: 2 }}>
+                {success}
+              </Alert>
+            )}
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              disabled={isLoading}
+              sx={{ mt: 3 }}
+            >
+              {isLoading ? 'Saving Changes...' : 'Save Changes'}
+            </Button>
+          </Box>
+        </Paper>
       </Box>
-    </Box>
+    </Container>
   );
 };
 
