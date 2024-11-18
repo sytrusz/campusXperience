@@ -97,7 +97,7 @@ const styles = {
     margin: '20px 0',
   },
   emailText: {
-    fontSize: '14px',
+    fontSize: '24px',
     marginBottom: '10px',
     fontWeight: 'bold',
   },
@@ -110,9 +110,8 @@ const styles = {
     padding: '10px',
     borderRadius: '5px',
     border: 'none',
-    width: '300px',
-    height: '20px',
-    outline: 'none',
+    width: '250px',
+    height: '40px',
   },
   submitButton: {
     padding: '10px 20px',

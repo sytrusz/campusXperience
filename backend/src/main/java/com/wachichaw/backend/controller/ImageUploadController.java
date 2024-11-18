@@ -11,8 +11,10 @@ import java.nio.file.Paths;
 @Service
 public class ImageUploadController {
 
+
     private static final String EVENTS_DIR = "C:/Users/USER/Documents/GitHub/campusxperience/backend/src/main/resources/static/uploads/";
     private static final String prof_DIR = "C:/Users/USER/Documents/GitHub/campusxperience/backend/src/main/resources/static/profile_pictures/";
+
 
     public String uploadImage(MultipartFile file) throws IOException {
         // Ensure the upload directory exists
