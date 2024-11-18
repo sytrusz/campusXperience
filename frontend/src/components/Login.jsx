@@ -1,25 +1,14 @@
-import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Grid,
-  Paper,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [name, setName] = useState("");
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [validationError, setValidationError] = useState('');
+  const [name, setName] = useState('');
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
-
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    setError("");
     
     try {
       // Attempt admin login first
@@ -32,7 +21,6 @@ export default function Login() {
       if (response.ok) {
         const adminData = await response.json();
         localStorage.setItem("jwtToken", adminData.token);
-        console.log("Admin Login Token:", adminData.token);
         localStorage.setItem("role", adminData.role);
         localStorage.setItem("currentUser", JSON.stringify({
           email,
@@ -44,8 +32,8 @@ export default function Login() {
         navigate("/admin");
         return;
       }
-      //
-      // Attempt user login if admin login fails //
+
+      // Attempt user login if admin login fails
       response = await fetch("http://localhost:8080/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -58,7 +46,6 @@ export default function Login() {
 
       const userData = await response.json();
       localStorage.setItem("jwtToken", userData.token);
-      console.log("User Login Token:", userData.token);
       localStorage.setItem("role", userData.role || "User");
       localStorage.setItem("currentUser", JSON.stringify({
         email,
@@ -67,150 +54,142 @@ export default function Login() {
       }));
       setName(userData.name);
       setGreat(true);
-      navigate("/events");
 
-     
+      console.log("User name from response:", userData.name);
+      navigate("/");
+
+
     } catch (err) {
       console.error("Error signing in:", err);
-      setError(err.message || "Invalid email or password");
+      setValidationError(err.message || "Invalid email or password");
     }
   };
 
-  return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
-      <Grid
-        item
-        xs={false}
-        sm={4}
-        md={8}
-        sx={{
-          position: "relative",
-          display: { xs: "none", md: "block" },
-          overflow: "hidden",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage:
-              "url(https://scontent-mnl1-2.xx.fbcdn.net/v/t39.30808-6/462729494_1003459358490572_2229268457718676568_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGipHJDPc817tZpMqMgy08ksqj3_Ohv_pKyqPf86G_-kokIc-dQxWOVv98coqysQb_wrZ3XCiPb4uJE8kkheZtd&_nc_ohc=cCoWt6papq0Q7kNvgFIUjDh&_nc_zt=23&_nc_ht=scontent-mnl1-2.xx&_nc_gid=AjDZLR3GttzC5cNZQ5NjeZn&oh=00_AYD_iriFhPT-3b0DyFNqjW6Y2kM3_xACIrTEQkAM-lSffA&oe=672E6C61)",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "150%",
-            backgroundPosition: "center",
-            filter: "blur(2px)",
-            zIndex: 0,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            position: "relative",
-            height: "100%",
-            zIndex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.4)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            padding: 4,
-          }}
-        >
-          <Typography component="h1" variant="h3" color="white" gutterBottom>
-            Hello Friend, to keep connected with us provide us with your
-            information
-          </Typography>
-          <Button
-            variant="outlined"
-            sx={{
-              color: "white",
-              backgroundColor: "#850f24",
-              width: 200,
-              "&:hover": {
-                borderColor: "white",
-                backgroundColor: "#DC0000",
-              },
-            }}
-          >
-            Sign up
-          </Button>
-        </Box>
-      </Grid>
+  // Common styles for form elements
+  const formFieldStyles = {
+    width: '100%',
+    boxSizing: 'border-box',
+    padding: '0.75rem',
+    border: '1px solid #e2e8f0',
+    borderRadius: '4px',
+    fontSize: '1rem'
+  };
 
-      <Grid item xs={12} md={4} component={Paper} elevation={6} square>
-        <Box
-          sx={{
-            my: 4,
-            mx: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
-            Sign in to Campus
-            <Box component="span" sx={{ color: "error.main" }}>
-              Xperience
-            </Box>
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSignIn}
-            sx={{ mt: 1, width: "100%", maxWidth: 400 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {error && (
-              <Typography color="error" align="center" sx={{ mt: 2 }}>
-                {error}
-              </Typography>
+  const formContainerStyles = {
+    width: '100%',
+    maxWidth: '400px',
+    padding: '0 20px',
+    boxSizing: 'border-box'
+  };
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      {/* Left side - Hero Image */}
+      <div style={{
+        display: window.innerWidth > 768 ? 'block' : 'none',
+        width: '40%',
+        backgroundImage: 'url(/src/assets/images/side_frame.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}></div>
+
+      {/* Right side - Login Form */}
+      <div style={{
+        width: window.innerWidth > 768 ? '90%' : '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Product Sans, sans-serif'
+      }}>
+        <div style={formContainerStyles}>
+          <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Sign in</h1>
+
+          <p style={{
+            textAlign: 'center',
+            fontSize: '0.975rem'
+          }}>
+            Don't have an account?{' '}
+            <a href="/signup" style={{
+              color: '#dc2626',
+              fontWeight: "bold",
+              textDecoration: 'none'
+            }}>
+              Sign Up
+            </a>
+          </p>
+
+          <form onSubmit={handleSignIn} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+            width: '100%'
+          }}>
+            <div>
+              <label style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                marginBottom: '0.5rem'
+              }}>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={formFieldStyles}
+                required
+              />
+            </div>
+
+            <div style={{ position: 'relative' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                marginBottom: '0.5rem'
+              }}>Password</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={formFieldStyles}
+                required
+              />
+            </div>
+
+            {validationError && (
+              <div style={{
+                color: '#dc2626',
+                fontSize: '0.875rem'
+              }}>{validationError}</div>
             )}
-            <Button
+
+            <button
               type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 3,
-                mb: 2,
-                bgcolor: "error.main",
-                "&:hover": {
-                  bgcolor: "error.dark",
-                },
+              style={{
+                ...formFieldStyles,
+                backgroundColor: '#dc2626',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                marginTop: '1rem',
+                fontWeight: "bold"
               }}
             >
               Sign In
-            </Button>
+            </button>
+
             {great && (
-              <Typography align="center" sx={{ mt: 2 }}>
-                Hi {name}
-              </Typography>
+              <div style={{
+                color: '#16a34a',
+                fontSize: '0.875rem',
+                textAlign: 'center'
+              }}>
+                Welcome back, {name}!
+              </div>
             )}
-          </Box>
-        </Box>
-      </Grid>
-    </Grid>
+          </form>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Login;
