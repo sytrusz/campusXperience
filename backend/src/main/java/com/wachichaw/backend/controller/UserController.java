@@ -68,19 +68,10 @@ public class UserController {
     // Create
 
     @PostMapping("/save")
-    public ResponseEntity<UserEntity> saveUser(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("name") String name,
-            @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            @RequestParam("createdAt") String createdAt
-            ) {
-        
-                UserEntity savedUser = userService.saveUser(file, name, email, password, createdAt);
-        System.out.println(file); // Debugging output
-
-        return ResponseEntity.ok(savedUser);
+    public UserEntity saveAdmin(@RequestBody UserEntity admin) {
+        return userService.saveUser(admin);
     }
+
     
     // Get all
     @GetMapping("/getAll")
