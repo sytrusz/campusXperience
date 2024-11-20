@@ -31,26 +31,10 @@ public class UserService {
     }
 
     // Create
-    public UserEntity saveUser(MultipartFile file, String name, String email, String password,
-                                 String createdAt) {
-
-        try {
-            String imageUrl = imageUploadController.uploadProfpic(file);
-
-            UserEntity newUser = new UserEntity();
-            newUser.setName(name);
-            newUser.setEmail(email);
-            newUser.setPassword(password);  
-            newUser.setCreatedAt(java.time.LocalDateTime.parse(createdAt));  
-            newUser.setProfPic(imageUrl);  
-
-            System.out.println(imageUrl);
-            return userRepo.save(newUser);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error while saving the event: " + e.getMessage());
-        }
+    public UserEntity saveUser(UserEntity user) {
+        return userRepo.save(user);
     }
+    
     
     // Read
    public String authenticateUser(String email, String password) {
