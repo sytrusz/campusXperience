@@ -48,6 +48,9 @@ public class EventEntity {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ReminderEntity> reminders;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TicketEntity> tickets;
 
     public EventEntity(int eventId, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int maxCapacity, String imageUrl){
         super();

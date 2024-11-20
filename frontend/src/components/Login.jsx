@@ -61,6 +61,7 @@ const Login = () => {
       localStorage.setItem("role", userData.role || "User");
       localStorage.setItem("currentUser", JSON.stringify({
         email,
+        id: userData.id,
         name: userData.name,
         role: userData.role || "User",
         prof_pic: userData.prof_pic

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  TextField, 
-  Button, 
-  Typography, 
-  Box, 
-  Container, 
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Container,
   Paper,
   Alert,
   IconButton,
@@ -18,12 +18,14 @@ const EditProfile = () => {
     email: '',
     currentPassword: '',
     newPassword: '',
-    confirmNewPassword: ''
+    file: null // For profile picture upload
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswords, setShowPasswords] = useState(false);
+  const [imgSrc, setImgSrc] = useState('');
+
 
   // Load current user details from localStorage
   useEffect(() => {
@@ -57,18 +59,6 @@ const EditProfile = () => {
       return false;
     }
 
-    if (formData.newPassword) {
-      if (formData.newPassword.length < 8) {
-        setError('New password must be at least 8 characters long');
-        return false;
-      }
-
-      if (formData.newPassword !== formData.confirmNewPassword) {
-        setError('New passwords do not match');
-        return false;
-      }
-    }
-
     return true;
   };
 
@@ -76,55 +66,65 @@ const EditProfile = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     try {
       const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      if (!currentUser?.email) {
-        throw new Error('User session not found');
+      if (!currentUser?.id || isNaN(currentUser.id)) {
+        throw new Error('Invalid user ID');
       }
-
-      const response = await fetch(`/user/update?userId=${currentUser.id}`, {
+  
+      const formDataPayload = new FormData();
+      formDataPayload.append('userId', currentUser.id);
+      formDataPayload.append('name', formData.name);
+      formDataPayload.append('email', formData.email);
+      formDataPayload.append('currentPassword', formData.currentPassword);
+      if (formData.newPassword) {
+        formDataPayload.append('newPassword', formData.newPassword);
+      }
+      if (formData.file) {
+        formDataPayload.append('file', formData.file);
+      }
+  
+      const response = await fetch(`http://localhost:8080/user/update`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          currentPassword: formData.currentPassword,
-          newPassword: formData.newPassword || null
-        })
+        body: formDataPayload
       });
-
+  
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Failed to update profile');
       }
-
+  
       const updatedUser = await response.json();
+  
+      // 1. Update localStorage with the new user data including the profile picture
       localStorage.setItem('currentUser', JSON.stringify({
         ...currentUser,
         name: updatedUser.name,
-        email: updatedUser.email
+        email: updatedUser.email,
+        prof_pic: updatedUser.prof_pic // Update profile picture if returned
       }));
-
+  
+      setImgSrc(updatedUser.prof_pic); // Update profile image in the state
+  
       setSuccess('Profile updated successfully!');
-      
+  
       // Clear sensitive form fields
       setFormData(prev => ({
         ...prev,
         currentPassword: '',
         newPassword: '',
-        confirmNewPassword: ''
+        file: null
       }));
-
     } catch (error) {
       if (error.message.includes('401')) {
         setError('Current password is incorrect or session expired');
@@ -138,12 +138,22 @@ const EditProfile = () => {
       setIsLoading(false);
     }
   };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+    setError('');
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData(prev => ({
+      ...prev,
+      file
     }));
     setError('');
   };
@@ -228,31 +238,13 @@ const EditProfile = () => {
               }}
             />
 
-            {formData.newPassword && (
-              <TextField
-                fullWidth
-                margin="normal"
-                label="Confirm New Password"
-                name="confirmNewPassword"
-                type={showPasswords ? "text" : "password"}
-                value={formData.confirmNewPassword}
-                onChange={handleChange}
-                disabled={isLoading}
-                required
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPasswords(!showPasswords)}
-                        edge="end"
-                      >
-                        {showPasswords ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
+            <TextField
+              fullWidth
+              margin="normal"
+              type="file"
+              onChange={handleFileChange}
+              disabled={isLoading}
+            />
 
             {error && (
               <Alert severity="error" sx={{ mt: 2 }}>

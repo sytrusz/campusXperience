@@ -1,6 +1,8 @@
 package com.wachichaw.backend.service;
 
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.controller.ImageUploadController;
 import com.wachichaw.backend.entity.UserEntity;
 import com.wachichaw.backend.repository.UserRepo;
+
+import io.jsonwebtoken.io.IOException;
 
 @Service
 public class UserService {
@@ -83,35 +87,39 @@ public class UserService {
     }
 
     // Update by ID
-    public UserEntity updateUser(int id, UserEntity updatedUser) {
-        // Retrieve the existing user
-        UserEntity existingUser = userRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-    
-        // Verify the current password
-        if (!existingUser.getPassword().equals(updatedUser.getPassword())) {
-            throw new RuntimeException("Current password is incorrect");
-        }
-    
-        // Update name if provided
-        if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
-            existingUser.setName(updatedUser.getName());
-        }
-    
-        // Check if the email is being updated and if it's unique
-        if (updatedUser.getEmail() != null && !existingUser.getEmail().equals(updatedUser.getEmail())) {
-            if (userRepo.existsByEmail(updatedUser.getEmail())) {
-                throw new RuntimeException("Email already in use");
-            }
-            existingUser.setEmail(updatedUser.getEmail());
-        }
-    
-        // Update password if a new one is provided
-    
-        // Save and return the updated user
-        return userRepo.save(existingUser);
+    public UserEntity updateUser(int userId, MultipartFile file, String currentPassword, String name, String email) throws IOException, java.io.IOException {
+    // Find the user by its ID
+    UserEntity existingUser = userRepo.findById(userId)
+            .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+    // Verify the current password
+    if (!existingUser.getPassword().equals(currentPassword)) {
+        throw new RuntimeException("Current password is incorrect");
     }
-    
+
+    // Update the user's name
+    if (name != null && !name.isEmpty()) {
+        existingUser.setName(name);
+    }
+
+    // Update the user's email if provided and unique
+    if (email != null && !email.equals(existingUser.getEmail())) {
+        if (userRepo.existsByEmail(email)) {
+            throw new RuntimeException("Email already in use");
+        }
+        existingUser.setEmail(email);
+    }
+
+    // Handle profile picture upload if a file is provided
+    if (file != null && !file.isEmpty()) {
+        String profPicUrl = imageUploadController.uploadProfpic(file);
+        existingUser.setProfPic(profPicUrl); 
+    }
+
+    return userRepo.save(existingUser);
+}
+
+
 
     // Delete by ID
     @SuppressWarnings("unused")
