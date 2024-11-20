@@ -44,6 +44,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<ReminderEntity> reminders;
 
+    @OneToMany(mappedBy = "user")
+    private List<TicketEntity> tickets;
+    
+
     public UserEntity() {
         super();
     }

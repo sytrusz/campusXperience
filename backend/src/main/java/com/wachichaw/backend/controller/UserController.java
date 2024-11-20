@@ -14,6 +14,7 @@ import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.entity.UserEntity;
 import com.wachichaw.backend.service.UserService;
 
+
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -32,17 +33,25 @@ public class UserController {
 
     // Token
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody UserEntity user) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserEntity user) {
+        String token = userService.authenticateUser(user.getEmail(), user.getPassword());
     
-    String token = userService.authenticateUser(user.getEmail(), user.getPassword());
-    Map<String, String> response = new HashMap<>();
-    response.put("token", token);
-    response.put("name", jwtUtil.extractUsername(token));
-    response.put("prof_pic", jwtUtil.extractProfpic(token));
-    System.out.println(response);
-    return ResponseEntity.ok(response);
+        // Extract claims from the token
+        int id = Integer.parseInt(jwtUtil.extractUserId(token)); // Ensure the id is parsed as an integer
+        String name = jwtUtil.extractUsername(token);
+        String profPic = jwtUtil.extractProfpic(token);
+    
+        // Prepare the response
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("id", id); // Add the id as an integer
+        response.put("name", name);
+        response.put("prof_pic", profPic);
+    
+        System.out.println(response);
+        return ResponseEntity.ok(response);
     }
-   
+    
     // Check Email uniqueness
     @GetMapping("/check-email")
     public ResponseEntity<Boolean> checkEmailUnique(@RequestParam String email) {
@@ -83,32 +92,29 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(
         @RequestParam int userId,
-        @RequestBody Map<String, String> updateRequest
+        @RequestParam(value = "file", required = false) MultipartFile file, // Optional profile picture upload
+        @RequestParam("currentPassword") String currentPassword,
+        @RequestParam("name") String name,
+        @RequestParam("email") String email
     ) {
         try {
-            // Extract data from the request
-            String currentPassword = updateRequest.get("currentPassword");
-            String name = updateRequest.get("name");
-            String email = updateRequest.get("email");
-    
-            // Create a temporary UserEntity object to pass to the service
-            UserEntity updatedUser = new UserEntity();
-            updatedUser.setUserId(userId);
-            updatedUser.setName(name);
-            updatedUser.setEmail(email);
-            updatedUser.setPassword(currentPassword);
-    
             // Call the service to update the user
-            UserEntity savedUser = userService.updateUser(userId, updatedUser);
-            return ResponseEntity.ok(savedUser);
+            UserEntity updatedUser = userService.updateUser(userId, file, currentPassword, name, email);
+    
+            // Return the updated user details in the response
+            return ResponseEntity.ok(updatedUser);
+    
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("message", e.getMessage()));
-        } catch (Exception e) {
+            // Handle errors like incorrect password or email already in use
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            // Handle any other exceptions
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", "An error occurred while updating the user"));
         }
     }
+    
     
     // Delete by ID
     @DeleteMapping("/delete/{userId}")
