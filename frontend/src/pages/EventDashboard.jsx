@@ -56,7 +56,7 @@ const EventDashboard = () => {
         event: { eventId: eventId },  // Ensure you pass an object with eventId
         user: { userId: userId },
         status: 'confirmed', 
-        rsvp_time: new Date().toISOString(), 
+        rsvpTime: new Date().toISOString(), 
       };
       console.log(userId);
   
