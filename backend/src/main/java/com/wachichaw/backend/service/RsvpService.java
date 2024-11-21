@@ -6,13 +6,22 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wachichaw.backend.repository.EventRepo;
 import com.wachichaw.backend.repository.RsvpRepo;
+import com.wachichaw.backend.repository.UserRepo;
+import com.wachichaw.backend.entity.EventEntity;
 import com.wachichaw.backend.entity.RsvpEntity;
+import com.wachichaw.backend.entity.UserEntity;
 
 @Service
 public class RsvpService {
     @Autowired
     private RsvpRepo rsvpRepo;
+    @Autowired
+    private EventRepo eventRepository;
+   
+    @Autowired
+    private UserRepo userRepository;
 
     // Read All Reservation
     public List<RsvpEntity> getAllReservations(){
@@ -20,9 +29,18 @@ public class RsvpService {
     }
 
     // Saving The Data of Reservation
-    public RsvpEntity saveReservation(RsvpEntity rsvp){
+    public RsvpEntity saveReservation(RsvpEntity rsvp) {
+        EventEntity event = eventRepository.findById(rsvp.getEvent().getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found with ID: " + rsvp.getEvent().getEventId()));
+        UserEntity user = userRepository.findById(rsvp.getUser().getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + rsvp.getUser().getUserId()));
+    
+                rsvp.setEvent(event);
+                rsvp.setUser(user);
+    
         return rsvpRepo.save(rsvp);
     }
+    
 
     // Delelting The Reservation
     public String deleteReservation(int rsvp_id){
@@ -41,7 +59,7 @@ public class RsvpService {
         try{
             rsvpEntity = rsvpRepo.findById(rsvp_id).get();
             rsvpEntity.setStatus(updateReservation.getStatus());
-            rsvpEntity.setRsvp_Time(updateReservation.getRsvp_Time());
+            rsvpEntity.setRsvpTime(updateReservation.getRsvpTime());
         } catch (NoSuchElementException nex) {
             throw new Exception("Reservation " + rsvp_id + "not found!");
         } finally{

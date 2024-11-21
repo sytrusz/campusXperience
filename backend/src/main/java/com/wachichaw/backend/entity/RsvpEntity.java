@@ -38,7 +38,7 @@ public class RsvpEntity {
         this.event = event;
         this.user = user;
         this.status = status;
-        this.rsvp_time = rsvp_time;
+        this.rsvp_time = LocalDateTime.now();    
     }
 
     // Reservation ID
@@ -50,18 +50,18 @@ public class RsvpEntity {
     }
 
     // Event Entity
-    public EventEntity getEventEntity(){
+    public EventEntity getEvent(){
         return event;
     }
-    public void setEventEntity(EventEntity event){
+    public void setEvent(EventEntity event){
         this.event = event;
     }
 
     // User Entity
-    public UserEntity getUserEntity(){
+    public UserEntity getUser(){
         return user;
     }
-    public void setUserEntity(UserEntity user){
+    public void setUser(UserEntity user){
         this.user = user;
     }
 
@@ -74,10 +74,18 @@ public class RsvpEntity {
     }
 
     // Local Date Time
-    public LocalDateTime getRsvp_Time(){
+    public LocalDateTime getRsvpTime() {
         return rsvp_time;
     }
-    public void setRsvp_Time(LocalDateTime rsvp_time) {
+    
+    public void setRsvpTime(LocalDateTime rsvp_time) {
         this.rsvp_time = rsvp_time;
+    }
+    public Integer getEventId() {
+        return event != null ? event.getEventId() : null;
+    }
+ 
+    public Integer getUserId() {
+        return user != null ? user.getUserId() : null;
     }
 }

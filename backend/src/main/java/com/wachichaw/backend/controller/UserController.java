@@ -47,7 +47,6 @@ public class UserController {
         response.put("id", id); // Add the id as an integer
         response.put("name", name);
         response.put("prof_pic", profPic);
-    
         System.out.println(response);
         return ResponseEntity.ok(response);
     }
