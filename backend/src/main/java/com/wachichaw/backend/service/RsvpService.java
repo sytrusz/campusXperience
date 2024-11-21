@@ -27,6 +27,9 @@ public class RsvpService {
     public List<RsvpEntity> getAllReservations(){
         return rsvpRepo.findAll();
     }
+    public List<RsvpEntity> getReservationsByUserId(int userId) {
+        return rsvpRepo.findByUser_UserId(userId);
+    }
 
     // Saving The Data of Reservation
     public RsvpEntity saveReservation(RsvpEntity rsvp) {

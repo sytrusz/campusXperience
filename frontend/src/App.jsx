@@ -9,13 +9,13 @@ import SignupPage from './pages/SignupPage';
 import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/AdminDashboard';
 import AboutUs from './pages/AboutUs';
+import FetchReservations from './pages/RsvpTicket';
 import Profile from './pages/Profile'; // Import the Profile page component
 import Footer from './components/Footer';
 // Component to conditionally render AppBar based on the current route
 function AppWithAppBar() {
   const location = useLocation();
 
-  // Check if the current route is login or signup
   const showAppBar = location.pathname !== '/login' && location.pathname !== '/signup';
 
   return (
@@ -27,6 +27,7 @@ function AppWithAppBar() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/events" element={<EventDashboard />} />
+        <Route path="/reservation" element={<FetchReservations />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
