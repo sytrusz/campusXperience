@@ -1,6 +1,6 @@
 import React from 'react';
-import { Lightbulb, Users, Accessibility, Clock, ChevronRight } from 'lucide-react';
-import { fontSize } from '@mui/system';
+import { Lightbulb, Users, Accessibility, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const globalStyles = {
   fontFamily: 'Product Sans, sans-serif',  
@@ -16,7 +16,7 @@ const globalStyles = {
   iconWrapper: { display: 'flex', justifyContent: 'center', marginBottom: '16px' },
   button: { backgroundColor: '#dc2626', color: '#ffffff', padding: '12px 32px', borderRadius: '8px', fontWeight: 'bold', border: 'none', cursor: 'pointer', transition: 'background-color 0.2s' },
   cta: { backgroundColor: '#FFFFFFF', color: '#000000', padding: '64px 20px', textAlign: 'center' },
-  hero: { position: 'relative', overflow: 'hidden', backgroundColor: '#dc2626', color: '#ffffff', padding: '60px 20px' },
+  hero: { position: 'relative', overflow: 'hidden', backgroundColor: '#C21807', color: '#ffffff', padding: '60px 20px' },
   heroOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2 },
   heroContent: { position: 'relative', maxWidth: '1200px', margin: '0 auto', fontSize: '24px'},
   devTeamCard: { backgroundColor: '#ffffff', padding: '32px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', textAlign: 'center' },
@@ -104,20 +104,28 @@ const DevTeamSection = () => (
   </div>
 );
 
-const CTASection = () => (
-  <div style={globalStyles.cta}>
-    <h2>Join Our Community</h2>
-    <p>Start your journey with Campus Xperience today.</p>
-    <button
-      style={globalStyles.button}
-      onMouseOver={(e) => (e.target.style.backgroundColor = '#b91c1c')}
-      onMouseOut={(e) => (e.target.style.backgroundColor = '#dc2626')}
-    >
-      Get Started
-      <ChevronRight style={{ marginLeft: '8px' }} size={20} />
-    </button>
-  </div>
-);
+const CTASection = () => {
+  const navigate = useNavigate(); // Initialize navigate here
+
+  const handleEventDiscovery = () => {
+    navigate("/events"); // Use navigate function here
+  };
+
+  return (
+    <div style={globalStyles.cta}>
+      <h2>Join Our Community</h2>
+      <p>Start your journey with Campus Xperience today.</p>
+      <button
+        onClick={handleEventDiscovery} // Updated to call handleEventDiscovery
+        style={globalStyles.button}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#b91c1c')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#dc2626')}
+      >
+        Get Started
+      </button>
+    </div>
+  );
+};
 
 const AboutUs = () => {
   const values = [
