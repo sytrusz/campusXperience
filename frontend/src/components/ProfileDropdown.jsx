@@ -51,16 +51,16 @@ export default function ProfileDropdown({ userType, onLogout }) {
       <Dropdown>
         <MenuButton>
         <img
-      src={currentUser?.prof_pic ? `http://localhost:8080${currentUser.prof_pic}?t=${new Date().getTime()}` : 'http://localhost:8080/profile_pictures/profile_pictures.png?t=' + new Date().getTime()}
-      alt="Profile"
-        style={{
-          width: '40px', 
-          height: '40px', 
-          borderRadius: '50%', 
-          objectFit: 'cover', 
-          display: 'block', 
-        }}
-        className="rounded-full"
+src={currentUser?.prof_pic ? `http://localhost:8080${currentUser.prof_pic}?t=${new Date().getTime()}` : 'http://localhost:8080/profile_pictures/profile_pictures.png?t=' + new Date().getTime()}
+alt="Profile"
+  style={{
+    width: '40px', 
+    height: '40px', 
+    borderRadius: '50%', 
+    objectFit: 'cover', 
+    display: 'block', 
+  }}
+  className="rounded-full"
 />
         </MenuButton>
         <Menu slots={{ listbox: AnimatedListbox }}>
