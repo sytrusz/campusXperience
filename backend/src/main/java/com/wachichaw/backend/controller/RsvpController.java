@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wachichaw.backend.entity.RsvpEntity;
@@ -38,6 +39,10 @@ public class RsvpController {
     @GetMapping("/getAll")
     public List<RsvpEntity> getAllReservations(){
         return rsvpService.getAllReservations();
+    }
+    @GetMapping("/getAllbyUserId")
+    public List<RsvpEntity> getReservationsByUserId(@RequestParam int userId) {
+        return rsvpService.getReservationsByUserId(userId);
     }
 
     // "UPDATE" A Data By ID

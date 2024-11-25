@@ -9,15 +9,15 @@ import SignupPage from './pages/SignupPage';
 import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/AdminDashboard';
 import AboutUs from './pages/AboutUs';
+import FetchReservations from './pages/RsvpTicket';
 import Profile from './pages/Profile'; // Import the Profile page component
 import Footer from './components/Footer';
 
 // Component to conditionally render AppBar and Footer
 function AppWithAppBar() {
   const location = useLocation();
-
-  // Check if the current route is admin
-  const isAdminRoute = location.pathname === '/admin';
+  
+const isAdminRoute = location.pathname === '/admin';
   const showAppBar = !['/login', '/signup', '/admin'].includes(location.pathname);
 
   return (
@@ -28,6 +28,7 @@ function AppWithAppBar() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/events" element={<EventDashboard />} />
+        <Route path="/reservation" element={<FetchReservations />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminDashboard />} /> {/* Admin route */}
