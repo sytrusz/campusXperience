@@ -2,8 +2,11 @@ import React from 'react';
 import { Box, Button, Typography, Grid } from '@mui/material';
 import { Search, Security, Notifications, CalendarMonth, Group, Star } from '@mui/icons-material';
 import HeroSection from '../components/HeroSection';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export default function Homepage() {
+    const navigate = useNavigate(); // Create a navigate function
+
     const features = [
         {
             icon: <Search sx={{ fontSize: 40, color: '#C21807'}} />,
@@ -40,57 +43,7 @@ export default function Homepage() {
     return (
         <>
         <HeroSection />
-            {/* Hero Section
-            <Box
-                sx={{
-                    minHeight: '80vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#F8F5F2',
-                    textAlign: 'center',
-                    p: 4,
-                    fontFamily: "'Product Sans', sans-serif"
-                }}
-            >
-                <Typography variant="h2" component="h1" 
-                    sx={{ 
-                        mb: 2, 
-                        color: '#C21807',
-                        fontWeight: 'bold',
-                        fontSize: { xs: '2.5rem', md: '3.75rem' },
-                        fontFamily: "'Product Sans', sans-serif"
-                    }}>
-                    Your Events, Elevated
-                </Typography>
-                <Typography variant="h5" 
-                    sx={{ 
-                        mb: 4, 
-                        color: '#333',
-                        maxWidth: '800px',
-                        mx: 'auto',
-                        fontFamily: "'Product Sans', sans-serif"
-                    }}>
-                    Discover, join, and manage memorable events with our all-in-one platform
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', fontFamily: "'Product Sans', sans-serif" }}>
-                    <Button 
-                        variant="contained" 
-                        size="large"
-                        sx={{
-                            backgroundColor: '#C21807',
-                            '&:hover': {
-                                backgroundColor: '#A61506',
-                            },
-                            px: 4,
-                        }}
-                    >
-                        Learn More
-                    </Button>
-                </Box>
-            </Box> */}
-
+            
             {/* Features Section */}
             <Box sx={{ py: 8, px: 4, backgroundColor: 'white' }}>
                 <Typography variant="h3" sx={{ mb: 6, textAlign: 'center', color: '#C21807', fontWeight: 'bold' , fontFamily: "'Product Sans', sans-serif" }}>
@@ -137,12 +90,13 @@ export default function Homepage() {
                 <Typography variant="h4" sx={{ mb: 2, color: "black", fontWeight: "bold", fontFamily: "Product Sans"}}>
                     Ready to Transform Your Event Experience?
                 </Typography>
-                <Typography variant="h6" sx={{ mb: 4, color: "gray", fontFamily: "Product Sans", fontSize:"14px"  }}>
+                <Typography variant="h6" sx={{ mb: 4, color: "gray", fontFamily: "Product Sans", fontSize:"14px" }}>
                     Join thousands of event organizers and attendees who are already using our platform
                 </Typography>
                 <Button 
                     variant="contained" 
                     size="large"
+                    onClick={() => navigate("/events")} // Use navigate function here
                     sx={{
                         backgroundColor: '#C21807',
                         borderRadius: '10px',

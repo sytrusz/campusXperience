@@ -25,7 +25,7 @@ const HeroSection = () => {
           <button
             style={{
               ...styles.button,
-              backgroundColor: hovered ? '#E64A19' : '#C21807',
+              backgroundColor: hovered ? '#B30018' : '#C21807',
             }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
