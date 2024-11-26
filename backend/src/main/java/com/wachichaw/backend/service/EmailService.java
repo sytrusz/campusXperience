@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -23,18 +26,19 @@ public class EmailService {
         }
 
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(body);
-            
-            // You might want to set a from address
-            message.setFrom("enriquezpiolo45@gmail.com"); // or another valid email
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);  // true means multipart
 
-            
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(body, true); // Set the body as HTML
+
+            // You might want to set a from address
+            helper.setFrom("vicci.agramon@gmail.com"); // or another valid email
+
             mailSender.send(message);
             log.info("Email sent successfully to {}", to);
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             log.error("Error sending email to {}: {}", to, e.getMessage(), e);
             throw new RuntimeException("Failed to send email to " + to, e);
         }
