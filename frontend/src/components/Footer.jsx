@@ -1,5 +1,6 @@
 import React from 'react';
 import { Facebook, Twitter, Instagram } from 'lucide-react';
+import '../App.css';
 
 const Footer = () => {
   return (
@@ -22,6 +23,7 @@ const Footer = () => {
             <input
               type="email"
               placeholder="Enter your email"
+              className="emailInput"
               style={styles.emailInput}
             />
             <button style={styles.submitButton}>Submit</button>
@@ -97,7 +99,7 @@ const styles = {
     margin: '20px 0',
   },
   emailText: {
-    fontSize: '24px',
+    fontSize: '20px',
     marginBottom: '10px',
     fontWeight: 'bold',
   },
@@ -111,14 +113,16 @@ const styles = {
     borderRadius: '5px',
     border: 'none',
     width: '250px',
-    height: '40px',
+    height: '20px',
+    fontSize: '12px',
   },
   submitButton: {
     padding: '10px 20px',
     borderRadius: '5px',
-    backgroundColor: '#4E174E',
+    backgroundColor: '#181A2F',
     color: '#ffffff',
     border: 'none',
+    fontSize: '12px',
     cursor: 'pointer',
     transition: 'background-color 0.2s ease',
   },
@@ -132,7 +136,7 @@ const styles = {
   link: {
     color: '#ffffff',
     textDecoration: 'none',
-    fontSize: '14px',
+    fontSize: '16px',
     transition: 'opacity 0.2s ease',
   },
   footerBottom: {
@@ -145,7 +149,7 @@ const styles = {
   },
   copyrightText: {
     margin: 0,
-    fontSize: '12px',
+    fontSize: '13px',
   },
   socialIcons: {
     display: 'flex',
