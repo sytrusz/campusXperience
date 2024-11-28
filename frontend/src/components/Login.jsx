@@ -59,6 +59,7 @@ const Login = () => {
       const userData = await response.json();
       localStorage.setItem("jwtToken", userData.token);
       localStorage.setItem("role", userData.role || "User");
+      localStorage.setItem("email", email);
       localStorage.setItem("currentUser", JSON.stringify({
         email,
         id:   userData.id,
@@ -67,7 +68,7 @@ const Login = () => {
         prof_pic: userData.prof_pic
         
       }));
-      console.log(userData.prof_pic)
+      console.log(email)
       setName(userData.name);
       setGreat(true);
       navigate("/");
