@@ -154,7 +154,7 @@ const FetchReservations = () => {
                 </div>
                 <div class="footer">
                   <p>If you have any questions, feel free to reach out to us.</p>
-                  <p>&copy; ${new Date().getFullYear()} Your Company</p>
+                  <p>&copy; ${new Date().getFullYear()} CampusXperience</p>
                 </div>
               </div>
             </body>

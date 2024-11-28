@@ -76,14 +76,12 @@ public class EventService {
     eventEntity.setLocation(location);
     eventEntity.setMaxCapacity(maxCapacity);
 
-    // If a file is uploaded, handle it
     if (file != null && !file.isEmpty()) {
-        // Use the ImageUploadController to upload the file
-        String imageUrl = imageUploadController.uploadImage(file);  // Call the method to upload the image
-        eventEntity.setImageUrl(imageUrl);  // Update the event's image URL
+     
+        String imageUrl = imageUploadController.uploadImage(file);  
+        eventEntity.setImageUrl(imageUrl);  
     }
 
-    // Save and return the updated event
     return eventRepo.save(eventEntity);
 }
 
