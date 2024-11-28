@@ -73,7 +73,6 @@ public class RsvpService {
     
 
     // Updating The Data of Reservation
-    @SuppressWarnings("finally")
     public RsvpEntity updateReservation(int rsvp_id, RsvpEntity updateReservation) {
         RsvpEntity rsvpEntity = rsvpRepo.findById(rsvp_id)
                 .orElseThrow(() -> new RuntimeException("Reservation " + rsvp_id + " not found!"));

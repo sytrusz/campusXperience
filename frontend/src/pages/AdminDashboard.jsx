@@ -28,6 +28,8 @@ import EventIcon from "@mui/icons-material/Event";
 
 import UserManagement from '../components/UserManagement'
 import AdminManagement from '../components/AdminManagement'
+import EventManagement from '../components/EventManagement'
+
 
 // Add Global Styles for font import
 const GlobalFontStyles = () => (
