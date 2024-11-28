@@ -102,7 +102,6 @@ const EventDashboard = () => {
           p: 3,
         }}
       >
-        <Typography variant="h2">Welcome to Campus Events</Typography>
       </Box>
   
       {/* Events Section */}
