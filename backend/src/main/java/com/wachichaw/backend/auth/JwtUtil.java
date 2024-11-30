@@ -57,6 +57,9 @@ public class JwtUtil {
     public String extractProfpic(String token) {
         return (String) extractAllClaims(token).get("prof_pic");
     }
+    public String extractEmail(String token) {
+        return (String) extractAllClaims(token).get("email");
+    }
     public String extractRole(String token) {
         return (String) extractAllClaims(token).get("role");
     }
