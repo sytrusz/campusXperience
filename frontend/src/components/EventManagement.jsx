@@ -160,13 +160,15 @@ export default function EventManagement() {
     });
   };
   const handleSaveEvent = async () => {
+    const freshToken = localStorage.getItem("jwtToken")
     const url = selectedEvent
       ? `http://localhost:8080/event/update?eventId=${selectedEvent.eventId}` 
       : "http://localhost:8080/event/save";
   
     try {
-      console.log(token)
+      console.log(freshToken)
       const formDataToSend = new FormData();
+  
       formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
       formDataToSend.append("location", formData.location);
@@ -177,12 +179,11 @@ export default function EventManagement() {
       if (formData.image) {
         formDataToSend.append("file", formData.image);
       }
-  
       await fetch(url, {
         method: selectedEvent ? "PUT" : "POST",
         body: formDataToSend,
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${freshToken}`,
         },
       });
   
