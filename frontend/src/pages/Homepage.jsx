@@ -100,6 +100,7 @@ export default function Homepage() {
                     sx={{
                         backgroundColor: '#C21807',
                         borderRadius: '10px',
+                        fontWeight: 'bold',
                         color: '#FFFFFF',
                         '&:hover': {
                             backgroundColor: '#A61506',
