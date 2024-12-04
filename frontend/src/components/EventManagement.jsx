@@ -19,9 +19,9 @@ import {
   TableRow,
 } from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
-const token = localStorage.getItem("jwtToken");
+const token = localStorage.getItem("adminToken");
 const makeAuthorizedRequest = async (url, options = {}) => {
-    const token = localStorage.getItem("jwtToken");
+    const token = localStorage.getItem("adminToken");
   if (!token) {
     throw new Error("No authentication token found");
   }
@@ -87,6 +87,10 @@ export default function EventManagement() {
   );
 
   useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (!token) {
+      console.warn("Token not set during initial run.");
+    }
     fetchEvents();
   }, []);
 
@@ -160,12 +164,13 @@ export default function EventManagement() {
     });
   };
   const handleSaveEvent = async () => {
+    const freshToken = localStorage.getItem("adminToken");
     const url = selectedEvent
       ? `http://localhost:8080/event/update?eventId=${selectedEvent.eventId}` 
       : "http://localhost:8080/event/save";
   
     try {
-      console.log(token)
+        console.log("Token being used:", freshToken);
       const formDataToSend = new FormData();
       formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
@@ -182,7 +187,7 @@ export default function EventManagement() {
         method: selectedEvent ? "PUT" : "POST",
         body: formDataToSend,
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${freshToken}`,
         },
       });
   

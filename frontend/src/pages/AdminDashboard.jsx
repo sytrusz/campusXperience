@@ -31,6 +31,9 @@ import AdminManagement from '../components/AdminManagement'
 import EventManagement from '../components/EventManagement'
 
 
+const token = localStorage.getItem("adminToken");
+
+
 // Add Global Styles for font import
 const GlobalFontStyles = () => (
   <GlobalStyles
@@ -193,7 +196,6 @@ const demoTheme = createTheme({
 });
 
 const makeAuthorizedRequest = async (url, options = {}) => {
-  const token = localStorage.getItem("jwtToken");
   if (!token) {
     throw new Error("No authentication token found");
   }
@@ -236,6 +238,7 @@ const CustomLogo = () => (
 );
 
 function DemoPageContent({ pathname }) {
+  console.log("Token after login:", token);
   return (
     <Box
       sx={{
@@ -249,6 +252,7 @@ function DemoPageContent({ pathname }) {
           Dashboard Overview
         </Typography>
       )}
+      
       {pathname === "/users" && <UserManagement />}
       {pathname === "/admin" && <AdminManagement />}
       {pathname === "/events" && <EventManagement />}
