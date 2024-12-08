@@ -1,9 +1,12 @@
 package com.wachichaw.backend.controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.wachichaw.backend.entity.TicketEntity;
 import com.wachichaw.backend.service.TicketService;
@@ -25,10 +28,27 @@ public class TicketController {
 
     // Create
     @PostMapping("/save")
-    public TicketEntity saveTicket(@RequestBody TicketEntity ticket) {
+public ResponseEntity<TicketEntity> saveTicket(@RequestBody TicketEntity ticket) {
+    try {
         System.out.println("Incoming JSON Payload: " + ticket);
-        return ticketService.saveTicket(ticket);
+        TicketEntity savedTicket = ticketService.saveTicket(ticket);
+        
+        // Return a successful response with the ticket and a custom header
+        return ResponseEntity
+                .ok()
+                .header("X-Custom-Success", "Ticket saved successfully")
+                .body(savedTicket);
+    } catch (ResponseStatusException ex) {
+        if (HttpStatus.BAD_REQUEST.equals(ex.getStatusCode())) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .header("X-Custom-Error", "No slots available for this event")
+                    .body(null); 
+        }
+        
+        throw ex;
     }
+}
 
     // Read
     @GetMapping("/getAll")

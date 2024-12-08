@@ -9,6 +9,8 @@ const EventDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [successDialog, setSuccessDialog] = useState({ open: false, message: "" }); 
+  const [errorDialog, setErrorDialog] = useState({ open: false, message: "" }); 
   const baseUrl = 'http://localhost:8080/event'; 
   const rsvpUrl = 'http://localhost:8080/rsvp'; 
 
@@ -72,12 +74,24 @@ const EventDashboard = () => {
       if (!response.ok) throw new Error('Failed to RSVP for the event');
       
       const data = await response.json();
-      alert('RSVP successful');
+      setSuccessDialog({ open: true, message: "Reservation successful" });
     } catch (err) {
       console.error('Error while RSVPing:', err);
-      alert('Failed to RSVP');
+      setErrorDialog({ open: true, message: "You are not authorized. Please log in again." });
     }
   };
+
+  const handleErrorDialogClose = () => {
+    setErrorDialog((prevState) => ({ ...prevState, open: false })); 
+    setTimeout(() => {
+        setErrorDialog((prevState) => ({ ...prevState, message: "" }));
+    }, 300); 
+};
+const handleSuccessDialogClose = () => {
+  setSuccessDialog((prevState) => ({ ...prevState, open: false })); 
+  setTimeout(() => {
+    setSuccessDialog((prevState) => ({ ...prevState, message: "" }));
+  }, 300); };
   
   
 
@@ -206,6 +220,29 @@ const EventDashboard = () => {
             </DialogActions>
           </Dialog>
         )}
+
+<Dialog open={successDialog.open} onClose={handleSuccessDialogClose}>
+    <DialogTitle>Success</DialogTitle>
+    <DialogContent>
+        <Typography>{successDialog.message}</Typography>
+    </DialogContent>
+    <DialogActions>
+        <Button onClick={handleSuccessDialogClose} color="primary">
+            Close
+        </Button>
+    </DialogActions>
+    </Dialog>
+      <Dialog open={errorDialog.open} onClose={handleErrorDialogClose}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <Typography>{errorDialog.message}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleErrorDialogClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
       </div>
     </>
 
