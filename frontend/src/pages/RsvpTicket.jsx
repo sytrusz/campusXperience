@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from "react";
 import EventCard from "../components/EventCard";
 import { sendEmail } from "../components/SendEmail"; 
-import { CircularProgress, Typography, Box, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
+import {
+  CircularProgress,
+  Typography,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 
 const FetchReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedReservation, setSelectedReservation] = useState(null); // State for selected reservation
+ 
+  const [selectedReservation, setSelectedReservation] = useState(null);
+  const [successDialog, setSuccessDialog] = useState({ open: false, message: "" }); 
+  const [errorDialog, setErrorDialog] = useState({ open: false, message: "" }); 
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const userId = currentUser?.id;
-  const email = localStorage.getItem('email');
+  const email = localStorage.getItem("email");
 
-  const ticketUrl = 'http://localhost:8080/ticket'; 
-
-
-  console.log("User ID is: " + userId);
+  const ticketUrl = "http://localhost:8080/ticket";
 
   const fetchReservations = async () => {
     setLoading(true);
@@ -53,40 +62,54 @@ const FetchReservations = () => {
   }, [userId]);
 
   const handleReservationClick = (reservation) => {
-    setSelectedReservation(reservation); 
+    setSelectedReservation(reservation);
   };
 
   const handleTicketDialog = async (selectedReservation) => {
-    const token = localStorage.getItem("jwtToken"); // Fetch the token here
-    console.log(email)
-  
+    const token = localStorage.getItem("jwtToken");
+
     try {
-      const currentUser = JSON.parse(localStorage.getItem("currentUser")); 
-      const userId = currentUser.id; 
-      const eventId = selectedReservation.event.eventId;  // Ensure you're accessing the correct event ID
-    
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const userId = currentUser.id;
+      const eventId = selectedReservation.event.eventId;
+
       const ticketBody = {
-        event: { eventId: eventId },  
+        event: { eventId: eventId },
         user: { userId: userId },
-        ticketType: 'VIP',
-        price: '100.00',
+        ticketType: "VIP",
+        price: "100.00",
         purchaseTime: new Date().toISOString(),
       };
-      console.log(userId);
-    
+
       const response = await fetch(`${ticketUrl}/save`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(ticketBody),
       });
-    
-      if (!response.ok) throw new Error('Failed to confirm ticket for the event');
+
+      if (response.headers.get("X-Custom-Error")) {
+        setErrorDialog({ open: true, message: response.headers.get("X-Custom-Error") });
+      }
+
+      if (response.status === 403) {
+        setErrorDialog({ open: true, message: "You are not authorized. Please log in again." });
+        return;
+      } else if (response.status === 400) {
+        setErrorDialog({ open: true, message: "No slots available for this event." });
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to confirm ticket for the event");
+      }
 
       const data = await response.json();
-      alert('Ticket confirmation successful');
+      setSuccessDialog({ open: true, message: "Ticket confirmation successful" });
+
       const emailData = {
         to: email,
         subject: "Event Confirmation",
@@ -161,19 +184,31 @@ const FetchReservations = () => {
             </body>
           </html>
         `,
-      };      
-      sendEmail(emailData, token); 
-      setSelectedReservation(null);  
+      };
+
+      sendEmail(emailData, token);
+      setSelectedReservation(null);
     } catch (err) {
-      console.error('Error while confirming ticket:', err);
-      alert('Failed to confirm ticket');
+      setErrorDialog({ open: true, message: err.message || "An error occurred. Please try again later." });
     }
   };
-  
 
   const handleCloseDialog = () => {
-    setSelectedReservation(null); // Close the dialog
+    setSelectedReservation(null);
   };
+
+  const handleErrorDialogClose = () => {
+    setErrorDialog((prevState) => ({ ...prevState, open: false })); 
+    setTimeout(() => {
+        setErrorDialog((prevState) => ({ ...prevState, message: "" }));
+    }, 300); 
+};
+const handleSuccessDialogClose = () => {
+  setSuccessDialog((prevState) => ({ ...prevState, open: false })); 
+  setTimeout(() => {
+    setSuccessDialog((prevState) => ({ ...prevState, message: "" }));
+  }, 300); };
+
 
   if (loading) {
     return (
@@ -211,7 +246,7 @@ const FetchReservations = () => {
             return (
               <div
                 key={event.eventId}
-                onClick={() => handleReservationClick(reservation)} // Click on reservation to show details
+                onClick={() => handleReservationClick(reservation)}
                 style={{ cursor: "pointer" }}
               >
                 <EventCard
@@ -237,7 +272,6 @@ const FetchReservations = () => {
         <Typography>No reservations found for this user.</Typography>
       )}
 
-      {/* Dialog for reservation details */}
       {selectedReservation && (
         <Dialog open={!!selectedReservation} onClose={handleCloseDialog} fullWidth maxWidth="md">
           <DialogTitle>{selectedReservation.event.title}</DialogTitle>
@@ -280,15 +314,36 @@ const FetchReservations = () => {
           </DialogContent>
 
           <DialogActions>
-          <Button onClick={() => handleTicketDialog(selectedReservation)}>
-              Confirm reservation
-              </Button>
+            <Button onClick={() => handleTicketDialog(selectedReservation)}>Confirm reservation</Button>
             <Button onClick={handleCloseDialog} color="primary">
               Close
             </Button>
           </DialogActions>
         </Dialog>
       )}
+
+    <Dialog open={successDialog.open} onClose={handleSuccessDialogClose}>
+    <DialogTitle>Success</DialogTitle>
+    <DialogContent>
+        <Typography>{successDialog.message}</Typography>
+    </DialogContent>
+    <DialogActions>
+        <Button onClick={handleSuccessDialogClose} color="primary">
+            Close
+        </Button>
+    </DialogActions>
+    </Dialog>
+      <Dialog open={errorDialog.open} onClose={handleErrorDialogClose}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <Typography>{errorDialog.message}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleErrorDialogClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
