@@ -86,11 +86,6 @@ const EventDashboard = () => {
   return (
     <>
       {/* Hero Section */}
-      <Typography variant="h2"
-      sx={{
-        textAlign: 'center',
-      }}>
-        Welcome to Campus Events</Typography>
       <Box
         sx={{
           height: '60vh',
