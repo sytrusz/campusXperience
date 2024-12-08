@@ -58,6 +58,7 @@ const FetchReservations = () => {
 
   const handleTicketDialog = async (selectedReservation) => {
     const token = localStorage.getItem("jwtToken"); // Fetch the token here
+    console.log(email)
   
     try {
       const currentUser = JSON.parse(localStorage.getItem("currentUser")); 

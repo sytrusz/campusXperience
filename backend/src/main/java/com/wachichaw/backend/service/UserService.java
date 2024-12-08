@@ -32,9 +32,19 @@ public class UserService {
 
     // Create
     public UserEntity saveUser(UserEntity user) {
+        
         return userRepo.save(user);
     }
-    
+    public void verifyUser(String email) {
+        UserEntity user = userRepo.findByEmail(email);
+
+        if (user == null) {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+
+        user.setVerified(true); 
+        userRepo.save(user);
+    }
     
     // Read
    public String authenticateUser(String email, String password) {

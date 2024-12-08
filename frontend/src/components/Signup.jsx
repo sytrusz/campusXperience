@@ -71,7 +71,7 @@ const SignUp = () => {
     }
   };
 
-  // Common styles for form elements
+  // Original style variables
   const formFieldStyles = {
     width: '100%',
     boxSizing: 'border-box',
