@@ -32,7 +32,7 @@ const Login = () => {
  
       if (response.ok) {
         const adminData = await response.json();
-        localStorage.setItem("jwtToken", adminData.token);
+        localStorage.setItem("adminToken", adminData.token);
         localStorage.setItem("role", adminData.role);
         localStorage.setItem("currentUser", JSON.stringify({
           email,
