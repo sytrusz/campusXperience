@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+ 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -9,19 +9,19 @@ const Login = () => {
   const [name, setName] = useState('');
   const [great, setGreat] = useState(false);
   const navigate = useNavigate();
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event) => event.preventDefault();
-
+ 
   const handleSignIn = async (e) => {
     e.preventDefault();
     setValidationError('');
-    
-
+ 
+ 
     try {
       // Attempt admin login first
       let response = await fetch("http://localhost:8080/admin/login", {
@@ -29,7 +29,7 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
+ 
       if (response.ok) {
         const adminData = await response.json();
         localStorage.setItem("jwtToken", adminData.token);
@@ -44,31 +44,30 @@ const Login = () => {
         navigate("/admin");
         return;
       }
-
+ 
       // Attempt user login if admin login fails
       response = await fetch("http://localhost:8080/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
+ 
       if (!response.ok) {
         throw new Error("Invalid email or password");
       }
-
+ 
       const userData = await response.json();
       localStorage.setItem("jwtToken", userData.token);
       localStorage.setItem("role", userData.role || "User");
-      localStorage.setItem("email", email);
       localStorage.setItem("currentUser", JSON.stringify({
         email,
         id:   userData.id,
         name: userData.name,
         role: userData.role || "User",
         prof_pic: userData.prof_pic
-        
+ 
       }));
-      console.log(email)
+      console.log(userData.prof_pic)
       setName(userData.name);
       setGreat(true);
       navigate("/");
@@ -77,7 +76,7 @@ const Login = () => {
       setValidationError(err.message || "Invalid email or password");
     }
   };
-
+ 
   const formFieldStyles = {
     width: '100%',
     boxSizing: 'border-box',
@@ -86,14 +85,14 @@ const Login = () => {
     borderRadius: '4px',
     fontSize: '1rem'
   };
-
+ 
   const formContainerStyles = {
     width: '100%',
     maxWidth: '400px',
     padding: '0 20px',
     boxSizing: 'border-box'
   };
-
+ 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {/* Left side - Hero Image */}
@@ -104,7 +103,7 @@ const Login = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}></div>
-
+ 
       {/* Right side - Login Form */}
       <div style={{
         width: window.innerWidth > 768 ? '90%' : '100%',
@@ -115,14 +114,14 @@ const Login = () => {
       }}>
         <div style={formContainerStyles}>
           <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Sign in</h1>
-
+ 
           <p style={{ textAlign: 'center', fontSize: '0.975rem' }}>
             Don't have an account?{' '}
             <a href="/signup" style={{ color: '#dc2626', fontWeight: "bold", textDecoration: 'none' }}>
               Sign Up
             </a>
           </p>
-
+ 
           <form onSubmit={handleSignIn} style={{
             display: 'flex',
             flexDirection: 'column',
@@ -143,7 +142,7 @@ const Login = () => {
                 required
               />
             </div>
-
+ 
             <div style={{ position: 'relative' }}>
               <label style={{
                 display: 'block',
@@ -158,14 +157,14 @@ const Login = () => {
                 required
               />
             </div>
-
+ 
             {validationError && (
               <div style={{
                 color: '#dc2626',
                 fontSize: '0.875rem'
               }}>{validationError}</div>
             )}
-
+ 
             <button
               type="submit"
               style={{
@@ -180,7 +179,7 @@ const Login = () => {
             >
               Sign In
             </button>
-
+ 
             {great && (
               <div style={{
                 color: '#16a34a',
@@ -196,5 +195,5 @@ const Login = () => {
     </div>
   );
 };
-
+ 
 export default Login;
