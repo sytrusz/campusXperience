@@ -10,12 +10,28 @@ const EventDashboard = () => {
   const [error, setError] = useState('');
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [successDialog, setSuccessDialog] = useState({ open: false, message: "" }); 
-  const [errorDialog, setErrorDialog] = useState({ open: false, message: "" }); 
+  const [errorDialog, setErrorDialog] = useState({ open: false, message: "" });
+  const [backgroundImage, setBackgroundImage] = useState('/src/assets/images/hero.jpg');
+  
   const baseUrl = 'http://localhost:8080/event'; 
   const rsvpUrl = 'http://localhost:8080/rsvp'; 
-
-
   const token = localStorage.getItem('jwtToken');
+
+  const [transitioningFromLeft, setIsTransitioningFromLeft] = useState(true);
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBackgroundImage((prev) =>
+        prev === '/src/assets/images/hero.jpg'
+          ? '/src/assets/images/hero1.jpg'
+          : '/src/assets/images/hero.jpg'
+      );
+      setTransitionFromLeft((prev) => !prev);
+    }, 10000); // 10 seconds delay
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -86,15 +102,14 @@ const EventDashboard = () => {
     setTimeout(() => {
         setErrorDialog((prevState) => ({ ...prevState, message: "" }));
     }, 300); 
-};
-const handleSuccessDialogClose = () => {
-  setSuccessDialog((prevState) => ({ ...prevState, open: false })); 
-  setTimeout(() => {
-    setSuccessDialog((prevState) => ({ ...prevState, message: "" }));
-  }, 300); };
-  
-  
+  };
 
+  const handleSuccessDialogClose = () => {
+      setSuccessDialog((prevState) => ({ ...prevState, open: false })); 
+      setTimeout(() => {
+      setSuccessDialog((prevState) => ({ ...prevState, message: "" }));
+    }, 300); 
+  };
   
 
   return (
@@ -107,13 +122,15 @@ const handleSuccessDialogClose = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundImage: 'url(/src/assets/images/hero.jpg)',
-          backgroundSize: '90%',
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: '80%',
+          paddingBottom: '50px',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           color: 'white',
           textAlign: 'center',
           p: 3,
+          transition: 'background-image 1s ease-in-out',
         }}
       >
       </Box>

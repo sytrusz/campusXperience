@@ -25,8 +25,10 @@ const ProtectedAdminRoute = () => {
 function AppWithAppBar() {
   const location = useLocation();
 
-  const isAdminRoute = location.pathname === '/admin';
-  const showAppBar = !['/login', '/signup', '/admin'].includes(location.pathname);
+  // Define routes where the AppBar and Footer should not appear
+  const hideFooterRoutes = ['/login', '/signup', '/admin'];
+  const showAppBar = !hideFooterRoutes.includes(location.pathname);
+  const showFooter = !['/login', '/signup', '/admin'].includes(location.pathname);
 
   return (
     <>
@@ -49,7 +51,7 @@ function AppWithAppBar() {
         {/* Catch-all route */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      {!isAdminRoute && <Footer />}
+      {showFooter && <Footer />} {/* Exclude Footer in specific routes */}
     </>
   );
 }
