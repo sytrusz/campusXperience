@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import './App.css';
-
 import CustomAppBar from './components/Appbar';
 import EventDashboard from './pages/EventDashboard';
 import LoginPage from './pages/LoginPage';
@@ -10,14 +9,23 @@ import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/AdminDashboard';
 import AboutUs from './pages/AboutUs';
 import FetchReservations from './pages/RsvpTicket';
-import Profile from './pages/Profile'; // Import the Profile page component
+import Profile from './pages/Profile';
 import Footer from './components/Footer';
+import NotFoundPage from './pages/NotFoundPage'; // Create this page
+
+// Protected Admin Route Component
+const ProtectedAdminRoute = () => {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const isAdmin = currentUser && currentUser.role === 'Admin';
+
+  return isAdmin ? <AdminDashboard /> : <Navigate to="/404" replace />;
+};
 
 // Component to conditionally render AppBar and Footer
 function AppWithAppBar() {
   const location = useLocation();
-  
-const isAdminRoute = location.pathname === '/admin';
+
+  const isAdminRoute = location.pathname === '/admin';
   const showAppBar = !['/login', '/signup', '/admin'].includes(location.pathname);
 
   return (
@@ -31,9 +39,17 @@ const isAdminRoute = location.pathname === '/admin';
         <Route path="/reservation" element={<FetchReservations />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/admin" element={<AdminDashboard />} /> {/* Admin route */}
+        
+        {/* Protected Admin Route */}
+        <Route path="/admin" element={<ProtectedAdminRoute />} />
+        
+        {/* 404 Page */}
+        <Route path="/404" element={<NotFoundPage />} />
+        
+        {/* Catch-all route */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      {!isAdminRoute && <Footer />} {/* Exclude Footer in Admin route */}
+      {!isAdminRoute && <Footer />}
     </>
   );
 }
