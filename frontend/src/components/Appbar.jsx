@@ -61,7 +61,7 @@ export default function CustomAppBar() {
             </Typography>
           </Link>
           <Box sx={{ display: 'flex', gap: 4 }}>
-            {['Event Discovery', 'Reservation and Ticketing', 'Event Reminder', 'About Us'].map(
+            {['Event Discovery', 'Reservation and Ticketing', 'About Us'].map(
               (label) => (
                 <Button
                   key={label}
@@ -75,7 +75,7 @@ export default function CustomAppBar() {
                   onClick={() => {
                     if (label === 'Event Discovery') handleNavigate('/events'); 
                     if (label === 'Reservation and Ticketing') handleNavigate('/reservation'); 
-                    if (label === 'Event Reminder') handleNavigate('/eventReminder'); 
+                    // if (label === 'Event Reminder') handleNavigate('/eventReminder'); 
                     if (label === 'About Us') handleNavigate('/aboutUs'); 
                   }}                    
                 >
