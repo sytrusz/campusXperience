@@ -135,9 +135,6 @@ public class UserController {
             @RequestParam String currentPassword,
             @RequestParam String newPassword) {
         try {
-            // Call the service to update the password
-            UserEntity updatedUser = userService.updatePassword(userId, currentPassword, newPassword);
-    
             // Return success message
             return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
         } catch (RuntimeException e) {
