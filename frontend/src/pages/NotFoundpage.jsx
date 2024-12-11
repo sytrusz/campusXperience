@@ -10,11 +10,12 @@ const NotFoundPage = () => {
       justifyContent: 'center',
       height: 'calc(100vh - 64px)', // Adjust based on your AppBar height
       textAlign: 'center',
-      backgroundColor: '#f0f0f0'
+      backgroundColor: '#f0f0f0',
+      fontFamily: 'Product Sans, sans-serif'
     }}>
       <h1 style={{ 
         fontSize: '4rem', 
-        color: '#dc2626', 
+        color: '#c21807', 
         marginBottom: '1rem' 
       }}>
         404
@@ -35,7 +36,7 @@ const NotFoundPage = () => {
       <Link 
         to="/" 
         style={{
-          backgroundColor: '#dc2626',
+          backgroundColor: '#c21807',
           color: 'white',
           padding: '10px 20px',
           textDecoration: 'none',
@@ -49,3 +50,4 @@ const NotFoundPage = () => {
 };
 
 export default NotFoundPage;
+
