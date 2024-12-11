@@ -138,7 +138,7 @@ const DevTeam = () => (
 
       <div style={{ ...globalStyles.devTeamCard, ...globalStyles.devTeamCardHover }}>
         <img 
-          src="https://scontent.fcgy2-2.fna.fbcdn.net/v/t39.30808-6/396191171_7430721863609190_7980979492650508440_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFbX4LgzpaQqLYU0LfEvrsOcyjqhAojfDJzKOqECiN8Ms0bnBLTXupoQ1aE7sn_QimV0JE6PRoOfHP1SlQ7v7gg&_nc_ohc=Q8eRBd0VMTYQ7kNvgGqW6jD&_nc_zt=23&_nc_ht=scontent.fcgy2-2.fna&_nc_gid=AQDzvECWnGgI-TOPlwccBwZ&oh=00_AYDQobPZMmMdiSCl3_w_RUV_MAcwvzIMIjT61MgSklGEXw&oe=67510805"
+          src="https://scontent.fcgy2-3.fna.fbcdn.net/v/t1.6435-9/39953524_10204903170175114_1115168862334091264_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=94e2a3&_nc_eui2=AeGZmQCe6SZBv3MDHUnbscQXEBj2g2EZTesQGPaDYRlN64p8IEAYFusdezfxgh5p_Ve12z3D626TQiWlBkqIa-0g&_nc_ohc=wC5WTSbDweQQ7kNvgHfRpIF&_nc_zt=23&_nc_ht=scontent.fcgy2-3.fna&_nc_gid=AQIyM0D956Nn97g2qPr1dLm&oh=00_AYAbNuBPeLv3S6eVwllyAao34pOr_dE5inlT5ZXZGgPPgQ&oe=677D1AB2"
           alt="Malagapo Nathan Rener S."
           style={{
             width: '200px',
@@ -249,38 +249,65 @@ const HeroSection = () => (
     </div>
   </header>
 );
-
 const MissionVisionSection = () => (
   <header
-  style={{
-    ...globalStyles,
-    backgroundImage: 'url("https://scontent.xx.fbcdn.net/v/t1.15752-9/462641148_549689784342221_5622515365787508271_n.png?stp=dst-png_s480x480&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeF6e41YksXPXPWwAwarDM4BsUvZgF0ZzrqxS9mAXRnOuqqH60VMC0PQIz1S7CnZYACkqhSrwnw1K1ybIXRIJj7Q&_nc_ohc=vdDo970ViN4Q7kNvgFZHC7h&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&oh=03_Q7cD1QHh_JKXbC7LHtdlg-Plhkk-mYj7rpsJoNtb6suWJP9v8g&oe=6772BB54")',
-    backgroundSize: 'contain',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'repeat',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  }}
->
-  <div style={globalStyles.section}>
-    <div style={globalStyles.grid}>
-      <div style={{ ...globalStyles.card, ...globalStyles.cardHover }}>
-        <h2>Our Mission</h2>
-        <p>To revolutionize campus events by providing innovative, intuitive tools that empower organizations to plan, execute, and enjoy memorable experiences with ease.</p>
-      </div>
-      <div style={{ ...globalStyles.card, ...globalStyles.cardHover }}>
-        <h2>Our Vision</h2>
-        <p>To become the leading platform that bridges students, faculty, and organizations, making event management seamless and accessible across every campus.</p>
-      </div>
-      <div style={{ ...globalStyles.card, ...globalStyles.cardHover }}>
-        <h2>Our Values</h2>
-        <p>We are committed to fostering collaboration, innovation, and inclusion by providing accessible and intuitive tools that empower campus communities to create impactful, sustainable, and memorable events, all while delivering excellence and dedicated service.</p>
+    style={{
+      ...globalStyles,
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}
+  >
+    <div
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundImage:
+          'url("https://scontent.xx.fbcdn.net/v/t1.15752-9/462641148_549689784342221_5622515365787508271_n.png?stp=dst-png_s480x480&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeF6e41YksXPXPWwAwarDM4BsUvZgF0ZzrqxS9mAXRnOuqqH60VMC0PQIz1S7CnZYACkqhSrwnw1K1ybIXRIJj7Q&_nc_ohc=vdDo970ViN4Q7kNvgFZHC7h&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&oh=03_Q7cD1QHh_JKXbC7LHtdlg-Plhkk-mYj7rpsJoNtb6suWJP9v8g&oe=6772BB54")',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'repeat',
+        opacity: 0.5,
+      }}
+    ></div>
+
+    {/* Content Section */}
+    <div style={globalStyles.section}>
+      <div style={globalStyles.grid}>
+        <div style={{ ...globalStyles.card, ...globalStyles.cardHover }}>
+          <h2>Our Mission</h2>
+          <p>
+            To revolutionize campus events by providing innovative, intuitive
+            tools that empower organizations to plan, execute, and enjoy
+            memorable experiences with ease.
+          </p>
+        </div>
+        <div style={{ ...globalStyles.card, ...globalStyles.cardHover }}>
+          <h2>Our Vision</h2>
+          <p>
+            To become the leading platform that bridges students, faculty, and
+            organizations, making event management seamless and accessible
+            across every campus.
+          </p>
+        </div>
+        <div style={{ ...globalStyles.card, ...globalStyles.cardHover }}>
+          <h2>Our Values</h2>
+          <p>
+            We are committed to fostering collaboration, innovation, and
+            inclusion by providing accessible and intuitive tools that empower
+            campus communities to create impactful, sustainable, and memorable
+            events, all while delivering excellence and dedicated service.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
   </header>
 );
+
 
 const CTASection = () => {
   const navigate = useNavigate();

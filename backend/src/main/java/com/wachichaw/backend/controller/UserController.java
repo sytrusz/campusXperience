@@ -108,11 +108,12 @@ public class UserController {
         @RequestParam(value = "file", required = false) MultipartFile file, // Optional profile picture upload
         @RequestParam("currentPassword") String currentPassword,
         @RequestParam("name") String name,
-        @RequestParam("email") String email
+        @RequestParam("email") String email,
+        @RequestParam("newPassword") String newPassword
     ) {
         try {
             // Call the service to update the user
-            UserEntity updatedUser = userService.updateUser(userId, file, currentPassword, name, email);
+            UserEntity updatedUser = userService.updateUser(userId, file, currentPassword, name, email, newPassword);
     
             // Return the updated user details in the response
             return ResponseEntity.ok(updatedUser);
@@ -125,6 +126,24 @@ public class UserController {
             // Handle any other exceptions
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", "An error occurred while updating the user"));
+        }
+    }
+    
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(
+            @RequestParam int userId,
+            @RequestParam String currentPassword,
+            @RequestParam String newPassword) {
+        try {
+            // Call the service to update the password
+            UserEntity updatedUser = userService.updatePassword(userId, currentPassword, newPassword);
+    
+            // Return success message
+            return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
+        } catch (RuntimeException e) {
+            // Handle incorrect password or other runtime issues
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", e.getMessage()));
         }
     }
     
