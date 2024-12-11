@@ -23,7 +23,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const makeAuthorizedRequest = async (url, options = {}) => {
-  const token = localStorage.getItem("jwtToken");
+  const token = localStorage.getItem("adminToken");
   if (!token) {
     throw new Error("No authentication token found");
   }

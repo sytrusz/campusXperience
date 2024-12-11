@@ -1,6 +1,6 @@
 package com.wachichaw.backend.entity;
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,14 +9,13 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Event")
-
 public class EventEntity {
     
     @Id
@@ -48,6 +47,7 @@ public class EventEntity {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ReminderEntity> reminders;
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<TicketEntity> tickets;
@@ -122,11 +122,19 @@ public class EventEntity {
     public void setMaxCapacity(int maxCapacity){
         this.maxCapacity = maxCapacity;
     }
+
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getSlotsLeft() {
+        if (tickets == null) {
+            return maxCapacity;
+        }
+        return maxCapacity - tickets.size();
     }
 }

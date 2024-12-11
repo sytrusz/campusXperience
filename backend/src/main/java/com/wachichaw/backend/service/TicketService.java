@@ -5,7 +5,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.wachichaw.backend.entity.EventEntity;
 import com.wachichaw.backend.entity.TicketEntity;
@@ -33,16 +35,22 @@ public class TicketService {
       public TicketEntity saveTicket(TicketEntity ticket) {
         EventEntity event = eventRepository.findById(ticket.getEvent().getEventId())
                 .orElseThrow(() -> new RuntimeException("Event not found with ID: " + ticket.getEvent().getEventId()));
+                int slots = event.getSlotsLeft();
+                System.out.print("SLHASJHDSAJHDJSAHDSJAHJAS " + slots);
+        if (event.getSlotsLeft() <= 0) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No slots available for the event with ID: " + event.getEventId());
+    }
     
-        // Fetch the UserEntity by userId
         UserEntity user = userRepository.findById(ticket.getUser().getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + ticket.getUser().getUserId()));
     
         ticket.setEventEntity(event);
         ticket.setUserEntity(user);
     
+        // Save the ticket
         return ticketRepo.save(ticket);
     }
+    
     
      // Get all
     public List<TicketEntity> getAllTickets() {
@@ -76,7 +84,6 @@ public class TicketService {
     }
 
     // Delete by ID
-    @SuppressWarnings("unused")
     public String deleteTicket(int id) {
         if (ticketRepo.existsById(id)) {
             ticketRepo.deleteById(id);

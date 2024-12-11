@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/user/login","/user/save", "admin/login", "/user/update","/user/check-email").permitAll() // Allow login without authentication
+                        .requestMatchers("/user/login","/user/save", "admin/login", "/user/update","/user/check-email","/verify").permitAll() // Allow login without authentication
                         .requestMatchers("/uploads/**","/profile_pictures/**").permitAll() 
 
 

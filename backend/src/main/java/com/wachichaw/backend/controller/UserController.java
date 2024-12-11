@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.entity.UserEntity;
+import com.wachichaw.backend.repository.UserRepo;
 import com.wachichaw.backend.service.UserService;
+import com.wachichaw.backend.service.VerificationService;
 
 
 @RestController
@@ -22,10 +24,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private final VerificationService verificationService;
+    @Autowired
+    private UserRepo userRepo;
     private final JwtUtil jwtUtil;
 
-    public UserController(JwtUtil jwtUtil) {
+    public UserController(JwtUtil jwtUtil, VerificationService verificationService) {
         this.jwtUtil = jwtUtil;
+        this.verificationService = verificationService;
     }
 
     
@@ -34,22 +41,32 @@ public class UserController {
     // Token
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserEntity user) {
-        String token = userService.authenticateUser(user.getEmail(), user.getPassword());
+        UserEntity existingUser = userRepo.findByEmail(user.getEmail());
     
-        // Extract claims from the token
-        int id = Integer.parseInt(jwtUtil.extractUserId(token)); // Ensure the id is parsed as an integer
+        if (!existingUser.isVerified()) { 
+            System.out.print("Account is not verified. Please check your email for the verification link.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Account is not verified. Please check your email for the verification link."));
+        }
+    
+        String token = userService.authenticateUser(user.getEmail(), user.getPassword());
+        
+        // Extract details from token
+        int id = Integer.parseInt(jwtUtil.extractUserId(token));
         String name = jwtUtil.extractUsername(token);
         String profPic = jwtUtil.extractProfpic(token);
     
-        // Prepare the response
+        // Prepare response
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
-        response.put("id", id); // Add the id as an integer
+        response.put("id", id);
         response.put("name", name);
         response.put("prof_pic", profPic);
+    
         System.out.println(response);
         return ResponseEntity.ok(response);
     }
+    
     
     // Check Email uniqueness
     @GetMapping("/check-email")
@@ -66,9 +83,15 @@ public class UserController {
 
     // Create
 
+
     @PostMapping("/save")
-    public UserEntity saveAdmin(@RequestBody UserEntity admin) {
-        return userService.saveUser(admin);
+    public UserEntity saveUser(@RequestBody UserEntity user) {
+        // Save the user
+        UserEntity savedUser = userService.saveUser(user);
+        System.out.print(savedUser.getEmail() + "\n" +savedUser.getName());
+        verificationService.sendVerificationEmail(savedUser.getEmail(), savedUser.getName());
+
+        return savedUser;
     }
 
     
@@ -85,11 +108,12 @@ public class UserController {
         @RequestParam(value = "file", required = false) MultipartFile file, // Optional profile picture upload
         @RequestParam("currentPassword") String currentPassword,
         @RequestParam("name") String name,
-        @RequestParam("email") String email
+        @RequestParam("email") String email,
+        @RequestParam("newPassword") String newPassword
     ) {
         try {
             // Call the service to update the user
-            UserEntity updatedUser = userService.updateUser(userId, file, currentPassword, name, email);
+            UserEntity updatedUser = userService.updateUser(userId, file, currentPassword, name, email, newPassword);
     
             // Return the updated user details in the response
             return ResponseEntity.ok(updatedUser);
@@ -102,6 +126,24 @@ public class UserController {
             // Handle any other exceptions
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", "An error occurred while updating the user"));
+        }
+    }
+    
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(
+            @RequestParam int userId,
+            @RequestParam String currentPassword,
+            @RequestParam String newPassword) {
+        try {
+            // Call the service to update the password
+            UserEntity updatedUser = userService.updatePassword(userId, currentPassword, newPassword);
+    
+            // Return success message
+            return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
+        } catch (RuntimeException e) {
+            // Handle incorrect password or other runtime issues
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", e.getMessage()));
         }
     }
     
