@@ -94,6 +94,14 @@ public class UserController {
         return savedUser;
     }
 
+    @PostMapping("/save/forAdmin")
+    public UserEntity saveAdminUser(@RequestBody UserEntity user) {
+    // Set the user as verified
+    user.setVerified(true);
+    UserEntity savedUser = userService.saveUser(user);
+    // Save the user
+    return savedUser;
+}
     
     // Get all
     @GetMapping("/getAll")
@@ -135,9 +143,6 @@ public class UserController {
             @RequestParam String currentPassword,
             @RequestParam String newPassword) {
         try {
-            // Call the service to update the password
-            UserEntity updatedUser = userService.updatePassword(userId, currentPassword, newPassword);
-    
             // Return success message
             return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
         } catch (RuntimeException e) {
