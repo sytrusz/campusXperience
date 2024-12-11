@@ -4,18 +4,6 @@ import PropTypes from "prop-types";
 import {
   Box,
   Typography,
-  Container,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Stack,
   GlobalStyles,
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -29,6 +17,7 @@ import EventIcon from "@mui/icons-material/Event";
 import UserManagement from '../components/UserManagement'
 import AdminManagement from '../components/AdminManagement'
 import EventManagement from '../components/EventManagement'
+import DashboardOverview from "../components/DashboardOverview";
 
 
 const token = localStorage.getItem("adminToken");
@@ -247,12 +236,7 @@ function DemoPageContent({ pathname }) {
         backgroundColor: '#F5F5F5',
       }}
     >
-      {pathname === "/dashboard" && (
-        <Typography sx={{ color: '#C41E3A', fontFamily: '"Product Sans", sans-serif' }}>
-          Dashboard Overview
-        </Typography>
-      )}
-      
+      {pathname === "/dashboard" && <DashboardOverview />}
       {pathname === "/users" && <UserManagement />}
       {pathname === "/admin" && <AdminManagement />}
       {pathname === "/events" && <EventManagement />}
