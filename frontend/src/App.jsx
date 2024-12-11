@@ -16,9 +16,11 @@ import Footer from './components/Footer';
 // Component to conditionally render AppBar and Footer
 function AppWithAppBar() {
   const location = useLocation();
-  
-const isAdminRoute = location.pathname === '/admin';
-  const showAppBar = !['/login', '/signup', '/admin'].includes(location.pathname);
+
+  // Define routes where the AppBar and Footer should not appear
+  const hideFooterRoutes = ['/login', '/signup', '/admin'];
+  const showAppBar = !hideFooterRoutes.includes(location.pathname);
+  const showFooter = !['/login', '/signup', '/admin'].includes(location.pathname);
 
   return (
     <>
@@ -33,7 +35,7 @@ const isAdminRoute = location.pathname === '/admin';
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminDashboard />} /> {/* Admin route */}
       </Routes>
-      {!isAdminRoute && <Footer />} {/* Exclude Footer in Admin route */}
+      {showFooter && <Footer />} {/* Exclude Footer in specific routes */}
     </>
   );
 }
