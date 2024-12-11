@@ -70,7 +70,7 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    opacity: 0.2,
+    opacity: 0.5,
     backgroundImage: `url("https://scontent-mnl1-2.xx.fbcdn.net/v/t1.15752-9/462641148_549689784342221_5622515365787508271_n.png?_nc_cat=102&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeF6e41YksXPXPWwAwarDM4BsUvZgF0ZzrqxS9mAXRnOuqqH60VMC0PQIz1S7CnZYACkqhSrwnw1K1ybIXRIJj7Q&_nc_ohc=CThmZ6BAlzEQ7kNvgEluXRv&_nc_zt=23&_nc_ht=scontent-mnl1-2.xx&oh=03_Q7cD1QH_lzFRxDbhan0vPEIg4hzAGHLEfq_lOH_lgTpukRqNpQ&oe=67624094")`,
     backgroundRepeat: 'repeat',
     pointerEvents: 'none',
