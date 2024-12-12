@@ -16,7 +16,7 @@ public class VerificationController {
     @SuppressWarnings("unused")
     private final VerificationService verificationService;
 
-    @Autowired
+    
     public VerificationController(VerificationService verificationService) {
         this.verificationService = verificationService;
     }

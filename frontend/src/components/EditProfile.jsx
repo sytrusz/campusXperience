@@ -13,6 +13,8 @@ const EditProfile = () => {
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [imgSrc, setImgSrc] = useState('/api/placeholder/100/100');
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
 
   // Load current user details from localStorage
   useEffect(() => {
@@ -234,7 +236,7 @@ const EditProfile = () => {
         <div style={styles.profileImage}>
           <div style={styles.imageContainer}>
             <img 
-              src={imgSrc} 
+              src={currentUser?.prof_pic ? `http://localhost:8080${currentUser.prof_pic}?t=${new Date().getTime()}` : 'http://localhost:8080/profile_pictures/profile_pictures.png?t=' + new Date().getTime()}
               alt="Profile" 
               style={styles.profileImageStyle} 
             />

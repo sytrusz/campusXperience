@@ -113,12 +113,12 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(
         @RequestParam int userId,
-        @RequestParam(value = "file", required = false) MultipartFile file, // Optional profile picture upload
+        @RequestParam(value = "file", required = false) MultipartFile file, 
         @RequestParam("currentPassword") String currentPassword,
         @RequestParam("name") String name,
         @RequestParam("email") String email,
-        @RequestParam("newPassword") String newPassword
-    ) {
+        @RequestParam(value = "newPassword", required = false) String newPassword
+        ) {
         try {
             // Call the service to update the user
             UserEntity updatedUser = userService.updateUser(userId, file, currentPassword, name, email, newPassword);
