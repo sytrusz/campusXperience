@@ -118,12 +118,6 @@ public class UserService {
     return userRepo.save(existingUser);
 }
 
-
-
-
-
-
-
     // Delete by ID
     @SuppressWarnings("unused")
     public String deleteUser(int id) {
