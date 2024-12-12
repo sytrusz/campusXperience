@@ -230,8 +230,10 @@ const handleSuccessDialogClose = () => {
   }
 
   return (
-    <div style={{ padding: "40px", backgroundColor: "#F8F5F2", minHeight: "100vh" }}>
-      <h2 style={{ color: "#C21807" }}>Your Reserved Events</h2>
+    <div style={{ padding: "40px", backgroundColor: "#FFF8F0", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
+      <h2 style={{ color: "#C21807", textAlign: "center", fontWeight: "bold", marginBottom: "20px" }}>
+        Your Reserved Events
+      </h2>
       {reservations.length > 0 ? (
         <div
           style={{
@@ -247,7 +249,22 @@ const handleSuccessDialogClose = () => {
               <div
                 key={event.eventId}
                 onClick={() => handleReservationClick(reservation)}
-                style={{ cursor: "pointer" }}
+                style={{
+                  cursor: "pointer",
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  overflow: "hidden",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.03)";
+                  e.currentTarget.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
+                }}
               >
                 <EventCard
                   id={event.eventId}
@@ -269,34 +286,40 @@ const handleSuccessDialogClose = () => {
           })}
         </div>
       ) : (
-        <Typography>No reservations found for this user.</Typography>
+        <Typography style={{ color: "#C21807", textAlign: "center", marginTop: "20px", fontSize: "1.1rem" }}>
+          No reservations found for this user.
+        </Typography>
       )}
-
+  
       {selectedReservation && (
         <Dialog open={!!selectedReservation} onClose={handleCloseDialog} fullWidth maxWidth="md">
-          <DialogTitle>{selectedReservation.event.title}</DialogTitle>
-          <DialogContent>
-            <Typography variant="h6">Description</Typography>
+          <DialogTitle style={{ color: "#C21807", fontWeight: "bold" }}>
+            {selectedReservation.event.title}
+          </DialogTitle>
+          <DialogContent style={{ padding: "24px" }}>
+            <Typography variant="h6" style={{ color: "#C21807", marginBottom: "12px" }}>
+              Description
+            </Typography>
             <Typography>{selectedReservation.event.description}</Typography>
-
-            <Typography variant="h6" style={{ marginTop: "16px" }}>
+  
+            <Typography variant="h6" style={{ color: "#C21807", marginTop: "20px", marginBottom: "12px" }}>
               Location
             </Typography>
             <Typography>{selectedReservation.event.location}</Typography>
-
-            <Typography variant="h6" style={{ marginTop: "16px" }}>
+  
+            <Typography variant="h6" style={{ color: "#C21807", marginTop: "20px", marginBottom: "12px" }}>
               Date & Time
             </Typography>
             <Typography>
               {new Date(selectedReservation.event.startTime).toLocaleString()} -{" "}
               {new Date(selectedReservation.event.endTime).toLocaleString()}
             </Typography>
-
-            <Typography variant="h6" style={{ marginTop: "16px" }}>
+  
+            <Typography variant="h6" style={{ color: "#C21807", marginTop: "20px", marginBottom: "12px" }}>
               Max Capacity
             </Typography>
             <Typography>{selectedReservation.event.maxCapacity}</Typography>
-
+  
             {selectedReservation.event.imageUrl && (
               <Box
                 component="img"
@@ -306,46 +329,55 @@ const handleSuccessDialogClose = () => {
                   width: "100%",
                   maxHeight: "400px",
                   objectFit: "cover",
-                  marginTop: "16px",
+                  marginTop: "20px",
                   borderRadius: "8px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
                 }}
               />
             )}
           </DialogContent>
-
-          <DialogActions>
-            <Button onClick={() => handleTicketDialog(selectedReservation)}>Confirm reservation</Button>
-            <Button onClick={handleCloseDialog} color="primary">
+  
+          <DialogActions style={{ justifyContent: "space-between", padding: "12px 24px" }}>
+            <Button
+              onClick={() => handleTicketDialog(selectedReservation)}
+              style={{ backgroundColor: "#C21807", color: "#FFFFFF", padding: "8px 16px", fontWeight: "bold" }}
+            >
+              Confirm Reservation
+            </Button>
+            <Button onClick={handleCloseDialog} style={{ color: "#C21807", fontWeight: "bold" }}>
               Close
             </Button>
           </DialogActions>
         </Dialog>
       )}
-
-    <Dialog open={successDialog.open} onClose={handleSuccessDialogClose}>
-    <DialogTitle>Success</DialogTitle>
-    <DialogContent>
-        <Typography>{successDialog.message}</Typography>
-    </DialogContent>
-    <DialogActions>
-        <Button onClick={handleSuccessDialogClose} color="primary">
+  
+      <Dialog open={successDialog.open} onClose={handleSuccessDialogClose}>
+        <DialogTitle style={{ color: "#C21807", fontWeight: "bold" }}>Success</DialogTitle>
+        <DialogContent>
+          <Typography>{successDialog.message}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSuccessDialogClose} style={{ color: "#C21807", fontWeight: "bold" }}>
             Close
-        </Button>
-    </DialogActions>
-    </Dialog>
+          </Button>
+        </DialogActions>
+      </Dialog>
+  
       <Dialog open={errorDialog.open} onClose={handleErrorDialogClose}>
-        <DialogTitle>Error</DialogTitle>
+        <DialogTitle style={{ color: "#C21807", fontWeight: "bold" }}>Error</DialogTitle>
         <DialogContent>
           <Typography>{errorDialog.message}</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleErrorDialogClose} color="primary">
+          <Button onClick={handleErrorDialogClose} style={{ color: "#C21807", fontWeight: "bold" }}>
             Close
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
+  
+
 };
 
 export default FetchReservations;

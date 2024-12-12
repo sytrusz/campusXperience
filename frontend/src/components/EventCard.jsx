@@ -13,7 +13,6 @@ const EventCard = ({ title, date, time, location, description, image, category, 
           height="180"
           image={image}
           sx={{ objectFit: 'cover', borderBottom: '2px solid #eee' }}
-
         />
       )}
       <CardContent sx={{ padding: '16px' }}>
