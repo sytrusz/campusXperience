@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wachichaw.backend.auth.JwtUtil;
 import com.wachichaw.backend.entity.AdminUserEntity;
 import com.wachichaw.backend.service.AdminUserService;
 
@@ -27,6 +28,11 @@ import com.wachichaw.backend.service.AdminUserService;
 public class AdminUserController {
     @Autowired
     private AdminUserService adminUserService;
+    private final JwtUtil jwtUtil;
+
+     public AdminUserController(JwtUtil jwtUtil ) {
+        this.jwtUtil = jwtUtil;
+    }
 
     // Check
     @GetMapping("/print")
@@ -41,12 +47,15 @@ public class AdminUserController {
     public ResponseEntity<Map<String, String>> login(@RequestBody AdminUserEntity admin) {
 
         String token = adminUserService.authenticateAdmin(admin.getEmail(), admin.getPassword());
-
+        
         Map<String, String> response = new HashMap<>();
+        String name = jwtUtil.extractUsername(token);
+
 
         response.put("token", token);
-
-        response.put("role", "Admin"); // Optionally include the role in the response
+        response.put("name", name);
+        response.put("role", "Admin");
+        System.out.println(name);
 
         return ResponseEntity.ok(response);
     }

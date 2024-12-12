@@ -7,32 +7,27 @@ import { styled } from '@mui/system';
 import { CssTransition } from '@mui/base/Transitions';
 import { PopupContext } from '@mui/base/Unstable_Popup';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
-
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileDropdown({ userType, onLogout }) {
-  const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
-  const navigate = useNavigate(); // Hook to navigate
+  const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  const profPic = currentUser?.prof_pic;
-
-  
-
+  console.log(currentUser.role)
 
   const handleMenuClick = (action) => {
     switch (action) {
       case 'profile':
-        navigate('/profile'); // Navigate to profile page
+        navigate('/profile');
         break;
       case 'dashboard':
-        navigate('/AdminDashboard'); // Navigate to dashboard
+        navigate('/admin');  // Changed from '/AdminDashboard' to match login.jsx
         break;
       case 'settings':
-        navigate('/settings'); // Navigate to settings
+        navigate('/settings');
         break;
       case 'logout':
-        setOpenModal(true); // Open the modal when logout is clicked
+        setOpenModal(true);
         break;
       default:
         break;
@@ -41,35 +36,35 @@ export default function ProfileDropdown({ userType, onLogout }) {
 
   const handleLogoutConfirmation = (confirm) => {
     if (confirm) {
-      onLogout(); // Call the logout function if confirmed
+      onLogout();
     }
-    setOpenModal(false); // Close the modal after the confirmation
+    setOpenModal(false);
   };
 
   return (
     <div className="flex items-center gap-3">
       <Dropdown>
         <MenuButton>
-        <img
-src={currentUser?.prof_pic ? `http://localhost:8080${currentUser.prof_pic}?t=${new Date().getTime()}` : 'http://localhost:8080/profile_pictures/profile_pictures.png?t=' + new Date().getTime()}
-alt="Profile"
-  style={{
-    width: '40px', 
-    height: '40px', 
-    borderRadius: '50%', 
-    objectFit: 'cover', 
-    display: 'block', 
-  }}
-  className="rounded-full"
-/>
+          <img
+            src={currentUser?.prof_pic ? `http://localhost:8080${currentUser.prof_pic}?t=${new Date().getTime()}` : 'http://localhost:8080/profile_pictures/profile_pictures.png?t=' + new Date().getTime()}
+            alt="Profile"
+            style={{
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '50%', 
+              objectFit: 'cover', 
+              display: 'block', 
+            }}
+            className="rounded-full"
+          />
         </MenuButton>
         <Menu slots={{ listbox: AnimatedListbox }}>
           <MenuItem onClick={() => handleMenuClick('profile')}>
             Profile
           </MenuItem>
-          {userType === 'admin' && (
+          {currentUser.role === 'Admin' && (
             <MenuItem onClick={() => handleMenuClick('dashboard')}>
-              Dashboard
+              Admin Dashboard
             </MenuItem>
           )}
           <MenuItem onClick={() => handleMenuClick('settings')}>
@@ -88,20 +83,19 @@ alt="Profile"
           Are you sure you want to logout?
         </DialogContent>
         <DialogActions>
-            <Button 
-                onClick={() => handleLogoutConfirmation(false)} 
-                sx={{ backgroundColor: '#f0f0f0', color: '#555' }}
-            >
-                Cancel
-            </Button>
-            <Button 
-                onClick={() => handleLogoutConfirmation(true)} 
-                sx={{ backgroundColor: '#d32f2f', color: '#fff' }}
-            >
-                Logout
-            </Button>
+          <Button 
+            onClick={() => handleLogoutConfirmation(false)} 
+            sx={{ backgroundColor: '#f0f0f0', color: '#555' }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={() => handleLogoutConfirmation(true)} 
+            sx={{ backgroundColor: '#d32f2f', color: '#fff' }}
+          >
+            Logout
+          </Button>
         </DialogActions>
-
       </Dialog>
     </div>
   );
@@ -166,7 +160,7 @@ const AnimatedListbox = React.forwardRef(function AnimatedListbox(props, ref) {
 
   if (popupContext == null) {
     throw new Error(
-      'The `AnimatedListbox` component cannot be rendered outside a `Popup` component'
+      'The AnimatedListbox component cannot be rendered outside a Popup component'
     );
   }
 
@@ -221,4 +215,4 @@ const MenuButton = styled(BaseMenuButton)`
     outline: 2px solid #C21807;
     outline-offset: 2px;
   }
-`;
+`

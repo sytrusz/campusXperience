@@ -34,7 +34,7 @@ const FetchReservations = () => {
       const response = await fetch(
         `http://localhost:8080/rsvp/getAllbyUserId?userId=${userId}`,
         {
-          method: "GET",
+          method: "GET",  
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -111,7 +111,7 @@ const FetchReservations = () => {
       setSuccessDialog({ open: true, message: "Ticket confirmation successful" });
 
       const emailData = {
-        to: email,
+        to: currentUser.email,
         subject: "Event Confirmation",
         body: `
           <html>

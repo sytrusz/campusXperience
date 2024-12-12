@@ -9,6 +9,7 @@ export default function CustomAppBar() {
   const [userType, setUserType] = useState("");
   
   const navigate = useNavigate();  // Initialize useNavigate for programmatic navigation
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));

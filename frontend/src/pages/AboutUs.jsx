@@ -102,7 +102,7 @@ const DevTeam = () => (
     <div style={globalStyles.grid}>
       <div style={{ ...globalStyles.devTeamCard, ...globalStyles.devTeamCardHover }}>
         <img 
-          src="https://scontent.fcgy2-1.fna.fbcdn.net/v/t39.30808-6/455320902_8077998918942576_3070034767662392834_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGfmiR_sUQmraA9uJuQX1PPk9sLDGYlGdeT2wsMZiUZ16CAySihrzBnA9wv3Pdyjdmf0xyufemqwg5o65GcdYd-&_nc_ohc=IOwZDv1S4MMQ7kNvgHnUyQG&_nc_zt=23&_nc_ht=scontent.fcgy2-1.fna&_nc_gid=AmmRBkAuA-19L6_nNXJXrvm&oh=00_AYAraOEyW28N7Jq-kRXY9KaUB85Qbam-x889CPy3BHtNLg&oe=67512873"
+          src="https://scontent-mnl1-1.xx.fbcdn.net/v/t39.30808-6/455320902_8077998918942576_3070034767662392834_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHBB7XHW_LCExl91tQfb6p1k9sLDGYlGdeT2wsMZiUZ14egXmQFFN4429HoygFtrE_cGSeTDsf56uNtCQeDcmHz&_nc_ohc=sGUipwuVbbgQ7kNvgFom1_1&_nc_zt=23&_nc_ht=scontent-mnl1-1.xx&_nc_gid=AbT21xltFF7BMzkhVjINHfm&oh=00_AYAKsXreaako5Y-vVOBbwtP3DnAc8YtW3ihKLWEdIpWoeQ&oe=676051B3"
           alt="Enriquez Piolo Frances L."
           style={{
             width: '200px',
@@ -156,7 +156,7 @@ const DevTeam = () => (
 
       <div style={{ ...globalStyles.devTeamCard, ...globalStyles.devTeamCardHover }}>
         <img 
-          src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462650353_368722402953804_1449901477893524103_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=103&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeHTlkOOf2HuX8tvrZvSjfUXsvmEh3D0wnCy-YSHcPTCcJJFKsRaEKXbupidAKx1--c7KXKOd478kYEqwNWhgg_x&_nc_ohc=VqDEPpZ_xCIQ7kNvgHvWgaA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&oh=03_Q7cD1QEq4fRqEG04l2P0j1KL2qTP7PHXEc8B_tC0GVHY2MGORw&oe=6772CA4C"
+          src="https://scontent-mnl1-2.xx.fbcdn.net/v/t39.30808-6/468977811_9096160807095516_8034811657684420272_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFJ03hYAdt24DDR-1iE6sy1-PpWVmFDUM34-lZWYUNQzY9GrKt2dL8LSOPsnQEBDlUJXePTBZ3Di0PF1nJBqpE7&_nc_ohc=En2KDtSTd4QQ7kNvgEFw70o&_nc_zt=23&_nc_ht=scontent-mnl1-2.xx&_nc_gid=AEO0hQTMmYfLC0zoRSISKL_&oh=00_AYCoHK4XGSj-iTL97khmMjZjfplps6p0sgWJnY_BOKgfdA&oe=67604096"
           alt="Vicci Louise Agramon"
           style={{
             width: '200px',
