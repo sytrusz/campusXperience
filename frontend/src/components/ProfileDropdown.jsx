@@ -23,9 +23,7 @@ export default function ProfileDropdown({ userType, onLogout }) {
       case 'dashboard':
         navigate('/admin');  // Changed from '/AdminDashboard' to match login.jsx
         break;
-      case 'settings':
-        navigate('/settings');
-        break;
+      
       case 'logout':
         setOpenModal(true);
         break;
@@ -67,9 +65,6 @@ export default function ProfileDropdown({ userType, onLogout }) {
               Admin Dashboard
             </MenuItem>
           )}
-          <MenuItem onClick={() => handleMenuClick('settings')}>
-            Settings
-          </MenuItem>
           <MenuItem onClick={() => handleMenuClick('logout')} className="text-red-600">
             Logout
           </MenuItem>

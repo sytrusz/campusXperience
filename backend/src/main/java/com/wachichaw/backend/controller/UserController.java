@@ -3,6 +3,7 @@ package com.wachichaw.backend.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wachichaw.backend.auth.JwtUtil;
+import com.wachichaw.backend.dto.TempUser;
 import com.wachichaw.backend.entity.UserEntity;
 import com.wachichaw.backend.repository.UserRepo;
 import com.wachichaw.backend.service.UserService;
@@ -28,6 +30,8 @@ public class UserController {
     private final VerificationService verificationService;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private TempUser tempUserStorageService;
     private final JwtUtil jwtUtil;
 
     public UserController(JwtUtil jwtUtil, VerificationService verificationService) {
@@ -87,12 +91,17 @@ public class UserController {
     @PostMapping("/save")
     public UserEntity saveUser(@RequestBody UserEntity user) {
         // Save the user
-        UserEntity savedUser = userService.saveUser(user);
+        String token = UUID.randomUUID().toString();
+        tempUserStorageService.saveUnverifiedUser(token, user);
+        tempUserStorageService.getUnverifiedUser(token);
+        UserEntity savedUser = user;
         System.out.print(savedUser.getEmail() + "\n" +savedUser.getName());
-        verificationService.sendVerificationEmail(savedUser.getEmail(), savedUser.getName());
+        verificationService.sendVerificationEmail(savedUser.getEmail(), savedUser.getName(), token);
 
         return savedUser;
     }
+
+    
 
     @PostMapping("/save/forAdmin")
     public UserEntity saveAdminUser(@RequestBody UserEntity user) {
