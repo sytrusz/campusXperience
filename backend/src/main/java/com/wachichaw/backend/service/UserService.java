@@ -118,30 +118,7 @@ public class UserService {
     return userRepo.save(existingUser);
 }
 
-public UserEntity updatePassword(int userId, String currentPassword, String newPassword) {
-    // Find the user by ID
-    UserEntity user = userRepo.findById(userId)
-        .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // Check if the current password matches
-    if (!user.getPassword().equals(currentPassword)) {
-        throw new RuntimeException("Current password is incorrect");
-    }
-
-    // Validate the new password
-    if (newPassword == null || newPassword.trim().isEmpty()) {
-        throw new RuntimeException("New password cannot be empty");
-    }
-
-    // Update the password
-    user.setPassword(newPassword);
-
-    // Update the passwordLastUpdated field
-    user.setPasswordLastUpdated(LocalDateTime.now());
-
-    // Save the updated user
-    return userRepo.save(user);
-}
 
 
 

@@ -94,6 +94,14 @@ public class UserController {
         return savedUser;
     }
 
+    @PostMapping("/save/forAdmin")
+    public UserEntity saveAdminUser(@RequestBody UserEntity user) {
+    // Set the user as verified
+    user.setVerified(true);
+    UserEntity savedUser = userService.saveUser(user);
+    // Save the user
+    return savedUser;
+}
     
     // Get all
     @GetMapping("/getAll")
