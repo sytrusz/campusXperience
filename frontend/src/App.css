@@ -1,0 +1,8 @@
+.emailInput::placeholder {
+    font-size: 12px;
+    color: #b0b0b0;
+}
+
+.emailInput{
+    font-size: 12px;
+}

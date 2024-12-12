@@ -18,8 +18,10 @@ import {
   TableRow,
   Stack,
   IconButton,
+  Avatar
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const makeAuthorizedRequest = async (url, options = {}) => {
@@ -29,10 +31,17 @@ const makeAuthorizedRequest = async (url, options = {}) => {
   }
 
   const headers = {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
     ...options.headers,
   };
+
+  // Remove Content-Type header for FormData to let browser set it automatically
+  if (options.body instanceof FormData) {
+    delete headers['Content-Type'];
+  } else {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  headers['Authorization'] = `Bearer ${token}`;
 
   const response = await fetch(url, {
     ...options,
@@ -40,7 +49,8 @@ const makeAuthorizedRequest = async (url, options = {}) => {
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
+    const errorText = await response.text();
+    throw new Error(`API request failed: ${errorText}`);
   }
 
   const contentType = response.headers.get("content-type");
@@ -48,7 +58,7 @@ const makeAuthorizedRequest = async (url, options = {}) => {
     return response.json();
   }
 
-  return {};
+  return response.text(); // Return text for non-JSON responses
 };
 
 const ConfirmationDialog = ({ open, onClose, onConfirm, title, message }) => (
@@ -82,6 +92,7 @@ export default function UserManagement() {
     user: null,
   });
   const [passwordVisibility, setPasswordVisibility] = useState({});
+  const [profilePicture, setProfilePicture] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -100,6 +111,11 @@ export default function UserManagement() {
       console.error("Error fetching users:", err);
       setError("Could not fetch users. Please try again later.");
     }
+  };
+
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePicture(file);
   };
 
   const handleTogglePassword = (userId) => {
@@ -174,20 +190,23 @@ export default function UserManagement() {
   const handleSubmit = async () => {
     try {
       if (selectedUser) {
+        const updateFormData = new FormData();
+        updateFormData.append('userId', selectedUser.userId);
+        updateFormData.append('currentPassword', selectedUser.password);
+        updateFormData.append('name', formData.name);
+        updateFormData.append('email', formData.email);
+        updateFormData.append('newPassword', formData.password);
+  
         await makeAuthorizedRequest(
           `http://localhost:8080/user/update?userId=${selectedUser.userId}`,
           {
             method: "PUT",
-            body: JSON.stringify({
-              userId: selectedUser.userId,
-              name: formData.name,
-              email: formData.email,
-              password: formData.password,
-            }),
+            body: updateFormData,
           }
         );
       } else {
-        await makeAuthorizedRequest("http://localhost:8080/user/save", {
+        // Create remains the same
+        await makeAuthorizedRequest("http://localhost:8080/user/save/forAdmin", {
           method: "POST",
           body: JSON.stringify(formData),
         });
