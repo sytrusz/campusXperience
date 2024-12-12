@@ -118,7 +118,7 @@ const FetchReservations = () => {
             <head>
               <style>
                 body {
-                  font-family: Arial, sans-serif;
+                  font-family: Product Sans, sans-serif;
                   color: #333;
                   line-height: 1.6;
                   background-color: #f8f8f8;
@@ -230,8 +230,8 @@ const handleSuccessDialogClose = () => {
   }
 
   return (
-    <div style={{ padding: "40px", backgroundColor: "#FFF8F0", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
-      <h2 style={{ color: "#C21807", textAlign: "center", fontWeight: "bold", marginBottom: "20px" }}>
+    <div style={{ padding: "40px", backgroundColor: "#FFF8F0", minHeight: "100vh", fontFamily: "Product Sans, sans-serif", alignItems: "start", }}>
+      <h2 style={{ color: "#C21807", textAlign: "center", fontWeight: "bold", marginBottom: "20px", fontSize: "30px", fontWeight: "600", }}>
         Your Reserved Events
       </h2>
       {reservations.length > 0 ? (
@@ -241,6 +241,10 @@ const handleSuccessDialogClose = () => {
             gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             gap: "20px",
             padding: "20px",
+            alignContent: "center",
+            alignItems: "center",
+            justifyContent: "start",
+            justifyItems: "center",
           }}
         >
           {reservations.map((reservation) => {
@@ -251,11 +255,11 @@ const handleSuccessDialogClose = () => {
                 onClick={() => handleReservationClick(reservation)}
                 style={{
                   cursor: "pointer",
-                  backgroundColor: "#FFFFFF",
                   borderRadius: "12px",
                   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                   transition: "transform 0.3s ease, box-shadow 0.3s ease",
                   overflow: "hidden",
+                  width: "300px",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "scale(1.03)";
@@ -327,7 +331,8 @@ const handleSuccessDialogClose = () => {
                 alt={selectedReservation.event.title}
                 sx={{
                   width: "100%",
-                  maxHeight: "400px",
+                  fontFamily: "Product Sans, sans-serif",
+                  maxHeight: "100%",
                   objectFit: "cover",
                   marginTop: "20px",
                   borderRadius: "8px",
