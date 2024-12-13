@@ -34,6 +34,7 @@ public class VerificationController {
        
         userService.saveUser(user);
         userService.verifyUser(email); 
+        tempUserStorageService.removeUnverifiedUser(token);
         return new RedirectView("http://localhost:5173/login");
             
     }

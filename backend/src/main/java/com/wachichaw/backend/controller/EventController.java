@@ -39,8 +39,6 @@ public class EventController {
             @RequestParam("maxCapacity") int maxCapacity) {
         
         EventEntity savedEvent = eventService.saveEvent(file, title, description, startTime, endTime, location, maxCapacity);
-        System.out.println(file); // Debugging output
-
         return ResponseEntity.ok(savedEvent);
     }
 

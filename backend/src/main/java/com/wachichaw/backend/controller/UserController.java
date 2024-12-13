@@ -66,9 +66,7 @@ public class UserController {
         response.put("id", id);
         response.put("name", name);
         response.put("prof_pic", profPic);
-    
-        System.out.println(response);
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
     }
     
     
@@ -95,7 +93,6 @@ public class UserController {
         tempUserStorageService.saveUnverifiedUser(token, user);
         tempUserStorageService.getUnverifiedUser(token);
         UserEntity savedUser = user;
-        System.out.print(savedUser.getEmail() + "\n" +savedUser.getName());
         verificationService.sendVerificationEmail(savedUser.getEmail(), savedUser.getName(), token);
 
         return savedUser;

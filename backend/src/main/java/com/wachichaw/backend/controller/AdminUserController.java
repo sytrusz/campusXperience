@@ -55,8 +55,6 @@ public class AdminUserController {
         response.put("token", token);
         response.put("name", name);
         response.put("role", "Admin");
-        System.out.println(name);
-
         return ResponseEntity.ok(response);
     }
 
