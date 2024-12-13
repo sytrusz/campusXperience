@@ -30,7 +30,6 @@ public class TicketController {
     @PostMapping("/save")
 public ResponseEntity<TicketEntity> saveTicket(@RequestBody TicketEntity ticket) {
     try {
-        System.out.println("Incoming JSON Payload: " + ticket);
         TicketEntity savedTicket = ticketService.saveTicket(ticket);
         
         // Return a successful response with the ticket and a custom header

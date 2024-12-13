@@ -164,7 +164,7 @@ export default function EventManagement() {
     });
   };
   const handleSaveEvent = async () => {
-    const freshToken = localStorage.getItem("adminToken");  
+    const freshToken = localStorage.getItem("adminToken");
 
     const url = selectedEvent
       ? `http://localhost:8080/event/update?eventId=${selectedEvent.eventId}` 

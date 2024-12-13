@@ -1,13 +1,14 @@
 package com.wachichaw.backend.controller;
 import java.nio.file.AccessDeniedException;
 
-import org.apache.commons.codec.digest.HmacUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.wachichaw.backend.dto.TempUser;
+import com.wachichaw.backend.entity.UserEntity;
 import com.wachichaw.backend.service.UserService;
 import com.wachichaw.backend.service.VerificationService;
 
@@ -15,6 +16,8 @@ import com.wachichaw.backend.service.VerificationService;
 public class VerificationController {
     @SuppressWarnings("unused")
     private final VerificationService verificationService;
+    @Autowired
+    private TempUser tempUserStorageService;
 
     
     public VerificationController(VerificationService verificationService) {
@@ -26,15 +29,12 @@ public class VerificationController {
 
     @GetMapping("/verify")
     public RedirectView verifyAccount(@RequestParam("token") String token, @RequestParam("email") String email) throws AccessDeniedException {
-        String secretKey = "1234"; // Same as used for generating the link
-        @SuppressWarnings("deprecation")
-        String expectedToken = HmacUtils.hmacSha256Hex(secretKey, email);
+        UserEntity user = tempUserStorageService.getUnverifiedUser(token);
 
-        if (!expectedToken.equals(token)) {
-            throw new AccessDeniedException("Invalid or expired verification link.");
-        }
-
+       
+        userService.saveUser(user);
         userService.verifyUser(email); 
+        tempUserStorageService.removeUnverifiedUser(token);
         return new RedirectView("http://localhost:5173/login");
             
     }

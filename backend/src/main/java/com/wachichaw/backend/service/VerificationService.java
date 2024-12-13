@@ -1,6 +1,5 @@
 package com.wachichaw.backend.service;
 import java.time.LocalDate;
-import org.apache.commons.codec.digest.HmacUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,17 +8,15 @@ public class VerificationService {
     @Autowired
     private EmailService emailService;
 
-    private static final String SECRET_KEY = "1234";
-    public String generateVerificationLink(String userEmail) {
-        @SuppressWarnings("deprecation")
-        String verificationToken = HmacUtils.hmacSha256Hex(SECRET_KEY, userEmail);
-    
-        return "http://localhost:8080/verify?token=" + verificationToken + "&email=" + userEmail;
+    public String generateVerificationLink(String userEmail,String token) {
+        return "http://localhost:8080/verify?token=" + token + "&email=" + userEmail;
     }
-    public void sendVerificationEmail(String to, String userName) {
+
+    
+    public void sendVerificationEmail(String to, String userName, String token) {
 
         System.out.print(to + "\n fjdskafjldsajfldsajflkdsajfdsjalfjdsla" +userName);
-        String verificationLink = generateVerificationLink(to); 
+        String verificationLink = generateVerificationLink(to, token); 
     
         String subject = "Verify Your Account";
         String body = 
